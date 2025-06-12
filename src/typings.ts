@@ -1,4 +1,4 @@
-import { IDataTestID } from './models';
+import { IDataTestID } from './form/models';
 
 export interface FieldProps extends IDataTestID {
   /** Property name, e.g. #.correlationExpression */

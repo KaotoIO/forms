@@ -4,20 +4,22 @@
   "npmClient": "yarn",
   "verbose": true,
   "packages": [
-    "./"
+    "./packages/*"
   ],
   "conventionalCommits": true,
   "changelog": true,
   "message": "chore(release): publish",
+  "loglevel": "debug",
   "command": {
+    "version": {
+      "tag": false,
+      "push": false,
+      "yes": true
+    },
     "publish": {
       "tag": true,
-      "push": true,
-      "pushArgs": [
-        "--follow-tags"
-      ],
+      "push": false,
       "yes": true
     }
-  },
-  "useWorkspaces": false
+  }
 }
