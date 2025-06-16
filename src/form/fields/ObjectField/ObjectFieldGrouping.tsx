@@ -21,14 +21,6 @@ export const ObjectFieldGrouping: FunctionComponent<FieldProps> = ({ propName })
 
   const requiredProperties = Array.isArray(schema.required) ? schema.required : [];
 
-  console.log('ObjectFieldGrouping', {
-    propName,
-    schema,
-    filteredFieldText,
-    groupedProperties,
-    requiredProperties,
-  });
-
   return (
     <>
       {/* Common properties */}

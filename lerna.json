@@ -3,9 +3,6 @@
   "version": "independent",
   "npmClient": "yarn",
   "verbose": true,
-  "packages": [
-    "./packages/*"
-  ],
   "conventionalCommits": true,
   "changelog": true,
   "message": "chore(release): publish",

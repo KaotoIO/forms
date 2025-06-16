@@ -21,17 +21,35 @@ describe('CanvasFormTabsProvider', () => {
 
   it('should update selectedTab on tab change', () => {
     const TestComponent: FunctionComponent = () => {
-      const { selectedTab, onTabChange } = useContext(CanvasFormTabsContext)!;
+      const { selectedTab, setSelectedTab } = useContext(CanvasFormTabsContext)!;
       return (
         <div>
           <div data-testid="selected-tab">{selectedTab}</div>
-          <button id="Required" onClick={onTabChange} data-testid="required-tab">
+          <button
+            id="Required"
+            onClick={() => {
+              setSelectedTab('Required');
+            }}
+            data-testid="required-tab"
+          >
             Required Tab
           </button>
-          <button id="All" onClick={onTabChange} data-testid="all-fields-tab">
+          <button
+            id="All"
+            onClick={() => {
+              setSelectedTab('All');
+            }}
+            data-testid="all-fields-tab"
+          >
             All Fields Tab
           </button>
-          <button id="Modified" onClick={onTabChange} data-testid="user-modified-tab">
+          <button
+            id="Modified"
+            onClick={() => {
+              setSelectedTab('Modified');
+            }}
+            data-testid="user-modified-tab"
+          >
             User Modified Tab
           </button>
         </div>

@@ -2,12 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "baseUrl": "src",
-    "outDir": "dist/esm",
+    "outDir": "dist",
     "rootDir": "src",
     "module": "es6",
     "target": "es6",
     "esModuleInterop": true,
     "moduleResolution": "node"
   },
-  "include": ["src"]
+  "include": ["src/**/*"],
+  "exclude": ["**/*.test.*"]
 }

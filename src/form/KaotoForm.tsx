@@ -1,5 +1,6 @@
 import { Form } from '@patternfly/react-core';
 import {
+  FormEventHandler,
   forwardRef,
   useCallback,
   useEffect,
@@ -7,17 +8,19 @@ import {
   useMemo,
   useRef,
   useState,
-  FormEventHandler,
 } from 'react';
-import { IDataTestID, KaotoSchemaDefinition } from './models';
-import { isDefined, ROOT_PATH, setValue } from './utils';
-import { NoFieldFound } from './Form/NoFieldFound';
 import { AutoField } from './fields/AutoField';
+import { NoFieldFound } from './Form/NoFieldFound';
 import './KaotoForm.scss';
-import { FormComponentFactoryProvider } from './providers/FormComponentFactoryProvider';
+import { IDataTestID, KaotoSchemaDefinition } from './models';
+import {
+  FormComponentFactoryContextValue,
+  FormComponentFactoryProvider,
+} from './providers/FormComponentFactoryProvider';
 import { ModelContextProvider } from './providers/ModelProvider';
 import { SchemaDefinitionsProvider } from './providers/SchemaDefinitionsProvider';
 import { SchemaProvider } from './providers/SchemaProvider';
+import { isDefined, ROOT_PATH, setValue } from './utils';
 import { errorsMapper } from './validation/errors-mapper';
 import { getValidator } from './validation/get-validator';
 
@@ -27,15 +30,28 @@ export interface KaotoFormApi {
 
 export interface KaotoFormProps extends IDataTestID {
   schema?: KaotoSchemaDefinition['schema'];
-  onChange?: (value: unknown) => void;
-  onChangeProp?: (propName: string, value: unknown) => void;
   model: unknown;
   omitFields?: string[];
   disabled?: boolean;
+  onChange?: (value: unknown) => void;
+  onChangeProp?: (propName: string, value: unknown) => void;
+  customFieldsFactory?: FormComponentFactoryContextValue;
 }
 
 export const KaotoForm = forwardRef<KaotoFormApi, KaotoFormProps>(
-  ({ schema, onChange, onChangeProp, model, omitFields = [], disabled, 'data-testid': dataTestId }, forwardRef) => {
+  (
+    {
+      'data-testid': dataTestId,
+      schema,
+      model,
+      omitFields = [],
+      disabled,
+      onChange,
+      onChangeProp,
+      customFieldsFactory,
+    },
+    forwardRef,
+  ) => {
     if (!isDefined(schema)) {
       throw new Error('[KaotoForm]: Schema is required');
     }
@@ -110,7 +126,7 @@ export const KaotoForm = forwardRef<KaotoFormApi, KaotoFormProps>(
     }, []);
 
     return (
-      <FormComponentFactoryProvider>
+      <FormComponentFactoryProvider customFieldsFactory={customFieldsFactory}>
         <SchemaDefinitionsProvider schema={schema} omitFields={omitFields}>
           <SchemaProvider schema={schema}>
             <ModelContextProvider
@@ -122,6 +138,7 @@ export const KaotoForm = forwardRef<KaotoFormApi, KaotoFormProps>(
               <Form onSubmit={onSubmit} className="kaoto-form kaoto-form__label" data-testid={dataTestId}>
                 <AutoField propName={ROOT_PATH} />
               </Form>
+
               <NoFieldFound className="kaoto-form kaoto-form__empty" />
             </ModelContextProvider>
           </SchemaProvider>

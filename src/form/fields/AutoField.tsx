@@ -9,7 +9,6 @@ import { FieldProps } from '../../typings';
 export const AutoField: FunctionComponent<FieldProps> = ({ propName, required, onRemove }) => {
   const { selectedTab } = useContext(CanvasFormTabsContext);
   const { schema } = useContext(SchemaContext);
-  console.log('schema', schema);
   const { value } = useFieldValue<object>(propName);
   const formComponentFactory = useContext(FormComponentFactoryContext);
 

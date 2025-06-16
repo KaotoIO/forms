@@ -10,7 +10,13 @@ export const NoFieldFound: FunctionComponent<{ className?: string }> = (props) =
       <CardBody>
         <Alert variant="info" title={`No ${canvasFormTabsContext.selectedTab} fields found`}>
           No field found matching this criteria. Please switch to the{' '}
-          <Button id="All" onClick={canvasFormTabsContext.onTabChange} variant="link" isInline>
+          <Button
+            onClick={() => {
+              canvasFormTabsContext.setSelectedTab('All');
+            }}
+            variant="link"
+            isInline
+          >
             <b>All</b>
           </Button>{' '}
           tab.

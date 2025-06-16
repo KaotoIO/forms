@@ -1,0 +1,27 @@
+.dashboard {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+
+  &__divider {
+    width: 1rem;
+  }
+
+  &__left,
+  &__right {
+    width: calc(50% - 0.5rem);
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__right {
+    overflow-y: scroll;
+    padding-right: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+}

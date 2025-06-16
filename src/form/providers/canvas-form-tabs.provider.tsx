@@ -1,34 +1,39 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FunctionComponent, PropsWithChildren, createContext, useState } from 'react';
-import { FormTabsModes } from './canvasformtabs.modes';
 
+type TabKeys = keyof typeof FormTabsModes;
 export interface CanvasFormTabsContextResult {
-  selectedTab: keyof typeof FormTabsModes;
-  onTabChange: (event: MouseEvent | React.MouseEvent<any, MouseEvent> | React.KeyboardEvent<Element>) => void;
+  selectedTab: TabKeys;
+  setSelectedTab: (key: TabKeys) => void;
 }
+
 export const CanvasFormTabsContext = createContext<CanvasFormTabsContextResult>({
   selectedTab: 'Required',
-  onTabChange: () => {},
+  setSelectedTab: () => void 0,
 });
 
 /**
  * Used for fetching and injecting the selected tab information from the canvas form
  */
-export const CanvasFormTabsProvider: FunctionComponent<PropsWithChildren> = (props) => {
-  const [selectedTab, setSelectedTab] = useState<keyof typeof FormTabsModes>('Required');
-
-  const onTabChange = (event: MouseEvent | React.MouseEvent<any, MouseEvent> | React.KeyboardEvent<Element>) => {
-    setSelectedTab(event.currentTarget.id);
-  };
+export const CanvasFormTabsProvider: FunctionComponent<PropsWithChildren<{ tab?: TabKeys }>> = ({
+  tab = 'Required',
+  children,
+}) => {
+  const [selectedTab, setSelectedTab] = useState<TabKeys>(tab);
 
   return (
     <CanvasFormTabsContext.Provider
       value={{
         selectedTab,
-        onTabChange,
+        setSelectedTab,
       }}
     >
-      {props.children}
+      {children}
     </CanvasFormTabsContext.Provider>
   );
+};
+
+export const FormTabsModes = {
+  Required: 'Shows Required fields only',
+  All: 'Shows All fields',
+  Modified: 'Shows Modified fields only',
 };

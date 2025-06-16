@@ -14,9 +14,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
-          scope: '@kaoto-next'
+          scope: '@kaoto'
           cache: 'yarn'
 
       # Install dependencies
@@ -27,5 +27,5 @@ jobs:
         run: yarn run test
 
       # Build packages
-      - name: Build @kaoto-next/uniforms-patternfly
+      - name: Build @kaoto/forms
         run: yarn run build
