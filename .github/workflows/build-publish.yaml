@@ -1,0 +1,49 @@
+name: 📦 Build npm Package
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.KAOTO_RELEASE_APP_ID }}
+          private-key: ${{ secrets.KAOTO_RELEASE_APP_KEY }}
+
+      - name: 🛎️ Checkout source code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: 🧰 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@kaoto'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: 📦 Build the library
+        run: yarn build
+
+      - name: 💅 Run eslint
+        run: yarn workspaces foreach --verbose --all --topological-dev run lint
+
+      - name: 📤 Upload artifacts for publish (only on main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          NODE_AUTH_TOKEN: ${{ secrets.KAOTO_NPM_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          yarn publish
