@@ -1,9 +1,9 @@
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema4 } from 'json-schema';
 import { TimerComponentSchema } from '../stubs/timer.component.schema';
 import { getFieldGroups } from './get-field-groups';
 
 describe('getFieldGroups', () => {
-  let inputValue: KaotoSchemaDefinition['schema']['properties'];
+  let inputValue: JSONSchema4['properties'];
 
   it('should get a object with common array and groups object containing advance groups array', () => {
     inputValue = {

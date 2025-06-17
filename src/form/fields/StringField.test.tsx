@@ -30,8 +30,8 @@ describe('StringField', () => {
   });
 
   describe('onChange', () => {
-    const stringSchema: KaotoSchemaDefinition['schema'] = { type: 'string' };
-    const numberSchema: KaotoSchemaDefinition['schema'] = { type: 'number' };
+    const stringSchema: JSONSchema4 = { type: 'string' };
+    const numberSchema: JSONSchema4 = { type: 'number' };
     const cases = [
       { initialValue: 'Value', newValue: 'New Value', expectedValue: 'New Value', schema: stringSchema },
       { initialValue: '', newValue: ' ', expectedValue: ' ', schema: stringSchema },

@@ -42,6 +42,7 @@ const TestComponent = () => {
         type="text"
         value={filteredFieldText}
         onChange={(event) => onFilterChange(null, event.target.value)}
+        title="Filter"
         data-testid="input"
       />
       <span data-testid="isGroupExpanded">{isGroupExpanded ? 'true' : 'false'}</span>

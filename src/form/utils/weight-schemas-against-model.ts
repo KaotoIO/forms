@@ -1,4 +1,4 @@
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema4 } from 'json-schema';
 import { isDefined } from './is-defined';
 import { resolveSchemaWithRef } from './resolve-schema-with-ref';
 
@@ -15,8 +15,8 @@ const PRIMITIVE_TYPES = ['string', 'number', 'boolean'];
  */
 export const weightSchemaAgainstModel = (
   model: unknown,
-  schema: KaotoSchemaDefinition['schema'],
-  definitions: Record<string, KaotoSchemaDefinition['schema']>,
+  schema: JSONSchema4,
+  definitions: Record<string, JSONSchema4>,
 ): number => {
   if (!isDefined(model) || !isDefined(schema)) return 0;
 

@@ -1,10 +1,10 @@
 import { FunctionComponent, useContext } from 'react';
-import { CanvasFormTabsContext } from '../providers/canvas-form-tabs.provider';
-import { isDefined } from '../utils';
 import { useFieldValue } from '../hooks/field-value';
-import { FormComponentFactoryContext } from '../providers/FormComponentFactoryProvider';
-import { SchemaContext } from '../providers/SchemaProvider';
 import { FieldProps } from '../models/typings';
+import { CanvasFormTabsContext } from '../providers/canvas-form-tabs.provider';
+import { FormComponentFactoryContext } from '../providers/context/form-component-factory-context';
+import { SchemaContext } from '../providers/SchemaProvider';
+import { isDefined } from '../utils';
 
 export const AutoField: FunctionComponent<FieldProps> = ({ propName, required, onRemove }) => {
   const { selectedTab } = useContext(CanvasFormTabsContext);

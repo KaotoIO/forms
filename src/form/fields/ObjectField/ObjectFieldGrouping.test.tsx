@@ -8,7 +8,7 @@ import { FormWrapper } from '../../testing/FormWrapper';
 import { ObjectFieldGrouping } from './ObjectFieldGrouping';
 
 describe('ObjectFieldGrouping', () => {
-  const schema: KaotoSchemaDefinition['schema'] = {
+  const schema: JSONSchema4 = {
     type: 'object',
     properties: {
       id: {

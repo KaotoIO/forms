@@ -1,11 +1,11 @@
-import { KaotoSchemaDefinition } from '../models/kaoto-schema';
+import { JSONSchema4 } from 'json-schema';
 import { OneOfSchemas } from './get-oneof-schema-list';
 import { weightSchemaAgainstModel } from './weight-schemas-against-model';
 
 export const getAppliedSchemaIndex = (
   model: unknown,
   oneOfSchemaList: OneOfSchemas[],
-  definitions: KaotoSchemaDefinition['schema']['definitions'] = {},
+  definitions: JSONSchema4['definitions'] = {},
 ): number => {
   const schemaPoints = oneOfSchemaList
     .map(({ schema }, index) => {

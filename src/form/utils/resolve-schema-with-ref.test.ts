@@ -2,7 +2,7 @@ import { KaotoSchemaDefinition } from '../models';
 import { resolveSchemaWithRef } from './resolve-schema-with-ref';
 
 describe('resolveSchemaWithRef', () => {
-  const schema: KaotoSchemaDefinition['schema'] = {
+  const schema: JSONSchema4 = {
     type: 'object',
     properties: {
       name: {

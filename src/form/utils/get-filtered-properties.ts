@@ -1,14 +1,14 @@
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema4 } from 'json-schema';
 import { isDefined } from './is-defined';
 
 /**
  * Extracts the schema recursively containing only the filtered properties.
  */
 export function getFilteredProperties(
-  properties: KaotoSchemaDefinition['schema']['properties'],
+  properties: JSONSchema4['properties'],
   filter: string,
   omitFields?: string[],
-): KaotoSchemaDefinition['schema']['properties'] {
+): JSONSchema4['properties'] {
   if (!isDefined(properties)) return {};
 
   const filteredFormSchema = Object.entries(properties).reduce(
@@ -26,7 +26,7 @@ export function getFilteredProperties(
 
       return acc;
     },
-    {} as KaotoSchemaDefinition['schema']['properties'],
+    {} as JSONSchema4['properties'],
   );
 
   return filteredFormSchema;

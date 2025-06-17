@@ -1,7 +1,7 @@
 import Ajv, { ValidateFunction } from 'ajv';
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema4 } from 'json-schema';
 
-export const getValidator = (schema: KaotoSchemaDefinition['schema']) => {
+export const getValidator = (schema: JSONSchema4) => {
   const ajv = new Ajv({ strict: false, allErrors: true, useDefaults: true });
 
   let validator: ValidateFunction | undefined;

@@ -1,9 +1,6 @@
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema4 } from 'json-schema';
 
-export const resolveSchemaWithRef = (
-  schema: KaotoSchemaDefinition['schema'],
-  definitions: Record<string, KaotoSchemaDefinition['schema']>,
-) => {
+export const resolveSchemaWithRef = (schema: JSONSchema4, definitions: Record<string, JSONSchema4>) => {
   if (schema?.$ref === undefined || typeof schema.$ref !== 'string') {
     return schema;
   }

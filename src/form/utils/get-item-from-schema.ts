@@ -1,10 +1,7 @@
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema4 } from 'json-schema';
 import { resolveSchemaWithRef } from './resolve-schema-with-ref';
 
-export const getItemFromSchema = (
-  schema: KaotoSchemaDefinition['schema'],
-  definitions: Record<string, KaotoSchemaDefinition['schema']>,
-) => {
+export const getItemFromSchema = (schema: JSONSchema4, definitions: Record<string, JSONSchema4>) => {
   const resolvedSchema = resolveSchemaWithRef(schema, definitions);
   const defaultValue = resolvedSchema.default;
   const properties = resolvedSchema.properties ?? {};

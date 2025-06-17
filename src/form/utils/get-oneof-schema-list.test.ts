@@ -4,7 +4,7 @@ import { getOneOfSchemaList } from './get-oneof-schema-list';
 
 describe('getOneOfSchemaList', () => {
   it('should return a list of `OneOfSchemas`', () => {
-    const oneOfList: KaotoSchemaDefinition['schema'][] = [
+    const oneOfList: JSONSchema4[] = [
       { type: 'object', properties: { deadLetterChannel: { type: 'number' } } },
       { type: 'object', properties: { errorHandler: { type: 'string' } } },
     ];
@@ -21,7 +21,7 @@ describe('getOneOfSchemaList', () => {
   });
 
   it('should use the title from the schema if provided', () => {
-    const oneOfList: KaotoSchemaDefinition['schema'][] = [
+    const oneOfList: JSONSchema4[] = [
       { type: 'object', title: 'Dead Letter Channel', properties: { deadLetterChannel: { type: 'number' } } },
       { type: 'object', title: 'Error Handler', properties: { errorHandler: { type: 'string' } } },
     ];
@@ -41,7 +41,7 @@ describe('getOneOfSchemaList', () => {
   });
 
   it('should use the description from the schema if provided', () => {
-    const oneOfList: KaotoSchemaDefinition['schema'][] = [
+    const oneOfList: JSONSchema4[] = [
       {
         type: 'object',
         description: 'Dead Letter Channel handler',
@@ -110,7 +110,7 @@ describe('getOneOfSchemaList', () => {
   });
 
   it('should remove the `not` schemas', () => {
-    const oneOfList: KaotoSchemaDefinition['schema'][] = [
+    const oneOfList: JSONSchema4[] = [
       { type: 'object', properties: { deadLetterChannel: { type: 'number' } } },
       { not: { type: 'object' } },
       { type: 'string' },
@@ -151,7 +151,7 @@ describe('getOneOfSchemaList', () => {
   });
 
   it('should use the property name if there is no title or description and there is single property', () => {
-    const oneOfList: KaotoSchemaDefinition['schema'][] = [
+    const oneOfList: JSONSchema4[] = [
       { type: 'object', properties: { deadLetterChannel: { type: 'number' } } },
       { type: 'object', properties: { errorHandler: { type: 'string' } } },
     ];
@@ -179,7 +179,7 @@ describe('getOneOfSchemaList', () => {
   });
 
   it('should use generic names if there is no title or description and there are more than one property', () => {
-    const oneOfList: KaotoSchemaDefinition['schema'][] = [
+    const oneOfList: JSONSchema4[] = [
       { type: 'object', properties: { deadLetterChannel: { type: 'number' }, anotherProperty: { type: 'string' } } },
       { type: 'object', properties: { errorHandler: { type: 'string' }, anotherProperty: { type: 'string' } } },
     ];
@@ -207,7 +207,7 @@ describe('getOneOfSchemaList', () => {
   });
 
   it('should update schema titles in case of Language or Dataformat could be represented in 2 different ways', () => {
-    const oneOfList: KaotoSchemaDefinition['schema'][] = [
+    const oneOfList: JSONSchema4[] = [
       { type: 'string' },
       { type: 'object', properties: { errorHandler: { type: 'string' } } },
     ];

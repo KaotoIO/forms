@@ -3,7 +3,7 @@ import { getItemFromSchema } from './get-item-from-schema';
 
 describe('getItemFromSchema', () => {
   it('should return default value if schema is string', () => {
-    const schema: KaotoSchemaDefinition['schema'] = { type: 'string', default: 'default value' };
+    const schema: JSONSchema4 = { type: 'string', default: 'default value' };
     const definitions = {};
 
     const result = getItemFromSchema(schema, definitions);
@@ -12,7 +12,7 @@ describe('getItemFromSchema', () => {
   });
 
   it('should return default value if schema is boolean', () => {
-    const schema: KaotoSchemaDefinition['schema'] = { type: 'boolean', default: true };
+    const schema: JSONSchema4 = { type: 'boolean', default: true };
     const definitions = {};
 
     const result = getItemFromSchema(schema, definitions);
@@ -21,7 +21,7 @@ describe('getItemFromSchema', () => {
   });
 
   it('should return default value if schema is number', () => {
-    const schema: KaotoSchemaDefinition['schema'] = { type: 'number', default: 10 };
+    const schema: JSONSchema4 = { type: 'number', default: 10 };
     const definitions = {};
 
     const result = getItemFromSchema(schema, definitions);
@@ -30,7 +30,7 @@ describe('getItemFromSchema', () => {
   });
 
   it('should return object with default values if schema is object', () => {
-    const schema: KaotoSchemaDefinition['schema'] = {
+    const schema: JSONSchema4 = {
       type: 'object',
       properties: {
         name: { type: 'string', default: 'default name' },
@@ -46,7 +46,7 @@ describe('getItemFromSchema', () => {
   });
 
   it('should return object with default values ignoring nested required properties', () => {
-    const schema: KaotoSchemaDefinition['schema'] = {
+    const schema: JSONSchema4 = {
       type: 'object',
       properties: {
         name: { type: 'string', default: 'default name' },
@@ -72,7 +72,7 @@ describe('getItemFromSchema', () => {
   });
 
   it('should return empty object if schema type is not string, boolean, number or object', () => {
-    const schema: KaotoSchemaDefinition['schema'] = { allOf: [{ type: 'string' }] };
+    const schema: JSONSchema4 = { allOf: [{ type: 'string' }] };
     const definitions = {};
 
     const result = getItemFromSchema(schema, definitions);

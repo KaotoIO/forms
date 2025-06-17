@@ -1,13 +1,13 @@
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema4 } from 'json-schema';
 import { extractGroup } from './get-tagged-field-from-string';
 import { isDefined } from './is-defined';
 
 interface FieldGroups {
-  common: Record<string, KaotoSchemaDefinition['schema']>;
-  groups: [string, Record<string, KaotoSchemaDefinition['schema']>][];
+  common: Record<string, JSONSchema4>;
+  groups: [string, Record<string, JSONSchema4>][];
 }
 
-export const getFieldGroups = (properties?: KaotoSchemaDefinition['schema']['properties']): FieldGroups => {
+export const getFieldGroups = (properties?: JSONSchema4['properties']): FieldGroups => {
   if (!isDefined(properties)) return { common: {}, groups: [] };
 
   const groupedProperties = Object.entries(properties).reduce(
@@ -25,8 +25,8 @@ export const getFieldGroups = (properties?: KaotoSchemaDefinition['schema']['pro
       return acc;
     },
     { common: {}, groups: {} } as {
-      common: Record<string, KaotoSchemaDefinition['schema']>;
-      groups: Record<string, Record<string, KaotoSchemaDefinition['schema']>>;
+      common: Record<string, JSONSchema4>;
+      groups: Record<string, Record<string, JSONSchema4>>;
     },
   );
 

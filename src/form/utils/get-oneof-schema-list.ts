@@ -1,4 +1,4 @@
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema4 } from 'json-schema';
 import { camelCaseToSpaces } from './camel-case-to-space';
 import { isDefined } from './is-defined';
 import { resolveSchemaWithRef } from './resolve-schema-with-ref';
@@ -6,12 +6,12 @@ import { resolveSchemaWithRef } from './resolve-schema-with-ref';
 export interface OneOfSchemas {
   name: string;
   description?: string;
-  schema: KaotoSchemaDefinition['schema'];
+  schema: JSONSchema4;
 }
 
 export const getOneOfSchemaList = (
-  oneOfList: KaotoSchemaDefinition['schema'][],
-  definitions: KaotoSchemaDefinition['schema']['definitions'] = {},
+  oneOfList: JSONSchema4[],
+  definitions: JSONSchema4['definitions'] = {},
 ): OneOfSchemas[] => {
   const list = oneOfList
     /** Ignore the `not` schemas */

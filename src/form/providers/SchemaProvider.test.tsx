@@ -5,7 +5,7 @@ import { KaotoSchemaDefinition } from '../models';
 import { SchemaDefinitionsProvider } from './SchemaDefinitionsProvider';
 
 describe('SchemaProvider', () => {
-  const schema: KaotoSchemaDefinition['schema'] = {
+  const schema: JSONSchema4 = {
     type: 'object',
     properties: {
       foo: {
@@ -37,7 +37,7 @@ describe('SchemaProvider', () => {
   });
 
   it('should resolve first-level properties using the `SchemaDefinitionsContext` context', () => {
-    const localSchema: KaotoSchemaDefinition['schema'] = {
+    const localSchema: JSONSchema4 = {
       $ref: '#/definitions/foo',
       definitions: {
         foo: {

@@ -1,11 +1,11 @@
+import { JSONSchema4 } from 'json-schema';
 import { FunctionComponent } from 'react';
-import { KaotoSchemaDefinition } from '../../models';
-import { SchemaProvider } from '../../providers/SchemaProvider';
 import { FieldProps } from '../../models/typings';
+import { SchemaProvider } from '../../providers/SchemaProvider';
 import { AutoField } from '../AutoField';
 
 interface AnyOfFieldProps extends FieldProps {
-  anyOf: KaotoSchemaDefinition['schema']['anyOf'];
+  anyOf: JSONSchema4['anyOf'];
 }
 
 export const AnyOfField: FunctionComponent<AnyOfFieldProps> = ({ propName, anyOf }) => {

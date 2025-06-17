@@ -1,4 +1,5 @@
 import { Form } from '@patternfly/react-core';
+import { JSONSchema4 } from 'json-schema';
 import {
   FormEventHandler,
   forwardRef,
@@ -12,7 +13,7 @@ import {
 import { AutoField } from './fields/AutoField';
 import { NoFieldFound } from './Form/NoFieldFound';
 import './KaotoForm.scss';
-import { IDataTestID, KaotoSchemaDefinition } from './models';
+import { IDataTestID } from './models';
 import { CustomFieldsFactory, FormComponentFactoryProvider } from './providers/FormComponentFactoryProvider';
 import { ModelContextProvider } from './providers/ModelProvider';
 import { SchemaDefinitionsProvider } from './providers/SchemaDefinitionsProvider';
@@ -26,7 +27,7 @@ export interface KaotoFormApi {
 }
 
 export interface KaotoFormProps extends IDataTestID {
-  schema?: KaotoSchemaDefinition['schema'];
+  schema?: JSONSchema4;
   model: unknown;
   omitFields?: string[];
   disabled?: boolean;

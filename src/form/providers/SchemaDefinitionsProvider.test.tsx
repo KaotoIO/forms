@@ -12,7 +12,7 @@ describe('SchemaDefinitionsProvider', () => {
   });
 
   it('should return the provided value', () => {
-    const schema: KaotoSchemaDefinition['schema'] = {
+    const schema: JSONSchema4 = {
       type: 'object',
       properties: {
         test: {

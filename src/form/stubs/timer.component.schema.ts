@@ -1,6 +1,6 @@
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema4 } from 'json-schema';
 
-export const TimerComponentSchema: KaotoSchemaDefinition['schema'] = {
+export const TimerComponentSchema: JSONSchema4 = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'object',
   properties: {

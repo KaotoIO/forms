@@ -1,6 +1,6 @@
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema4 } from 'json-schema';
 
-export const errorHandlerSchema: KaotoSchemaDefinition['schema'] = {
+export const errorHandlerSchema: JSONSchema4 = {
   type: 'object',
   additionalProperties: false,
   oneOf: [

@@ -9,7 +9,7 @@ import { FormWrapper } from '../../testing/FormWrapper';
 import { AnyOfField } from './AnyOfField';
 
 describe('AnyOfField', () => {
-  const anyOf: KaotoSchemaDefinition['schema']['anyOf'] = [
+  const anyOf: JSONSchema4['anyOf'] = [
     { type: 'object', properties: { name: { type: 'string', title: 'Name' } } },
     { type: 'object', properties: { valid: { type: 'boolean', title: 'Valid' } } },
   ];

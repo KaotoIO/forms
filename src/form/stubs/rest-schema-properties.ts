@@ -1,6 +1,6 @@
-import { KaotoSchemaDefinition } from '../models/kaoto-schema';
+import { JSONSchema4 } from 'json-schema';
 
-export const restSchemaProperties: KaotoSchemaDefinition['schema']['properties'] = {
+export const restSchemaProperties: JSONSchema4['properties'] = {
   id: {
     type: 'string',
     title: 'Id',

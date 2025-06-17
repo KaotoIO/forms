@@ -1,19 +1,16 @@
+import { JSONSchema4 } from 'json-schema';
 import { createContext, FunctionComponent, PropsWithChildren, useContext, useMemo } from 'react';
-import { KaotoSchemaDefinition } from '../models';
 import { resolveSchemaWithRef } from '../utils';
 import { SchemaDefinitionsContext } from './SchemaDefinitionsProvider';
 
 export interface SchemaContextValue {
-  schema: KaotoSchemaDefinition['schema'];
-  definitions: Record<string, KaotoSchemaDefinition['schema']>;
+  schema: JSONSchema4;
+  definitions: Record<string, JSONSchema4>;
 }
 
 export const SchemaContext = createContext<SchemaContextValue>({ schema: {}, definitions: {} });
 
-export const SchemaProvider: FunctionComponent<PropsWithChildren<{ schema: KaotoSchemaDefinition['schema'] }>> = ({
-  schema,
-  children,
-}) => {
+export const SchemaProvider: FunctionComponent<PropsWithChildren<{ schema: JSONSchema4 }>> = ({ schema, children }) => {
   const { definitions, omitFields } = useContext(SchemaDefinitionsContext);
 
   const value = useMemo(() => {

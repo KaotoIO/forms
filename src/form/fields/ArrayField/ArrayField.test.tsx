@@ -5,7 +5,7 @@ import { FieldTestProvider } from '../../testing/FieldTestProvider';
 import { ArrayField } from './ArrayField';
 
 describe('ArrayField', () => {
-  const schema: KaotoSchemaDefinition['schema'] = {
+  const schema: JSONSchema4 = {
     title: 'Test Array Field',
     type: 'array',
     description: 'A test array field',
