@@ -9,7 +9,7 @@ permissions:
   contents: write
 jobs:
   build:
-    if: github.repository == 'KaotoIO/uniforms-patternfly' && github.actor != 'renovate[bot]'
+    if: github.repository == 'KaotoIO/forms' && github.actor != 'renovate[bot]'
 
     runs-on: ubuntu-latest
     steps:
@@ -21,7 +21,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
           scope: '@kaoto-next'
           cache: 'yarn'
