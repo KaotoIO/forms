@@ -13,10 +13,7 @@ import { AutoField } from './fields/AutoField';
 import { NoFieldFound } from './Form/NoFieldFound';
 import './KaotoForm.scss';
 import { IDataTestID, KaotoSchemaDefinition } from './models';
-import {
-  FormComponentFactoryContextValue,
-  FormComponentFactoryProvider,
-} from './providers/FormComponentFactoryProvider';
+import { CustomFieldsFactory, FormComponentFactoryProvider } from './providers/FormComponentFactoryProvider';
 import { ModelContextProvider } from './providers/ModelProvider';
 import { SchemaDefinitionsProvider } from './providers/SchemaDefinitionsProvider';
 import { SchemaProvider } from './providers/SchemaProvider';
@@ -35,7 +32,7 @@ export interface KaotoFormProps extends IDataTestID {
   disabled?: boolean;
   onChange?: (value: unknown) => void;
   onChangeProp?: (propName: string, value: unknown) => void;
-  customFieldsFactory?: FormComponentFactoryContextValue;
+  customFieldsFactory?: CustomFieldsFactory;
 }
 
 export const KaotoForm = forwardRef<KaotoFormApi, KaotoFormProps>(

@@ -1,4 +1,4 @@
-import { IDataTestID } from './form/models';
+import { IDataTestID } from './react-component';
 
 export interface FieldProps extends IDataTestID {
   /** Property name, e.g. #.correlationExpression */

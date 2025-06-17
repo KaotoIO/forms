@@ -5,7 +5,7 @@ import { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { getItemFromSchema, isDefined, getHexaDecimalRandomId } from '../../utils';
 import { useFieldValue } from '../../hooks/field-value';
 import { SchemaContext, SchemaProvider } from '../../providers/SchemaProvider';
-import { FieldProps } from '../../../typings';
+import { FieldProps } from '../../models/typings';
 import { AutoField } from '../AutoField';
 import { ArrayFieldWrapper } from './ArrayFieldWrapper';
 

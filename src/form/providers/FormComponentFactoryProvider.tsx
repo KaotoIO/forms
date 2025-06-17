@@ -1,5 +1,5 @@
 import { createContext, FunctionComponent, PropsWithChildren, useCallback } from 'react';
-import { FieldProps } from '../../typings';
+import { FieldProps } from '../models/typings';
 import { ArrayField } from '../fields/ArrayField/ArrayField';
 import { BooleanField } from '../fields/BooleanField';
 import { DisabledField } from '../fields/DisabledField';
@@ -13,19 +13,20 @@ import { StringField } from '../fields/StringField';
 import { TextAreaField } from '../fields/TextAreaField';
 import { KaotoSchemaDefinition } from '../models';
 
-export type FormComponentFactoryContextValue = (
-  schema: KaotoSchemaDefinition['schema'],
-) => FunctionComponent<FieldProps>;
+type FormComponentFactoryContextValue = (schema: KaotoSchemaDefinition['schema']) => FunctionComponent<FieldProps>;
 
 export const FormComponentFactoryContext = createContext<FormComponentFactoryContextValue | undefined>(undefined);
 
+export type CustomFieldsFactory = (
+  schema: KaotoSchemaDefinition['schema'],
+) => FunctionComponent<FieldProps> | undefined;
 interface IFormComponentFactoryProvider extends PropsWithChildren {
   /**
    * Factory function to override the Field selection algorithm.
    *
    * Should return a component receiving FieldProps as props, or undefined if no custom field is found.
    */
-  customFieldsFactory?: (schema: KaotoSchemaDefinition['schema']) => FunctionComponent<FieldProps> | undefined;
+  customFieldsFactory?: CustomFieldsFactory;
 }
 export const FormComponentFactoryProvider: FunctionComponent<IFormComponentFactoryProvider> = ({
   customFieldsFactory,

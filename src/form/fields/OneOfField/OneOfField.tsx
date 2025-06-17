@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { useOneOfField } from '../../hooks/one-of-field';
 import { SchemaProvider } from '../../providers/SchemaProvider';
-import { FieldProps } from '../../../typings';
+import { FieldProps } from '../../models/typings';
 import { AutoField } from '../AutoField';
 import { SchemaList } from './SchemaList';
 

@@ -2,7 +2,7 @@ import { FunctionComponent, useContext, useMemo } from 'react';
 import { FilteredFieldContext } from '../../providers/filtered-field.provider';
 import { getFieldGroups, getFilteredProperties } from '../../utils';
 import { SchemaContext, SchemaProvider } from '../../providers/SchemaProvider';
-import { FieldProps } from '../../../typings';
+import { FieldProps } from '../../models/typings';
 import { AnyOfField } from './AnyOfField';
 import { GroupFields } from './GroupFields';
 import { ObjectFieldInner } from './ObjectFieldInner';

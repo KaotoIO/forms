@@ -3,7 +3,7 @@ import { FunctionComponent, PropsWithChildren, useCallback, useMemo } from 'reac
 import { KaotoSchemaDefinition } from '../../models';
 import { isDefined } from '../../utils';
 import { OneOfSchemas } from '../../utils/get-oneof-schema-list';
-import { FieldProps } from '../../../typings';
+import { FieldProps } from '../../models/typings';
 import { SimpleSelector } from '../../typeahead/SimpleSelector';
 import { Typeahead } from '../../typeahead/Typeahead';
 import { TypeaheadItem } from '../../typeahead/Typeahead.types';

@@ -3,7 +3,7 @@ import { Typeahead } from '../typeahead/Typeahead';
 import { TypeaheadItem } from '../typeahead/Typeahead.types';
 import { useFieldValue } from '../hooks/field-value';
 import { SchemaContext } from '../providers/SchemaProvider';
-import { FieldProps } from '../../typings';
+import { FieldProps } from '../models/typings';
 import { FieldWrapper } from './FieldWrapper';
 import { isDefined } from '../utils';
 

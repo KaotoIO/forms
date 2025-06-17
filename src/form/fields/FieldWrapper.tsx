@@ -9,7 +9,7 @@ import {
 } from '@patternfly/react-core';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import { FunctionComponent, PropsWithChildren, ReactNode } from 'react';
-import { FieldProps } from '../../typings';
+import { FieldProps } from '../models/typings';
 import clsx from 'clsx';
 
 interface FieldWrapperProps extends FieldProps {

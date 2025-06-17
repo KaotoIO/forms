@@ -17,8 +17,17 @@
  * under the License.
  */
 
+export * from './ArrayField';
+export * from './ObjectField';
+export * from './OneOfField';
+export * from './PropertiesField';
+
 export * from './AutoField';
+export * from './BooleanField';
 export * from './DisabledField';
+export * from './EnumField';
+export * from './FieldActions';
+export * from './FieldWrapper';
 export * from './PasswordField';
 export * from './StringField';
 export * from './TextAreaField';

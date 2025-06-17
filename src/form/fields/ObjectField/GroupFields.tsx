@@ -7,7 +7,7 @@ import { SchemaProvider } from '../../providers/SchemaProvider';
 import { ObjectFieldInner } from './ObjectFieldInner';
 import { useFieldValue } from '../../hooks/field-value';
 import { KaotoSchemaDefinition } from '../../models';
-import { FieldProps } from '../../../typings';
+import { FieldProps } from '../../models/typings';
 
 interface GroupFieldsProps extends FieldProps {
   groups: [string, Record<string, KaotoSchemaDefinition['schema']>][];

@@ -2,7 +2,7 @@ import { Badge } from '@patternfly/react-core';
 import { FunctionComponent, useContext } from 'react';
 import { useFieldValue } from '../../hooks/field-value';
 import { SchemaContext } from '../../providers/SchemaProvider';
-import { FieldProps } from '../../../typings';
+import { FieldProps } from '../../models/typings';
 import { FieldWrapper } from '../FieldWrapper';
 import { KeyValue, KeyValueType } from '../../KeyValue/KeyValue';
 

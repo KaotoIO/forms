@@ -4,7 +4,7 @@ import { FunctionComponent, useContext, useState } from 'react';
 import { isDefined, ROOT_PATH } from '../../utils';
 import { useFieldValue } from '../../hooks/field-value';
 import { SchemaContext } from '../../providers/SchemaProvider';
-import { FieldProps } from '../../../typings';
+import { FieldProps } from '../../models/typings';
 import { ArrayFieldWrapper } from '../ArrayField/ArrayFieldWrapper';
 import { ObjectFieldGrouping } from './ObjectFieldGrouping';
 

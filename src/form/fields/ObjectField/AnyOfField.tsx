@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { KaotoSchemaDefinition } from '../../models';
 import { SchemaProvider } from '../../providers/SchemaProvider';
-import { FieldProps } from '../../../typings';
+import { FieldProps } from '../../models/typings';
 import { AutoField } from '../AutoField';
 
 interface AnyOfFieldProps extends FieldProps {

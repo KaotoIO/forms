@@ -1,7 +1,7 @@
 import { Card, CardBody, CardTitle } from '@patternfly/react-core';
 import { FunctionComponent } from 'react';
 import { IDataTestID } from '../models';
-import { FieldProps } from '../../typings';
+import { FieldProps } from '../models/typings';
 import { CustomExpandableSection } from '../Form/customField/CustomExpandableSection';
 
 export const DisabledField: FunctionComponent<IDataTestID & FieldProps> = (props) => {

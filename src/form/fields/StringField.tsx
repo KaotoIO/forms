@@ -8,7 +8,7 @@ import { FunctionComponent, ReactNode, useContext, useRef, useState } from 'reac
 import { isDefined, isRawString } from '../utils';
 import { useFieldValue } from '../hooks/field-value';
 import { SchemaContext } from '../providers/SchemaProvider';
-import { FieldProps } from '../../typings';
+import { FieldProps } from '../models/typings';
 import { FieldActions } from './FieldActions';
 import { FieldWrapper } from './FieldWrapper';
 
