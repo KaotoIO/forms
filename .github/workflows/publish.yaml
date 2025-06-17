@@ -18,7 +18,7 @@ jobs:
         with:
           app-id: ${{ vars.KAOTO_RELEASE_APP_ID }}
           private-key: ${{ secrets.KAOTO_RELEASE_APP_KEY }}
-          
+
       - name: 'Checkout source code'
         uses: actions/checkout@v4
         with:
@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
-          scope: '@kaoto-next'
+          scope: '@kaoto'
           cache: 'yarn'
 
       # Install dependencies
@@ -40,7 +40,7 @@ jobs:
         run: yarn run test
 
       # Build packages
-      - name: Build @kaoto-next/uniforms-patternfly
+      - name: Build @kaoto/forms
         run: yarn run build
 
       # Version and publish
