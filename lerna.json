@@ -3,20 +3,21 @@
   "version": "independent",
   "npmClient": "yarn",
   "verbose": true,
+  "packages": [
+    "./"
+  ],
   "conventionalCommits": true,
   "changelog": true,
   "message": "chore(release): publish",
-  "loglevel": "debug",
   "command": {
-    "version": {
-      "tag": false,
-      "push": false,
-      "yes": true
-    },
     "publish": {
       "tag": true,
-      "push": false,
+      "push": true,
+      "pushArgs": [
+        "--follow-tags"
+      ],
       "yes": true
     }
-  }
+  },
+  "useWorkspaces": false
 }
