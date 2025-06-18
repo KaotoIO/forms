@@ -1,6 +1,6 @@
 import { FunctionComponent, useCallback } from 'react';
-import { Typeahead } from '../../form/typeahead/Typeahead';
-import { TypeaheadItem } from '../../form/typeahead/Typeahead.types';
+import { Typeahead } from '../../form/Typeahead/Typeahead';
+import { TypeaheadItem } from '../../form/Typeahead/Typeahead.types';
 import { useCurrentSchema } from '../providers/CurrentSchemaProvider';
 import { useModel } from '../providers/ModelProvider';
 

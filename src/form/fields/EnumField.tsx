@@ -1,6 +1,6 @@
 import { FunctionComponent, useCallback, useContext, useMemo } from 'react';
-import { Typeahead } from '../typeahead/Typeahead';
-import { TypeaheadItem } from '../typeahead/Typeahead.types';
+import { Typeahead } from '../Typeahead/Typeahead';
+import { TypeaheadItem } from '../Typeahead/Typeahead.types';
 import { useFieldValue } from '../hooks/field-value';
 import { SchemaContext } from '../providers/SchemaProvider';
 import { FieldProps } from '../models/typings';

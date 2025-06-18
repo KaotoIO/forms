@@ -2,9 +2,9 @@ import { FormGroup } from '@patternfly/react-core';
 import { JSONSchema4 } from 'json-schema';
 import { FunctionComponent, PropsWithChildren, useCallback, useMemo } from 'react';
 import { FieldProps } from '../../models/typings';
-import { SimpleSelector } from '../../typeahead/SimpleSelector';
-import { Typeahead } from '../../typeahead/Typeahead';
-import { TypeaheadItem } from '../../typeahead/Typeahead.types';
+import { SimpleSelector } from '../../Typeahead/SimpleSelector';
+import { Typeahead } from '../../Typeahead/Typeahead';
+import { TypeaheadItem } from '../../Typeahead/Typeahead.types';
 import { isDefined } from '../../utils';
 import { OneOfSchemas } from '../../utils/get-oneof-schema-list';
 
