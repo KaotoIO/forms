@@ -22,12 +22,8 @@
   "types": "./dist/index.d.ts",
   "main": "dist/index.js",
   "exports": {
-    ".": {
-      "import": "./dist/index.js"
-    },
-    "./testing": {
-      "import": "./dist/testing.js"
-    }
+    ".": "./dist/index.js",
+    "./testing": "./dist/testing.js"
   },
   "files": [
     "dist"
