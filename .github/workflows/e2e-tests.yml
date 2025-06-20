@@ -1,0 +1,123 @@
+name: 🏗️ E2E Tests (Cypress)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test-on-firefox:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node-22.15.0-chrome-136.0.7103.92-1-ff-138.0.1-edge-136.0.3240.50-1
+      options: --user 1001
+
+    steps:
+      - name: 👷‍♀️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔨 Cypress run
+        uses: cypress-io/github-action@v6.10.0
+        with:
+          browser: firefox
+          install: true
+          start: yarn run start --host
+          config: baseUrl=http://localhost:5173
+          wait-on: 'http://127.0.0.1:5173'
+          wait-on-timeout: 60
+        env:
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 💾 Save videos
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-firefox
+          path: cypress/videos
+
+      - name: 💾 Save screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-firefox
+          path: cypress/screenshots
+
+  test-on-chrome:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node-22.15.0-chrome-136.0.7103.92-1-ff-138.0.1-edge-136.0.3240.50-1
+      options: --user 1001
+
+    steps:
+      - name: 👷‍♀️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔨 Cypress run
+        uses: cypress-io/github-action@v6.10.0
+        with:
+          browser: chrome
+          install: true
+          start: yarn run start --host
+          config: baseUrl=http://localhost:5173
+          wait-on: 'http://127.0.0.1:5173'
+          wait-on-timeout: 60
+        env:
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 💾 Save videos
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-chrome
+          path: cypress/videos
+
+      - name: 💾 Save screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-chrome
+          path: cypress/screenshots
+
+  test-on-edge:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node-22.15.0-chrome-136.0.7103.92-1-ff-138.0.1-edge-136.0.3240.50-1
+      options: --user 1001
+
+    steps:
+      - name: 👷‍♀️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔨 Cypress run
+        uses: cypress-io/github-action@v6.10.0
+        with:
+          browser: edge
+          install: true
+          start: yarn run start --host
+          config: baseUrl=http://localhost:5173
+          wait-on: 'http://127.0.0.1:5173'
+          wait-on-timeout: 60
+        env:
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 💾 Save videos
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-edge
+          path: cypress/videos
+
+      - name: 💾 Save screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-edge
+          path: cypress/screenshots

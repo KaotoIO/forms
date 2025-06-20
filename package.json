@@ -18,7 +18,6 @@
   "bugs": {
     "url": "https://github.com/KaotoIO/forms/issues"
   },
-  "type": "module",
   "types": "./dist/index.d.ts",
   "main": "dist/index.js",
   "exports": {
@@ -29,16 +28,20 @@
     "dist"
   ],
   "scripts": {
+    "e2e": "cypress open --config-file=cypress.config.ts",
+    "e2e:headless": "cypress run",
     "start": "vite --mode=dev",
     "build": "yarn rimraf dist && yarn build:esm",
     "build:esm": "tsc --project tsconfig.esm.json && copyfiles -u 2 ./src/form/**/*.scss ./dist",
     "test": "jest",
+    "preview": "vite preview",
     "publish": "lerna publish"
   },
   "dependencies": {
     "ajv": "^8.12.0",
     "ajv-formats": "^3.0.0",
     "clsx": "^2.1.0",
+    "cypress": "^14.5.0",
     "lodash.clonedeep": "^4.5.0",
     "usehooks-ts": "^3.0.0"
   },
