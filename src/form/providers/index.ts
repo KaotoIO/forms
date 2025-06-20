@@ -4,3 +4,4 @@ export * from './FormComponentFactoryProvider';
 export * from './ModelProvider';
 export * from './SchemaDefinitionsProvider';
 export * from './SchemaProvider';
+export * from './SuggestionRegistryProvider';
