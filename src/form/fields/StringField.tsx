@@ -4,11 +4,12 @@ import {
   TextInputGroupMainProps,
   TextInputGroupUtilities,
 } from '@patternfly/react-core';
-import { FunctionComponent, ReactNode, useContext, useRef, useState } from 'react';
-import { isDefined, isRawString } from '../utils';
+import { FunctionComponent, ReactNode, useCallback, useContext, useRef, useState } from 'react';
 import { useFieldValue } from '../hooks/field-value';
-import { SchemaContext } from '../providers/SchemaProvider';
+import { useSuggestions } from '../hooks/suggestions';
 import { FieldProps } from '../models/typings';
+import { SchemaContext } from '../providers/SchemaProvider';
+import { isDefined, isRawString } from '../utils';
 import { FieldActions } from './FieldActions';
 import { FieldWrapper } from './FieldWrapper';
 
@@ -35,21 +36,24 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
   const schemaType = typeof schema.type === 'string' ? schema.type : 'unknown';
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const onFieldChange = (_event: unknown, newValue: string) => {
-    setFieldValue(newValue);
+  const onFieldChange = useCallback(
+    (_event: unknown, newValue: string) => {
+      setFieldValue(newValue);
 
-    const isEmptyString = newValue === '' || newValue === undefined;
-    const isNumber = isNumberSchema && !isEmptyString && !isNaN(Number(newValue));
-    /* To handle inputs under construction, for instance 2. */
-    const isPartialNumber = typeof newValue === 'string' && newValue.endsWith('.');
+      const isEmptyString = newValue === '' || newValue === undefined;
+      const isNumber = isNumberSchema && !isEmptyString && !isNaN(Number(newValue));
+      /* To handle inputs under construction, for instance 2. */
+      const isPartialNumber = typeof newValue === 'string' && newValue.endsWith('.');
 
-    if (isNumber && !isPartialNumber) {
-      onChange(Number(newValue));
-      return;
-    }
+      if (isNumber && !isPartialNumber) {
+        onChange(Number(newValue));
+        return;
+      }
 
-    onChange(newValue);
-  };
+      onChange(newValue);
+    },
+    [isNumberSchema, onChange],
+  );
 
   const onRemove = () => {
     if (isDefined(onRemoveProps)) {
@@ -70,6 +74,21 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
     onChange(newValue);
     setFieldValue(newValue);
   };
+
+  const setValue = useCallback(
+    (value: string | number) => {
+      onFieldChange(null, value.toString());
+    },
+    [onFieldChange],
+  );
+
+  const suggestions = useSuggestions({
+    propName,
+    schema,
+    inputRef,
+    value: fieldValue,
+    setValue,
+  });
 
   const id = `${propName}-popover`;
 
@@ -98,6 +117,8 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
           aria-describedby={id}
           ref={inputRef}
         />
+
+        {suggestions}
 
         <TextInputGroupUtilities>
           {additionalUtility}

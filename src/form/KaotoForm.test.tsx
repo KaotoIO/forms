@@ -37,7 +37,11 @@ describe('KaotoForm', () => {
   });
 
   it('displays "Schema not defined" when schema is not provided', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // Suppress error logs
+
     expect(() => render(<KaotoForm {...defaultProps} schema={undefined} />)).toThrow('[KaotoForm]: Schema is required');
+
+    jest.restoreAllMocks();
   });
 
   it('should not call onChange when loading the form for the first time', () => {

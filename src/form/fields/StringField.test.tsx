@@ -1,8 +1,8 @@
 import { act, fireEvent, render } from '@testing-library/react';
-import { KaotoSchemaDefinition } from '../models';
-import { ROOT_PATH } from '../utils';
-import { ModelContextProvider } from '../providers/ModelProvider';
+import { JSONSchema4 } from 'json-schema';
+import { ModelContext, ModelContextProvider } from '../providers/ModelProvider';
 import { SchemaProvider } from '../providers/SchemaProvider';
+import { ROOT_PATH } from '../utils';
 import { StringField } from './StringField';
 
 describe('StringField', () => {
@@ -189,5 +189,106 @@ describe('StringField', () => {
     );
 
     expect(wrapper.getByTestId('additional-utility')).toBeInTheDocument();
+  });
+
+  it('should not wrap non-string values with RAW', async () => {
+    const onPropertyChangeSpy = jest.fn();
+
+    const wrapper = render(
+      <ModelContextProvider model={123} onPropertyChange={onPropertyChangeSpy}>
+        <StringField propName={ROOT_PATH} />
+      </ModelContextProvider>,
+    );
+
+    const fieldActions = wrapper.getByTestId(`${ROOT_PATH}__field-actions`);
+    act(() => {
+      fireEvent.click(fieldActions);
+    });
+
+    const rawButton = await wrapper.findByRole('menuitem', { name: /raw/i });
+    act(() => {
+      fireEvent.click(rawButton);
+    });
+
+    expect(onPropertyChangeSpy).not.toHaveBeenCalled();
+  });
+
+  it('should handle integer schema type', () => {
+    const onPropertyChangeSpy = jest.fn();
+
+    const wrapper = render(
+      <ModelContextProvider model="" onPropertyChange={onPropertyChangeSpy}>
+        <SchemaProvider schema={{ type: 'integer' }}>
+          <StringField propName={ROOT_PATH} />
+        </SchemaProvider>
+      </ModelContextProvider>,
+    );
+
+    const input = wrapper.getByRole('textbox');
+    act(() => {
+      fireEvent.change(input, { target: { value: '42' } });
+    });
+
+    expect(onPropertyChangeSpy).toHaveBeenCalledWith(ROOT_PATH, 42);
+  });
+
+  it('should set field type correctly', () => {
+    const wrapper = render(
+      <ModelContextProvider model="Value" onPropertyChange={jest.fn()}>
+        <StringField propName={ROOT_PATH} fieldType="password" />
+      </ModelContextProvider>,
+    );
+
+    const input = wrapper.getByRole('textbox');
+    expect(input).toHaveAttribute('type', 'password');
+  });
+
+  it('should handle disabled state', () => {
+    const wrapper = render(
+      <ModelContext.Provider value={{ disabled: true, model: 'value', onPropertyChange: jest.fn() }}>
+        <StringField propName={ROOT_PATH} />
+      </ModelContext.Provider>,
+    );
+
+    const inputField = wrapper.getByRole('textbox');
+    expect(inputField).toBeDisabled();
+  });
+
+  it('should handle empty string conversion for number schema', () => {
+    const onPropertyChangeSpy = jest.fn();
+
+    const wrapper = render(
+      <ModelContextProvider model=" " onPropertyChange={onPropertyChangeSpy}>
+        <SchemaProvider schema={{ type: 'number' }}>
+          <StringField propName={ROOT_PATH} />
+        </SchemaProvider>
+      </ModelContextProvider>,
+    );
+
+    const input = wrapper.getByRole('textbox');
+    act(() => {
+      fireEvent.change(input, { target: { value: '' } });
+    });
+
+    expect(onPropertyChangeSpy).toHaveBeenCalledWith(ROOT_PATH, '');
+  });
+
+  it('should handle NaN values for number schema', () => {
+    const onPropertyChangeSpy = jest.fn();
+
+    const wrapper = render(
+      <ModelContextProvider model="" onPropertyChange={onPropertyChangeSpy}>
+        <SchemaProvider schema={{ type: 'number' }}>
+          <StringField propName={ROOT_PATH} />
+        </SchemaProvider>
+      </ModelContextProvider>,
+    );
+
+    const input = wrapper.getByRole('textbox');
+    act(() => {
+      fireEvent.change(input, { target: { value: 'invalid-number' } });
+    });
+
+    expect(onPropertyChangeSpy).toHaveBeenCalledWith(ROOT_PATH, 'invalid-number');
   });
 });

@@ -25,5 +25,15 @@ export const SchemaSelector: FunctionComponent = () => {
     setModel({});
   }, [setModel, setSchema]);
 
-  return <Typeahead items={schemas} selectedItem={schema} onChange={onSchemaChange} onCleanInput={onSchemaClean} />;
+  return (
+    <Typeahead
+      id="schema-selector"
+      data-testid="schema-selector"
+      aria-label="Schema selector"
+      items={schemas}
+      selectedItem={schema}
+      onChange={onSchemaChange}
+      onCleanInput={onSchemaClean}
+    />
+  );
 };

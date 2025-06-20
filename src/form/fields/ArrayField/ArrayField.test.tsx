@@ -1,8 +1,18 @@
 import { act, fireEvent, render, RenderResult } from '@testing-library/react';
-import { KaotoSchemaDefinition } from '../../models';
-import { ROOT_PATH } from '../../utils';
+import { JSONSchema4 } from 'json-schema';
 import { FieldTestProvider } from '../../testing/FieldTestProvider';
+import { ROOT_PATH } from '../../utils';
 import { ArrayField } from './ArrayField';
+
+jest.mock('../../utils', () => {
+  const actual = jest.requireActual('../../utils');
+  let idCounter = 0;
+
+  return {
+    ...actual,
+    getHexaDecimalRandomId: jest.fn().mockImplementation(() => `mocked-id-${idCounter++}`),
+  };
+});
 
 describe('ArrayField', () => {
   const schema: JSONSchema4 = {

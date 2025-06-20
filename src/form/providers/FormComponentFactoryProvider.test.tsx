@@ -58,6 +58,8 @@ describe('FormComponentFactoryProvider', () => {
   );
 
   it('should throw an error when schema has an unhandled anyOf array', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {}); // Suppress error logs
+
     const { result } = renderHook(() => useContext(FormComponentFactoryContext), {
       wrapper: ({ children }) => <FormComponentFactoryProvider>{children}</FormComponentFactoryProvider>,
     });
@@ -65,5 +67,7 @@ describe('FormComponentFactoryProvider', () => {
     expect(() => result.current?.({ anyOf: [] } as unknown as JSONSchema4)).toThrow(
       'FormComponentFactoryProvider: AnyOf should be handled in the scope of the ObjectField',
     );
+
+    jest.restoreAllMocks();
   });
 });

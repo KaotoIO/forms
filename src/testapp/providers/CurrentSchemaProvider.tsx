@@ -24,7 +24,11 @@ export const CurrentSchemaProvider: FunctionComponent<PropsWithChildren> = ({ ch
     () => Object.entries(componentSchemas).map(([name, schema]) => ({ name, value: schema as JSONSchema4 })),
     [],
   );
-  const [schema, setSchema] = useState<SchemaEntry | undefined>(undefined);
+
+  const [schema, setSchema] = useState<SchemaEntry | undefined>({
+    name: 'log',
+    value: componentSchemas['log'] as JSONSchema4,
+  });
 
   const value = useMemo(() => ({ schema, schemas, setSchema }), [schema, schemas]);
 

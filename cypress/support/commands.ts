@@ -17,8 +17,9 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
-      checkCodeSpanLine(spanText: string, linesCount?: number): Chainable<JQuery<HTMLElement>>;
       openHomePage(): Chainable<JQuery<HTMLElement>>;
+      selectSchema(schemaName: string): Chainable<JQuery<HTMLElement>>;
+      checkCodeSpanLine(spanText: string, linesCount?: number): Chainable<JQuery<HTMLElement>>;
       expandWrappedSection(sectionName: string): Chainable<JQuery<HTMLElement>>;
       closeWrappedSection(sectionName: string): Chainable<JQuery<HTMLElement>>;
       selectInTypeaheadField(inputGroup: string, value: string): Chainable<JQuery<HTMLElement>>;
@@ -30,6 +31,13 @@ declare global {
 Cypress.Commands.add('openHomePage', () => {
   const url = Cypress.config().baseUrl;
   cy.visit(url!);
+});
+
+Cypress.Commands.add('selectSchema', (schemaName: string) => {
+  cy.get('[aria-label="Schema selector toggle"]').click();
+  cy.get('input[type="text"][aria-label="Schema selector"]').eq(0).clear();
+  cy.get('input[type="text"][aria-label="Schema selector"]').eq(0).type(schemaName);
+  cy.get('.pf-v6-c-menu__item-text').contains(schemaName).click();
 });
 
 Cypress.Commands.add('checkCodeSpanLine', (spanText: string, linesCount?: number) => {

@@ -1,11 +1,11 @@
 import { act, render, screen } from '@testing-library/react';
 import { inspect } from 'node:util';
 import { CanvasFormTabsContext, CanvasFormTabsContextResult } from '../providers';
-import { ROOT_PATH } from '../utils';
-import { FormComponentFactoryProvider } from '../providers/FormComponentFactoryProvider';
 import { FormComponentFactoryContext } from '../providers/context/form-component-factory-context';
+import { FormComponentFactoryProvider } from '../providers/FormComponentFactoryProvider';
 import { ModelContextProvider } from '../providers/ModelProvider';
 import { SchemaProvider } from '../providers/SchemaProvider';
+import { ROOT_PATH } from '../utils';
 import { AutoField } from './AutoField';
 
 describe('AutoField', () => {
@@ -13,15 +13,18 @@ describe('AutoField', () => {
   let modifiedValue: CanvasFormTabsContextResult;
 
   beforeEach(() => {
-    requiredValue = { selectedTab: 'Required', onTabChange: jest.fn() };
-    modifiedValue = { selectedTab: 'Modified', onTabChange: jest.fn() };
+    requiredValue = { selectedTab: 'Required', setSelectedTab: jest.fn() };
+    modifiedValue = { selectedTab: 'Modified', setSelectedTab: jest.fn() };
   });
 
   it('should throw an error if schema is not defined', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
+
     expect(() => render(<AutoField propName={ROOT_PATH} />)).toThrow(
       `AutoField: schema is not defined for ${ROOT_PATH}`,
     );
+
+    jest.restoreAllMocks();
   });
 
   it('should throw an error if formComponentFactory is not defined', () => {
@@ -33,6 +36,8 @@ describe('AutoField', () => {
         </SchemaProvider>,
       ),
     ).toThrow(`AutoField: formComponentFactory is not defined for ${ROOT_PATH}`);
+
+    jest.restoreAllMocks();
   });
 
   it('it should not render when in `Required` mode but no required properties', () => {
@@ -271,11 +276,11 @@ describe('AutoField', () => {
               type: 'object',
               properties: {
                 name: { type: 'string', default: 'test' },
-                disabled: { type: 'boolean', default: true },
+                disabled: { type: 'boolean', default: true, title: 'Disabled' },
               },
             }}
           >
-            <ModelContextProvider model={{ name: 'test', disabled: 'true' }} onPropertyChange={jest.fn()}>
+            <ModelContextProvider model={{ name: 'test', disabled: true }} onPropertyChange={jest.fn()}>
               <AutoField propName={ROOT_PATH} />
             </ModelContextProvider>
           </SchemaProvider>

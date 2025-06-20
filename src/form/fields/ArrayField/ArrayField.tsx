@@ -1,11 +1,10 @@
 import { Button } from '@patternfly/react-core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { FunctionComponent, useContext, useEffect, useState } from 'react';
-// import { getHexaDecimalRandomId } from '../../../../../../camel-utils/camel-random-id';
-import { getItemFromSchema, isDefined, getHexaDecimalRandomId } from '../../utils';
 import { useFieldValue } from '../../hooks/field-value';
-import { SchemaContext, SchemaProvider } from '../../providers/SchemaProvider';
 import { FieldProps } from '../../models/typings';
+import { SchemaContext, SchemaProvider } from '../../providers/SchemaProvider';
+import { getHexaDecimalRandomId, getItemFromSchema, isDefined } from '../../utils';
 import { AutoField } from '../AutoField';
 import { ArrayFieldWrapper } from './ArrayFieldWrapper';
 
