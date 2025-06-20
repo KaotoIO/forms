@@ -5,10 +5,11 @@ import {
   TextInputGroupUtilities,
 } from '@patternfly/react-core';
 import { FunctionComponent, ReactNode, useContext, useRef, useState } from 'react';
-import { isDefined, isRawString } from '../utils';
 import { useFieldValue } from '../hooks/field-value';
-import { SchemaContext } from '../providers/SchemaProvider';
+import { useSuggestions } from '../hooks/suggestions';
 import { FieldProps } from '../models/typings';
+import { SchemaContext } from '../providers/SchemaProvider';
+import { isDefined, isRawString } from '../utils';
 import { FieldActions } from './FieldActions';
 import { FieldWrapper } from './FieldWrapper';
 
@@ -34,6 +35,7 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
   const toggleRawAriaLabel = `Toggle RAW wrap for ${lastPropName} field`;
   const schemaType = typeof schema.type === 'string' ? schema.type : 'unknown';
   const inputRef = useRef<HTMLInputElement>(null);
+  const suggestions = useSuggestions({ propName, schema, inputRef, inputValue: fieldValue });
 
   const onFieldChange = (_event: unknown, newValue: string) => {
     setFieldValue(newValue);
@@ -98,6 +100,8 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
           aria-describedby={id}
           ref={inputRef}
         />
+
+        {suggestions}
 
         <TextInputGroupUtilities>
           {additionalUtility}
