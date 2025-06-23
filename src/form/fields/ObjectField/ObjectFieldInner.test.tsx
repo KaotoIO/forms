@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { inspect } from 'node:util';
 import { ROOT_PATH } from '../../utils';
-import { FormComponentFactoryContext } from '../../providers/FormComponentFactoryProvider';
+import { FormComponentFactoryContext } from '../../providers/context/form-component-factory-context';
 import { ModelContextProvider } from '../../providers/ModelProvider';
 import { SchemaProvider } from '../../providers/SchemaProvider';
 import { FormWrapper } from '../../testing/FormWrapper';

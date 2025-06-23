@@ -1,12 +1,12 @@
 import { render } from '@testing-library/react';
 import { inspect } from 'node:util';
 import { useContext } from 'react';
-import { KaotoSchemaDefinition } from '../../models';
 import { ROOT_PATH } from '../../utils';
-import { FormComponentFactoryContext } from '../../providers/FormComponentFactoryProvider';
+import { FormComponentFactoryContext } from '../../providers/context/form-component-factory-context';
 import { SchemaContext } from '../../providers/SchemaProvider';
 import { FormWrapper } from '../../testing/FormWrapper';
 import { AnyOfField } from './AnyOfField';
+import { JSONSchema4 } from 'json-schema';
 
 describe('AnyOfField', () => {
   const anyOf: JSONSchema4['anyOf'] = [
