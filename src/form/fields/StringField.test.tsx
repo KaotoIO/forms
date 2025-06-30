@@ -1,11 +1,33 @@
-import { act, fireEvent, render } from '@testing-library/react';
+import { act, fireEvent, render, waitFor, within } from '@testing-library/react';
 import { JSONSchema4 } from 'json-schema';
+import { SuggestionContext } from '../providers';
 import { ModelContext, ModelContextProvider } from '../providers/ModelProvider';
 import { SchemaProvider } from '../providers/SchemaProvider';
 import { ROOT_PATH } from '../utils';
 import { StringField } from './StringField';
 
 describe('StringField', () => {
+  const mockSuggestionProvider = {
+    id: 'test-provider',
+    appliesTo: jest.fn().mockReturnValue(true),
+    getSuggestions: jest.fn().mockResolvedValue([
+      { value: 'test-suggestion-1', description: 'First test suggestion' },
+      { value: 'test-suggestion-2', description: 'Second test suggestion' },
+    ]),
+  };
+
+  const getProvidersMock = jest.fn().mockReturnValue([mockSuggestionProvider]);
+
+  const renderWithSuggestions = (children: React.ReactNode) => {
+    return render(
+      <SuggestionContext.Provider value={{ getProviders: getProvidersMock }}>{children}</SuggestionContext.Provider>,
+    );
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should render', () => {
     const { container } = render(
       <ModelContextProvider model="Value" onPropertyChange={jest.fn()}>
@@ -290,5 +312,55 @@ describe('StringField', () => {
     });
 
     expect(onPropertyChangeSpy).toHaveBeenCalledWith(ROOT_PATH, 'invalid-number');
+  });
+
+  it('should show suggestions when Ctrl+Space is pressed', async () => {
+    const onPropertyChangeSpy = jest.fn();
+
+    const wrapper = renderWithSuggestions(
+      <ModelContextProvider model="" onPropertyChange={onPropertyChangeSpy}>
+        <StringField propName={ROOT_PATH} />
+      </ModelContextProvider>,
+    );
+
+    await act(async () => {
+      const input = wrapper.getByRole('textbox');
+      input.focus();
+      fireEvent.keyDown(input, { code: 'Space', ctrlKey: true });
+    });
+
+    await waitFor(() => {
+      expect(wrapper.getByTestId('suggestions-menu')).toBeInTheDocument();
+    });
+
+    // Check if suggestions are rendered
+    expect(wrapper.getByText('First test suggestion')).toBeInTheDocument();
+    expect(wrapper.getByText('Second test suggestion')).toBeInTheDocument();
+  });
+
+  it('should apply suggestion when clicked', async () => {
+    const onPropertyChangeSpy = jest.fn();
+
+    const wrapper = renderWithSuggestions(
+      <ModelContextProvider model="" onPropertyChange={onPropertyChangeSpy}>
+        <StringField propName={ROOT_PATH} />
+      </ModelContextProvider>,
+    );
+
+    await act(async () => {
+      const input = wrapper.getByRole('textbox');
+      input.focus();
+      fireEvent.keyDown(input, { code: 'Space', ctrlKey: true });
+    });
+
+    const suggestionMenu = await wrapper.findByRole('menu');
+    expect(suggestionMenu).toBeInTheDocument();
+
+    const firstSuggestion = within(suggestionMenu).getByText('First test suggestion');
+    act(() => {
+      fireEvent.click(firstSuggestion);
+    });
+
+    expect(onPropertyChangeSpy).toHaveBeenCalledWith(ROOT_PATH, 'test-suggestion-1');
   });
 });

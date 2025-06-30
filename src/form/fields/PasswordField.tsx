@@ -1,10 +1,11 @@
 import { Button, TextInputGroup, TextInputGroupMain, TextInputGroupUtilities } from '@patternfly/react-core';
 import { EyeIcon, EyeSlashIcon } from '@patternfly/react-icons';
-import { FunctionComponent, useContext, useRef, useState } from 'react';
-import { isDefined, isRawString } from '../utils';
+import { FunctionComponent, useCallback, useContext, useRef, useState } from 'react';
 import { useFieldValue } from '../hooks/field-value';
-import { SchemaContext } from '../providers/SchemaProvider';
+import { useSuggestions } from '../hooks/suggestions';
 import { FieldProps } from '../models/typings';
+import { SchemaContext } from '../providers/SchemaProvider';
+import { isDefined, isRawString } from '../utils';
 import { FieldActions } from './FieldActions';
 import { FieldWrapper } from './FieldWrapper';
 
@@ -18,9 +19,12 @@ export const PasswordField: FunctionComponent<FieldProps> = ({ propName, require
   const toggleRawAriaLabel = `Toggle RAW wrap for ${lastPropName} field`;
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const onFieldChange = (_event: unknown, value: string) => {
-    onChange(value);
-  };
+  const onFieldChange = useCallback(
+    (_event: unknown, value: string) => {
+      onChange(value);
+    },
+    [onChange],
+  );
 
   const onRemove = () => {
     if (isDefined(onRemoveProps)) {
@@ -39,6 +43,21 @@ export const PasswordField: FunctionComponent<FieldProps> = ({ propName, require
     const newValue = isRawString(value) ? value.substring(4, value.length - 1) : `RAW(${value})`;
     onChange(newValue);
   };
+
+  const setValue = useCallback(
+    (value: string | number) => {
+      onFieldChange(null, value.toString());
+    },
+    [onFieldChange],
+  );
+
+  const suggestions = useSuggestions({
+    propName,
+    schema,
+    inputRef,
+    value,
+    setValue,
+  });
 
   const id = `${propName}-popover`;
 
@@ -66,6 +85,8 @@ export const PasswordField: FunctionComponent<FieldProps> = ({ propName, require
           aria-describedby={id}
           ref={inputRef}
         />
+
+        {suggestions}
 
         <TextInputGroupUtilities>
           <Button

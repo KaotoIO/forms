@@ -2,6 +2,7 @@
 export * from './fields';
 export * from './hooks';
 export * from './KaotoForm';
+export * from './models/suggestions';
 export * from './models/typings';
 export * from './providers';
 export * from './utils';
