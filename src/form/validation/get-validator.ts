@@ -1,12 +1,12 @@
-import Ajv, { ValidateFunction } from 'ajv';
+import Ajv, { Options, ValidateFunction } from 'ajv';
 import { JSONSchema4 } from 'json-schema';
 
-export const getValidator = (schema: JSONSchema4) => {
-  const ajv = new Ajv({ strict: false, allErrors: true, useDefaults: true });
+export const getValidator = <T = unknown>(schema: JSONSchema4, options: Options | undefined = undefined) => {
+  const ajv = new Ajv({ strict: false, allErrors: true, useDefaults: true, ...(options ?? {}) });
 
-  let validator: ValidateFunction | undefined;
+  let validator: ValidateFunction<T> | undefined;
   try {
-    validator = ajv.compile(schema);
+    validator = ajv.compile<T>(schema);
   } catch (error) {
     console.error('[KaotoForm Validator]: Could not compile schema', error);
   }
