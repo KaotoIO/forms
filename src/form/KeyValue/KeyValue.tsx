@@ -2,6 +2,7 @@ import { Button, Content, Split, SplitItem, TextInputGroup, TextInputGroupMain }
 import { PlusIcon, TrashIcon } from '@patternfly/react-icons';
 import { FunctionComponent, useRef, useState } from 'react';
 import { getCamelRandomId } from '../utils/camel-random-id';
+import { KeyValueField } from './KeyValueField';
 
 export type KeyValueType = Record<string, string>;
 
@@ -106,26 +107,23 @@ export const KeyValue: FunctionComponent<KeyValueProps> = ({ propName, initialMo
             </SplitItem>
 
             <SplitItem isFilled>
-              <TextInputGroup>
-                <TextInputGroupMain
-                  type="text"
-                  id={`${propName}__${key}__value`}
-                  name={`${propName}__${key}__value`}
-                  data-testid={`${propName}__value`}
-                  onChange={(_event, value) => {
-                    onPropertyValueChange(key, value);
-                  }}
-                  ref={getFocusRefFn('value', index)}
-                  onFocus={() => {
-                    currentFocusIndex.current = ['value', index];
-                  }}
-                  onBlur={() => {
-                    currentFocusIndex.current = ['value', -1];
-                  }}
-                  placeholder="Write a value"
-                  value={value}
-                />
-              </TextInputGroup>
+              <KeyValueField
+                id={`${propName}__${key}__value`}
+                name={`${propName}__${key}__value`}
+                data-testid={`${propName}__value`}
+                onChange={(value) => {
+                  onPropertyValueChange(key, value);
+                }}
+                ref={getFocusRefFn('value', index)}
+                onFocus={() => {
+                  currentFocusIndex.current = ['value', index];
+                }}
+                onBlur={() => {
+                  currentFocusIndex.current = ['value', -1];
+                }}
+                placeholder="Write a value"
+                value={value}
+              />
             </SplitItem>
 
             <SplitItem>

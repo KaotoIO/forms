@@ -272,6 +272,29 @@ describe('useSuggestions', () => {
     });
   });
 
+  it('should return the focus to the input when pressing Escape', async () => {
+    const result = renderWithContext(<TestComponent />);
+
+    const input = result.getByRole('textbox');
+    const focusSpy = jest.spyOn(input, 'focus');
+
+    // Open suggestions menu
+    await act(async () => {
+      fireEvent.focus(input);
+      fireEvent.keyDown(input, { ctrlKey: true, code: 'Space' });
+    });
+
+    // Press Escape to close suggestions
+    await act(async () => {
+      const suggestionItem = result.getByText('suggestion1');
+      fireEvent.keyDown(suggestionItem, { key: 'Escape' });
+    });
+
+    await waitFor(() => {
+      expect(focusSpy).toHaveBeenCalled();
+    });
+  });
+
   it('should fetch suggestions from providers when value changes', async () => {
     const result = renderWithContext(<TestComponent />);
 
@@ -300,6 +323,50 @@ describe('useSuggestions', () => {
         propertyName: 'testProp',
       });
     });
+  });
+
+  it('should select an option and return to the input when clicking on it', async () => {
+    const result = renderWithContext(<TestComponent />);
+
+    const input = result.getByRole('textbox') as HTMLInputElement;
+    const focusSpy = jest.spyOn(input, 'focus');
+    const selectionRangeSpy = jest.spyOn(input, 'setSelectionRange');
+
+    // Open suggestions menu
+    await act(async () => {
+      fireEvent.focus(input);
+      fireEvent.keyDown(input, { ctrlKey: true, code: 'Space' });
+    });
+
+    await act(async () => {
+      const suggestionItem = result.getByText('suggestion1');
+      fireEvent.click(suggestionItem);
+    });
+
+    expect(focusSpy).toHaveBeenCalled();
+    expect(selectionRangeSpy).toHaveBeenCalled();
+  });
+
+  it('should select an option when pressing Enter', async () => {
+    const result = renderWithContext(<TestComponent />);
+
+    const input = result.getByRole('textbox') as HTMLInputElement;
+    const focusSpy = jest.spyOn(input, 'focus');
+    const selectionRangeSpy = jest.spyOn(input, 'setSelectionRange');
+
+    // Open suggestions menu
+    await act(async () => {
+      fireEvent.focus(input);
+      fireEvent.keyDown(input, { ctrlKey: true, code: 'Space' });
+    });
+
+    await act(async () => {
+      const suggestionItem = result.getByText('suggestion1');
+      fireEvent.keyDown(suggestionItem, { key: 'Enter' });
+    });
+
+    expect(focusSpy).toHaveBeenCalled();
+    expect(selectionRangeSpy).toHaveBeenCalled();
   });
 
   it('should group suggestions correctly', async () => {

@@ -9,9 +9,9 @@ import { getCursorWord } from '../utils/get-cursor-word';
 type UseSuggestionsProps = {
   propName: string;
   schema: JSONSchema4;
-  inputRef: RefObject<HTMLInputElement>;
+  inputRef: RefObject<HTMLInputElement | HTMLTextAreaElement>;
   value: string | number;
-  setValue?: (value: string | number) => void;
+  setValue?: (value: string) => void;
 };
 export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: UseSuggestionsProps): ReactNode => {
   const [isVisible, setIsVisible] = useState(false);
@@ -38,7 +38,9 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
   );
 
   const handleInputKeyDown = useCallback(
-    (event: KeyboardEvent) => {
+    (event: Event) => {
+      if (!(event instanceof KeyboardEvent)) return;
+
       if (event.ctrlKey && event.code === 'Space') {
         event.preventDefault();
         setIsVisible(true);

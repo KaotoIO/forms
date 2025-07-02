@@ -1,8 +1,13 @@
-import { act, fireEvent, render } from '@testing-library/react';
-import { ROOT_PATH } from '../utils';
-import { TextAreaField } from './TextAreaField';
+import { act, fireEvent, render, waitFor } from '@testing-library/react';
 import { ModelContextProvider } from '../providers/ModelProvider';
 import { SchemaProvider } from '../providers/SchemaProvider';
+import { ROOT_PATH } from '../utils';
+import { TextAreaField } from './TextAreaField';
+
+// Mock useSuggestions to control its output
+jest.mock('../hooks/suggestions', () => ({
+  useSuggestions: jest.fn(() => null),
+}));
 
 describe('TextAreaField', () => {
   it('should render', () => {
@@ -89,5 +94,45 @@ describe('TextAreaField', () => {
 
     expect(onPropertyChangeSpy).toHaveBeenCalledTimes(1);
     expect(onPropertyChangeSpy).toHaveBeenCalledWith(ROOT_PATH, undefined);
+  });
+
+  it('should call the onRemove callback if provided when using the clear button', () => {
+    const onRemoveSpy = jest.fn();
+
+    const wrapper = render(
+      <ModelContextProvider model="Value" onPropertyChange={jest.fn()}>
+        <TextAreaField propName={ROOT_PATH} onRemove={onRemoveSpy} />
+      </ModelContextProvider>,
+    );
+
+    const clearButton = wrapper.getByTestId(`${ROOT_PATH}__clear`);
+    act(() => {
+      fireEvent.click(clearButton);
+    });
+
+    expect(onRemoveSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows suggestions when Ctrl+Space is pressed', async () => {
+    const SuggestionsMenu = () => <div data-testid="suggestions-menu">Suggestions</div>;
+    const { useSuggestions } = jest.requireMock('../hooks/suggestions');
+
+    useSuggestions.mockImplementation(() => <SuggestionsMenu />);
+
+    const { getByRole, getByTestId } = render(
+      <ModelContextProvider model="Value" onPropertyChange={jest.fn()}>
+        <TextAreaField propName={ROOT_PATH} />
+      </ModelContextProvider>,
+    );
+    const input = getByRole('textbox');
+
+    await act(async () => {
+      input.focus();
+      fireEvent.keyDown(input, { code: 'Space', ctrlKey: true });
+    });
+
+    await waitFor(() => {
+      expect(getByTestId('suggestions-menu')).toBeInTheDocument();
+    });
   });
 });

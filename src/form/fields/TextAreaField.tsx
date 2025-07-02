@@ -1,10 +1,11 @@
 import { Button, InputGroup, InputGroupItem, TextArea } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
-import { FunctionComponent, useContext } from 'react';
-import { isDefined } from '../utils';
+import { FunctionComponent, useContext, useRef } from 'react';
 import { useFieldValue } from '../hooks/field-value';
-import { SchemaContext } from '../providers/SchemaProvider';
+import { useSuggestions } from '../hooks/suggestions';
 import { FieldProps } from '../models/typings';
+import { SchemaContext } from '../providers/SchemaProvider';
+import { isDefined } from '../utils';
 import { FieldWrapper } from './FieldWrapper';
 
 export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, required, onRemove: onRemoveProps }) => {
@@ -13,6 +14,7 @@ export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, require
   const lastPropName = propName.split('.').pop();
   const ariaLabel = isDefined(onRemoveProps) ? 'Remove' : `Clear ${lastPropName} field`;
   const rows = Math.max(value.split('\n').length, 2);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const onFieldChange = (_event: unknown, value: string) => {
     onChange(value);
@@ -27,6 +29,14 @@ export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, require
     /** Clear field by removing its value */
     onChange(undefined as unknown as string);
   };
+
+  const suggestions = useSuggestions({
+    propName,
+    schema,
+    inputRef: textAreaRef,
+    value,
+    setValue: onChange,
+  });
 
   const id = `${propName}-popover`;
 
@@ -52,7 +62,10 @@ export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, require
             onChange={onFieldChange}
             aria-describedby={id}
             isDisabled={disabled}
+            ref={textAreaRef}
           />
+
+          {suggestions}
         </InputGroupItem>
 
         <InputGroupItem>
