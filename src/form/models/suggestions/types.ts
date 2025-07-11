@@ -13,6 +13,12 @@ export type Suggestion = {
 
 export type GroupedSuggestions = Record<string, Suggestion[]>;
 
+export type SuggestionRequestContext = {
+  propertyName: string;
+  inputValue: string | number;
+  cursorPosition?: number | null;
+};
+
 export interface SuggestionProvider {
   /**
    * Unique identifier for the provider.
@@ -34,8 +40,5 @@ export interface SuggestionProvider {
    * @param inputValue The current value in the text input.
    * @returns An array of suggestions.
    */
-  getSuggestions: (
-    word: string,
-    context: { propertyName: string; inputValue: string | number; cursorPosition?: number | null },
-  ) => Suggestion[] | Promise<Suggestion[]>;
+  getSuggestions: (word: string, context: SuggestionRequestContext) => Suggestion[] | Promise<Suggestion[]>;
 }
