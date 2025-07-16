@@ -150,6 +150,8 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
 
   return (
     <Popper
+      preventOverflow
+      maxWidth="trigger"
       isVisible={isVisible}
       triggerRef={inputRef}
       popperRef={menuRef}
@@ -181,7 +183,7 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
                       ref={groupIndex === 0 ? firstElementRef : null}
                       key={group}
                       flyoutMenu={
-                        <Menu containsFlyout>
+                        <Menu containsFlyout isScrollable>
                           <MenuContent>
                             <MenuList>
                               {suggestions.map((suggestion) => (

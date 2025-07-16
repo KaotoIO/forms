@@ -33,6 +33,7 @@
     "start": "vite --mode=dev",
     "build": "yarn rimraf dist && yarn build:lib",
     "build:lib": "tsc --project tsconfig.lib.json && copyfiles -u 2 ./src/form/**/*.scss ./dist",
+    "build:lib:watch": "tsc --project tsconfig.lib.json --watch",
     "build:site": "vite build  --config vite.config.mjs",
     "test": "jest",
     "preview": "vite preview",
