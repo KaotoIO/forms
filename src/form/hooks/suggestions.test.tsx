@@ -251,47 +251,73 @@ describe('useSuggestions', () => {
     });
   });
 
-  it('should hide suggestions menu when Escape is pressed', async () => {
-    const result = renderWithContext(<TestComponent />);
+  describe('Escape key handling', () => {
+    it('should hide suggestions menu when Escape is pressed', async () => {
+      const result = renderWithContext(<TestComponent />);
 
-    await act(async () => {
-      fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      await act(async () => {
+        fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      });
+
+      await waitFor(() => {
+        expect(result.getByTestId('suggestions-menu')).toBeInTheDocument();
+      });
+
+      await act(async () => {
+        fireEvent.focus(result.getByTestId('test-input'));
+        fireEvent.keyDown(result.getByTestId('test-input'), { key: 'Escape' });
+      });
+
+      await waitFor(() => {
+        expect(result.queryByTestId('suggestions-menu')).not.toBeInTheDocument();
+      });
     });
 
-    await waitFor(() => {
-      expect(result.getByTestId('suggestions-menu')).toBeInTheDocument();
+    it('should hide suggestions menu when Escape is pressed in the search field', async () => {
+      const result = renderWithContext(<TestComponent />);
+
+      await act(async () => {
+        fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      });
+
+      await waitFor(() => {
+        expect(result.getByTestId('suggestions-menu')).toBeInTheDocument();
+      });
+
+      await act(async () => {
+        const searchInput = result.getByTestId('suggestions-menu-search-input').querySelector('input');
+        expect(searchInput).toBeInTheDocument();
+
+        fireEvent.focus(searchInput!);
+        fireEvent.keyDown(searchInput!, { key: 'Escape' });
+      });
+
+      await waitFor(() => {
+        expect(result.queryByTestId('suggestions-menu')).not.toBeInTheDocument();
+      });
     });
 
-    await act(async () => {
-      fireEvent.focus(result.getByTestId('test-input'));
-      fireEvent.keyDown(result.getByTestId('test-input'), { key: 'Escape' });
-    });
+    it('should return the focus to the input when pressing Escape', async () => {
+      const result = renderWithContext(<TestComponent />);
 
-    await waitFor(() => {
-      expect(result.queryByTestId('suggestions-menu')).not.toBeInTheDocument();
-    });
-  });
+      const input = result.getByRole('textbox');
+      const focusSpy = jest.spyOn(input, 'focus');
 
-  it('should return the focus to the input when pressing Escape', async () => {
-    const result = renderWithContext(<TestComponent />);
+      // Open suggestions menu
+      await act(async () => {
+        fireEvent.focus(input);
+        fireEvent.keyDown(input, { ctrlKey: true, code: 'Space' });
+      });
 
-    const input = result.getByRole('textbox');
-    const focusSpy = jest.spyOn(input, 'focus');
+      // Press Escape to close suggestions
+      await act(async () => {
+        const suggestionItem = result.getByText('suggestion1');
+        fireEvent.keyDown(suggestionItem, { key: 'Escape' });
+      });
 
-    // Open suggestions menu
-    await act(async () => {
-      fireEvent.focus(input);
-      fireEvent.keyDown(input, { ctrlKey: true, code: 'Space' });
-    });
-
-    // Press Escape to close suggestions
-    await act(async () => {
-      const suggestionItem = result.getByText('suggestion1');
-      fireEvent.keyDown(suggestionItem, { key: 'Escape' });
-    });
-
-    await waitFor(() => {
-      expect(focusSpy).toHaveBeenCalled();
+      await waitFor(() => {
+        expect(focusSpy).toHaveBeenCalled();
+      });
     });
   });
 
@@ -388,16 +414,34 @@ describe('useSuggestions', () => {
     });
   });
 
-  it('should show "No suggestions available" when no suggestions are provided', async () => {
-    mockProvider.getSuggestions = jest.fn().mockResolvedValue([]);
+  describe('when no suggestions are available', () => {
+    it('should show "No suggestions available" when no suggestions are provided', async () => {
+      mockProvider.getSuggestions = jest.fn().mockResolvedValue([]);
 
-    const result = renderWithContext(<TestComponent />);
-    await act(async () => {
-      fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      const result = renderWithContext(<TestComponent />);
+      await act(async () => {
+        fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      });
+
+      await waitFor(() => {
+        expect(result.getByText('No suggestions available')).toBeInTheDocument();
+      });
     });
 
-    await waitFor(() => {
-      expect(result.getByText('No suggestions available')).toBeInTheDocument();
+    it('should not show "No suggestions available" when there are grouped suggestions', async () => {
+      mockProvider.getSuggestions = jest
+        .fn()
+        .mockResolvedValue([{ value: 'grouped1', description: 'Grouped suggestion', group: 'TestGroup' }]);
+
+      const result = renderWithContext(<TestComponent />);
+      await act(async () => {
+        fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      });
+
+      await waitFor(() => {
+        expect(result.queryByText('No suggestions available')).not.toBeInTheDocument();
+        expect(result.getByText('TestGroup')).toBeInTheDocument();
+      });
     });
   });
 
@@ -449,6 +493,101 @@ describe('useSuggestions', () => {
 
       const inputElement = result.getByTestId('test-input') as HTMLInputElement;
       expect(inputElement.value).toBe('suggestion1');
+    });
+  });
+
+  describe('search functionality', () => {
+    it('should filter suggestions based on search input', async () => {
+      const result = renderWithContext(<TestComponent />);
+
+      // Open suggestions menu
+      await act(async () => {
+        fireEvent.focus(result.getByTestId('test-input'));
+        fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      });
+
+      await waitFor(() => {
+        expect(result.getByTestId('suggestions-menu')).toBeInTheDocument();
+      });
+
+      // Type in the search input to filter
+      await act(async () => {
+        const searchInput = result.getByTestId('suggestions-menu-search-input').querySelector('input');
+        expect(searchInput).toBeInTheDocument();
+
+        fireEvent.change(searchInput!, { target: { value: '2' } });
+      });
+
+      await waitFor(() => {
+        expect(result.getByText('group1')).toBeInTheDocument();
+        expect(result.queryByText('suggestion1')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should focus the search input when the menuitem containing it is focused', async () => {
+      const result = renderWithContext(<TestComponent />);
+
+      // Open suggestions menu
+      await act(async () => {
+        fireEvent.focus(result.getByTestId('test-input'));
+        fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      });
+
+      await waitFor(() => {
+        expect(result.getByTestId('suggestions-menu')).toBeInTheDocument();
+      });
+
+      const searchMenuItem = result.getByTestId('suggestions-menu-search-item');
+      const searchInput = result.getByTestId('suggestions-menu-search-input').querySelector('input');
+
+      expect(searchInput).toBeInTheDocument();
+      const focusSpy = jest.spyOn(searchInput!, 'focus');
+
+      // Focus the menuitem containing the search input
+      await act(async () => {
+        fireEvent.focus(searchMenuItem);
+      });
+
+      expect(focusSpy).toHaveBeenCalled();
+    });
+
+    it('should clear the search input when Ctrl+Space is pressed', async () => {
+      const result = renderWithContext(<TestComponent />);
+
+      // Open suggestions menu
+      await act(async () => {
+        fireEvent.focus(result.getByTestId('test-input'));
+        fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      });
+
+      await waitFor(() => {
+        expect(result.getByTestId('suggestions-menu')).toBeInTheDocument();
+      });
+
+      const searchInput = result.getByTestId('suggestions-menu-search-input').querySelector('input');
+      expect(searchInput).toBeInTheDocument();
+
+      await act(async () => {
+        fireEvent.change(searchInput!, { target: { value: 'new search' } });
+      });
+
+      await waitFor(() => {
+        expect(searchInput!.value).toBe('new search');
+      });
+
+      await act(async () => {
+        fireEvent.keyDown(searchInput!, { code: 'Escape' });
+      });
+
+      // Open suggestions menu
+      await act(async () => {
+        fireEvent.focus(result.getByTestId('test-input'));
+        fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      });
+
+      await waitFor(() => {
+        expect(searchInput!.value).toBe('');
+      });
     });
   });
 });

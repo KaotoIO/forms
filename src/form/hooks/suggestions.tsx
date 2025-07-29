@@ -1,4 +1,4 @@
-import { Menu, MenuContent, MenuItem, MenuList, Popper } from '@patternfly/react-core';
+import { Menu, MenuContent, MenuItem, MenuList, Popper, SearchInput } from '@patternfly/react-core';
 import { JSONSchema4 } from 'json-schema';
 import { ReactNode, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { GroupedSuggestions, Suggestion, SuggestionProvider } from '../models/suggestions';
@@ -15,10 +15,11 @@ type UseSuggestionsProps = {
 };
 export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: UseSuggestionsProps): ReactNode => {
   const [isVisible, setIsVisible] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const [groupedSuggestions, setGroupedSuggestions] = useState<GroupedSuggestions>({ root: [] });
   const menuRef = useRef<HTMLDivElement>(null);
   const firstElementRef = useRef<HTMLDivElement>(null);
-
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const { getProviders } = useContext(SuggestionContext);
 
   const suggestionProviders: SuggestionProvider[] = useMemo(
@@ -43,6 +44,7 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
 
       if (event.ctrlKey && event.code === 'Space') {
         event.preventDefault();
+        setSearchValue('');
         setIsVisible(true);
         requestAnimationFrame(() => {
           firstElementRef.current?.focus();
@@ -103,15 +105,21 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
 
       if (cancelled) return;
 
-      const newGroupedSuggestions = results.flat().reduce(
-        (acc, suggestion) => {
-          const group = suggestion.group ?? 'root';
-          acc[group] ??= [];
-          acc[group].push(suggestion);
-          return acc;
-        },
-        { root: [] } as GroupedSuggestions,
-      );
+      const lowerCaseSearchValue = searchValue.toLocaleLowerCase();
+      const newGroupedSuggestions = results
+        .flat()
+        .filter((suggestion) => {
+          return suggestion.value.toLocaleLowerCase().includes(lowerCaseSearchValue);
+        })
+        .reduce(
+          (acc, suggestion) => {
+            const group = suggestion.group ?? 'root';
+            acc[group] ??= [];
+            acc[group].push(suggestion);
+            return acc;
+          },
+          { root: [] } as GroupedSuggestions,
+        );
       setGroupedSuggestions(newGroupedSuggestions);
     };
 
@@ -119,7 +127,7 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
     return () => {
       cancelled = true;
     };
-  }, [suggestionProviders, value, propName, inputRef, isVisible]);
+  }, [suggestionProviders, value, propName, inputRef, isVisible, searchValue]);
 
   /** Register keyboard bindings */
   useEffect(() => {
@@ -148,6 +156,14 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
     };
   }, [handleInputKeyDown, inputRef]);
 
+  const focusOnSearchInput = useCallback(() => {
+    searchInputRef.current?.focus();
+  }, []);
+
+  const handleOnSearchChange = useCallback((_event: unknown, value: string) => {
+    setSearchValue(value);
+  }, []);
+
   return (
     <Popper
       preventOverflow
@@ -160,6 +176,17 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
           <Menu containsFlyout data-testid="suggestions-menu">
             <MenuContent>
               <MenuList>
+                <MenuItem data-testid="suggestions-menu-search-item" onFocus={focusOnSearchInput}>
+                  <SearchInput
+                    data-testid="suggestions-menu-search-input"
+                    ref={searchInputRef}
+                    placeholder="Filter suggestions..."
+                    value={searchValue}
+                    onChange={handleOnSearchChange}
+                    onKeyDown={getHandleMenuKeyDown('')}
+                  />
+                </MenuItem>
+
                 {Object.entries(groupedSuggestions).map(([group, suggestions], groupIndex) => {
                   if (group === 'root') {
                     return suggestions.map((suggestion, suggestionIndex) => {
@@ -206,7 +233,9 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
                   );
                 })}
 
-                {groupedSuggestions.root.length === 0 && <MenuItem isDisabled>No suggestions available</MenuItem>}
+                {groupedSuggestions.root.length === 0 && Object.keys(groupedSuggestions).length === 1 && (
+                  <MenuItem isDisabled>No suggestions available</MenuItem>
+                )}
               </MenuList>
             </MenuContent>
           </Menu>
