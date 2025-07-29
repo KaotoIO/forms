@@ -14,6 +14,12 @@ export const BooleanField: FunctionComponent<FieldProps> = ({ propName, required
 
   const id = `${propName}-popover`;
 
+  let normalizedValue = value;
+  if (normalizedValue === undefined) {
+    // If the value is undefined, we check the schema default. Sometimes the default is not set, so we use false.
+    normalizedValue = schema.default === true;
+  }
+
   return (
     <FieldWrapper
       propName={propName}
@@ -30,8 +36,8 @@ export const BooleanField: FunctionComponent<FieldProps> = ({ propName, required
         role="checkbox"
         aria-label={schema.title}
         aria-describedby={id}
-        isChecked={value}
-        checked={value}
+        isChecked={normalizedValue}
+        checked={normalizedValue}
         onChange={onFieldChange}
         isDisabled={disabled}
       />
