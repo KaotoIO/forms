@@ -13,6 +13,7 @@ import { TimesIcon } from '@patternfly/react-icons';
 import {
   FormEvent,
   FunctionComponent,
+  KeyboardEvent,
   MouseEventHandler,
   Ref,
   useCallback,
@@ -39,6 +40,7 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
   onCreate,
   onCreatePrefix,
   disabled = false,
+  allowCustomInput = false,
 }) => {
   const [filter, setFilter] = useState<string>(selectedItem?.name ?? '');
   const [inputValue, setInputValue] = useState<string>(selectedItem?.name ?? '');
@@ -77,6 +79,14 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
         return;
       }
 
+      // Handle selection of custom input value
+      if (allowCustomInput && name === inputValue && !items.find((item) => item.value === name)) {
+        const customItem = { name: inputValue, value: inputValue, description: '' };
+        onChange?.(customItem);
+        setIsOpen(false);
+        return;
+      }
+
       const localItem = items.find((item) => item.value === name);
       setInputValue(localItem?.name ?? '');
       setIsOpen(false);
@@ -85,7 +95,7 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
         onChange?.(localItem);
       }
     },
-    [onChange, items, selectedItem?.name, onCreate, inputValue],
+    [onChange, items, selectedItem?.name, onCreate, inputValue, allowCustomInput],
   );
 
   const onToggleClick: MouseEventHandler<HTMLDivElement | HTMLButtonElement> = async (event) => {
@@ -114,6 +124,28 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
     setInputValue('');
     onCleanInput?.();
     inputRef.current?.focus();
+  };
+
+  const onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && allowCustomInput && inputValue.trim()) {
+      event.preventDefault();
+      const exactMatch = items.find((item) => item.name === inputValue);
+      if (!exactMatch && inputValue !== selectedItem?.name) {
+        const customItem = { name: inputValue, value: inputValue, description: '' };
+        onChange?.(customItem);
+      }
+      setIsOpen(false);
+    }
+  };
+
+  const onInputBlur = () => {
+    if (allowCustomInput && inputValue.trim() && !isOpen) {
+      const exactMatch = items.find((item) => item.name === inputValue);
+      if (!exactMatch && inputValue !== selectedItem?.name) {
+        const customItem = { name: inputValue, value: inputValue, description: '' };
+        onChange?.(customItem);
+      }
+    }
   };
 
   const filteredItems = useMemo(() => {
@@ -152,6 +184,8 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
           onClick={onToggleClick}
           value={inputValue}
           onChange={onTextInputChange}
+          onKeyDown={onInputKeyDown}
+          onBlur={onInputBlur}
         />
 
         <TextInputGroupUtilities>
@@ -196,7 +230,17 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
           </SelectOption>
         ))}
 
-        {filteredItems.length === 0 && <SelectOption isDisabled>No items found</SelectOption>}
+        {filteredItems.length === 0 && !allowCustomInput && <SelectOption isDisabled>No items found</SelectOption>}
+
+        {filteredItems.length === 0 && allowCustomInput && inputValue.trim() && (
+          <SelectOption value={inputValue} aria-label={`use custom value ${inputValue.toLowerCase()}`}>
+            Use &quot;{inputValue}&quot;
+          </SelectOption>
+        )}
+
+        {filteredItems.length === 0 && allowCustomInput && !inputValue.trim() && (
+          <SelectOption isDisabled>Type to enter custom value</SelectOption>
+        )}
 
         {onCreate && (
           <SelectOption value={CREATE_NEW_ITEM} aria-label={`option ${CREATE_NEW_ITEM.toLocaleLowerCase()}`}>

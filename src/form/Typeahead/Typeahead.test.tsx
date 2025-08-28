@@ -141,4 +141,118 @@ describe('Typeahead', () => {
     expect(createNewElement).toBeInTheDocument();
     expect(createNewElement).toHaveTextContent("Create new brick 'in the wall'");
   });
+
+  describe('Custom Input functionality', () => {
+    const customInputProps = {
+      ...defaultProps,
+      allowCustomInput: true,
+      onChange: jest.fn(),
+    };
+
+    beforeEach(() => {
+      customInputProps.onChange.mockClear();
+    });
+
+    it('should preserve custom input when Enter is pressed', async () => {
+      render(<Typeahead {...customInputProps} />);
+      const input = screen.getByPlaceholderText('Select or write an option');
+
+      await act(async () => {
+        fireEvent.change(input, { target: { value: '{{aws.region}}' } });
+        fireEvent.keyDown(input, { key: 'Enter' });
+      });
+
+      expect(customInputProps.onChange).toHaveBeenCalledWith({
+        name: '{{aws.region}}',
+        value: '{{aws.region}}',
+        description: '',
+      });
+    });
+
+    it('should preserve custom input when blurred', async () => {
+      render(<Typeahead {...customInputProps} />);
+      const input = screen.getByPlaceholderText('Select or write an option');
+
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'custom-value' } });
+        fireEvent.blur(input);
+      });
+
+      expect(customInputProps.onChange).toHaveBeenCalledWith({
+        name: 'custom-value',
+        value: 'custom-value',
+        description: '',
+      });
+    });
+
+    it('should show custom input option when no matches found', async () => {
+      render(<Typeahead {...customInputProps} />);
+      const input = screen.getByPlaceholderText('Select or write an option');
+
+      await act(async () => {
+        fireEvent.click(input);
+        fireEvent.change(input, { target: { value: 'no-match-value' } });
+      });
+
+      expect(screen.getByText('Use "no-match-value"')).toBeInTheDocument();
+    });
+
+    it('should show helper text when no input and custom input allowed', async () => {
+      const propsWithoutItems = { ...customInputProps, items: [] };
+      render(<Typeahead {...propsWithoutItems} />);
+      const input = screen.getByPlaceholderText('Select or write an option');
+
+      await act(async () => {
+        fireEvent.click(input);
+      });
+
+      expect(screen.getByText('Type to enter custom value')).toBeInTheDocument();
+    });
+
+    it('should allow selection of custom value from dropdown', async () => {
+      render(<Typeahead {...customInputProps} />);
+      const input = screen.getByPlaceholderText('Select or write an option');
+
+      await act(async () => {
+        fireEvent.click(input);
+        fireEvent.change(input, { target: { value: 'custom-dropdown-value' } });
+      });
+
+      const customOption = screen.getByText('Use "custom-dropdown-value"');
+      act(() => {
+        fireEvent.click(customOption);
+      });
+
+      expect(customInputProps.onChange).toHaveBeenCalledWith({
+        name: 'custom-dropdown-value',
+        value: 'custom-dropdown-value',
+        description: '',
+      });
+    });
+
+    it('should not preserve empty custom input', async () => {
+      render(<Typeahead {...customInputProps} />);
+      const input = screen.getByPlaceholderText('Select or write an option');
+
+      await act(async () => {
+        fireEvent.change(input, { target: { value: '   ' } });
+        fireEvent.keyDown(input, { key: 'Enter' });
+      });
+
+      expect(customInputProps.onChange).not.toHaveBeenCalled();
+    });
+
+    it('should show regular "No items found" when custom input disabled', async () => {
+      render(<Typeahead {...defaultProps} allowCustomInput={false} />);
+      const input = screen.getByPlaceholderText('Select or write an option');
+
+      await act(async () => {
+        fireEvent.click(input);
+        fireEvent.change(input, { target: { value: 'no-match' } });
+      });
+
+      expect(screen.getByText('No items found')).toBeInTheDocument();
+      expect(screen.queryByText('Use "no-match"')).not.toBeInTheDocument();
+    });
+  });
 });

@@ -103,4 +103,38 @@ describe('EnumField', () => {
     );
     expect(screen.getByText(/error message/i)).toBeInTheDocument();
   });
+
+  it('supports custom input values like property placeholders', async () => {
+    const onPropertyChangeSpy = jest.fn();
+    render(
+      <ModelContextProvider model={undefined} onPropertyChange={onPropertyChangeSpy}>
+        <SchemaProvider schema={enumSchema}>
+          <EnumField propName={ROOT_PATH} />
+        </SchemaProvider>
+      </ModelContextProvider>,
+    );
+
+    const input = screen.getByRole('textbox', { name: /type to filter/i });
+
+    await act(async () => {
+      fireEvent.change(input, { target: { value: '{{aws.region}}' } });
+      fireEvent.keyDown(input, { key: 'Enter' });
+    });
+
+    expect(onPropertyChangeSpy).toHaveBeenCalledWith(ROOT_PATH, '{{aws.region}}');
+  });
+
+  it('preserves custom values that are not in the enum', () => {
+    const onPropertyChangeSpy = jest.fn();
+    render(
+      <ModelContextProvider model={'{{custom.value}}'} onPropertyChange={onPropertyChangeSpy}>
+        <SchemaProvider schema={enumSchema}>
+          <EnumField propName={ROOT_PATH} />
+        </SchemaProvider>
+      </ModelContextProvider>,
+    );
+
+    const input = screen.getByRole('textbox', { name: /type to filter/i });
+    expect(input).toHaveValue('{{custom.value}}');
+  });
 });

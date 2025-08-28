@@ -38,7 +38,14 @@ export const EnumField: FunctionComponent<FieldProps> = ({ propName, required })
       };
     }
 
-    return items.find((item) => item.name === value) ?? { value: value, name: value, description: '' };
+    // First, try to find exact match in enum items
+    const enumMatch = items.find((item) => item.name === value);
+    if (enumMatch) {
+      return enumMatch;
+    }
+
+    // If no enum match, create custom item (this handles property placeholders and other custom values)
+    return { value: value, name: value, description: '' };
   }, [items, value]);
 
   const onItemChange = useCallback(
@@ -71,6 +78,7 @@ export const EnumField: FunctionComponent<FieldProps> = ({ propName, required })
         onChange={onItemChange}
         onCleanInput={onCleanInput}
         disabled={disabled}
+        allowCustomInput
       />
     </FieldWrapper>
   );
