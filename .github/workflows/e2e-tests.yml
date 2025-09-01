@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 🔨 Cypress run
-        uses: cypress-io/github-action@v6.10.0
+        uses: cypress-io/github-action@v6.10.2
         with:
           browser: firefox
           install: true
@@ -57,7 +57,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 🔨 Cypress run
-        uses: cypress-io/github-action@v6.10.0
+        uses: cypress-io/github-action@v6.10.2
         with:
           browser: chrome
           install: true
@@ -95,7 +95,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 🔨 Cypress run
-        uses: cypress-io/github-action@v6.10.0
+        uses: cypress-io/github-action@v6.10.2
         with:
           browser: edge
           install: true
