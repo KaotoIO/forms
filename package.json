@@ -109,5 +109,5 @@
     "vite-plugin-dts": "^4.5.4",
     "vite-plugin-static-copy": "^3.1.0"
   },
-  "packageManager": "yarn@4.9.2"
+  "packageManager": "yarn@4.9.4"
 }
