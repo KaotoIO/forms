@@ -173,7 +173,7 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
       popperRef={menuRef}
       popper={
         <div ref={menuRef}>
-          <Menu containsFlyout data-testid="suggestions-menu">
+          <Menu containsFlyout isNavFlyout data-testid="suggestions-menu">
             <MenuContent>
               <MenuList>
                 <MenuItem data-testid="suggestions-menu-search-item" onFocus={focusOnSearchInput}>
@@ -188,6 +188,8 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
                 </MenuItem>
 
                 {Object.entries(groupedSuggestions).map(([group, suggestions], groupIndex) => {
+                  if (suggestions.length === 0) return null;
+
                   if (group === 'root') {
                     return suggestions.map((suggestion, suggestionIndex) => {
                       const isFirst = groupIndex === 0 && suggestionIndex === 0;

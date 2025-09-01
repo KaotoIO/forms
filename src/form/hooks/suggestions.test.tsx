@@ -443,6 +443,35 @@ describe('useSuggestions', () => {
         expect(result.getByText('TestGroup')).toBeInTheDocument();
       });
     });
+
+    it('should not render empty groups', async () => {
+      mockProvider.getSuggestions = jest.fn().mockResolvedValue([
+        { value: 'root1', description: 'Root suggestion' },
+        { value: 'grouped1', description: 'Grouped suggestion', group: 'TestGroup' },
+      ]);
+
+      const result = renderWithContext(<TestComponent />);
+
+      await act(async () => {
+        fireEvent.keyDown(result.getByTestId('test-input'), { ctrlKey: true, code: 'Space' });
+      });
+
+      await waitFor(() => {
+        expect(result.getByText('root1')).toBeInTheDocument();
+        expect(result.getByText('TestGroup')).toBeInTheDocument();
+      });
+
+      // Filter suggestions to make TestGroup empty
+      await act(async () => {
+        const searchInput = result.getByTestId('suggestions-menu-search-input').querySelector('input');
+        fireEvent.change(searchInput!, { target: { value: 'root' } });
+      });
+
+      await waitFor(() => {
+        expect(result.getByText('root1')).toBeInTheDocument();
+        expect(result.queryByText('TestGroup')).not.toBeInTheDocument();
+      });
+    });
   });
 
   it('should handle async suggestion providers', async () => {
