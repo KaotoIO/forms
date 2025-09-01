@@ -5508,7 +5508,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^3.5.3":
+"chokidar@npm:^3.6.0":
   version: 3.6.0
   resolution: "chokidar@npm:3.6.0"
   dependencies:
@@ -14193,17 +14193,17 @@ __metadata:
   linkType: hard
 
 "vite-plugin-static-copy@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "vite-plugin-static-copy@npm:3.1.0"
+  version: 3.1.2
+  resolution: "vite-plugin-static-copy@npm:3.1.2"
   dependencies:
-    chokidar: "npm:^3.5.3"
+    chokidar: "npm:^3.6.0"
     fs-extra: "npm:^11.3.0"
     p-map: "npm:^7.0.3"
     picocolors: "npm:^1.1.1"
     tinyglobby: "npm:^0.2.14"
   peerDependencies:
     vite: ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: 10/7e536b11d174e6db4c72bc71f1ea0c144c4ac69a4dd9aaf8d52f26fdac327cb20e68b63cf622e03196cf2e8aeefbd001f2eaf0146d10424bfa23093b4787d64c
+  checksum: 10/a51999bbc4f2a88976a70f9e359ee6b8deb822d9ec7a9ae5bece6d61997810fe2600b78012abc0867594e9fcb7688842b62e520008c2cd7b778e0ffabce6c2db
   languageName: node
   linkType: hard
 
