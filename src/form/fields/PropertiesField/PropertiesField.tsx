@@ -5,6 +5,7 @@ import { SchemaContext } from '../../providers/SchemaProvider';
 import { FieldProps } from '../../models/typings';
 import { FieldWrapper } from '../FieldWrapper';
 import { KeyValue, KeyValueType } from '../../KeyValue/KeyValue';
+import { IndexedValue } from '../../KeyValue/IndexedValue';
 
 export const PropertiesField: FunctionComponent<FieldProps> = ({ propName, required }) => {
   const { schema } = useContext(SchemaContext);
@@ -12,6 +13,7 @@ export const PropertiesField: FunctionComponent<FieldProps> = ({ propName, requi
 
   const items = Object.entries(value ?? {});
   const title = schema.title ?? propName.split('.').pop();
+  const isConstructors = propName.toLowerCase().includes('constructors');
 
   return (
     <FieldWrapper
@@ -26,7 +28,11 @@ export const PropertiesField: FunctionComponent<FieldProps> = ({ propName, requi
       description={schema.description}
       defaultValue={schema.default?.toString()}
     >
-      <KeyValue propName={propName} initialModel={value} onChange={onChange} disabled={disabled} />
+      {isConstructors ? (
+        <IndexedValue propName={propName} onChange={onChange} initialModel={value} disabled={disabled} />
+      ) : (
+        <KeyValue propName={propName} initialModel={value} onChange={onChange} disabled={disabled} />
+      )}
     </FieldWrapper>
   );
 };
