@@ -48,14 +48,18 @@ export const KeyValue: FunctionComponent<KeyValueProps> = ({ propName, initialMo
     updateModel(newModel);
   };
 
-  const onPropertyKeyChange = (key: string, newKey: string) => {
-    const newModel = internalModel.map(([k, v]): KeyValueEntry => (k === key ? [newKey, v] : [k, v]));
-    updateModel(newModel);
+  const onPropertyKeyChange = (index: number, key: string, newKey: string) => {
+    internalModel.at(index)![0] = newKey;
+    updateModel([...internalModel]);
   };
 
   const onPropertyValueChange = (key: string, newValue: string) => {
     const newModel = internalModel.map(([k, v]): KeyValueEntry => (k === key ? [k, newValue] : [k, v]));
     updateModel(newModel);
+  };
+
+  const duplicateKeyExists = (key: string) => {
+    return internalModel.filter(([k]) => k === key).length > 1;
   };
 
   return (
@@ -84,14 +88,14 @@ export const KeyValue: FunctionComponent<KeyValueProps> = ({ propName, initialMo
         return (
           <Split hasGutter key={index}>
             <SplitItem isFilled>
-              <TextInputGroup>
+              <TextInputGroup validated={duplicateKeyExists(key) ? 'error' : undefined}>
                 <TextInputGroupMain
                   type="text"
                   id={`${propName}__${key}__key`}
                   name={`${propName}__${key}__key`}
                   data-testid={`${propName}__key`}
                   onChange={(_event, value) => {
-                    onPropertyKeyChange(key, value);
+                    onPropertyKeyChange(index, key, value);
                   }}
                   ref={getFocusRefFn('key', index)}
                   onFocus={() => {
