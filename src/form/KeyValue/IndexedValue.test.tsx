@@ -6,7 +6,7 @@ describe('IndexedValue', () => {
   let initialModel: KeyValueType;
 
   beforeEach(() => {
-    initialModel = { 0: 'value1', 1: 'value2', 3: 'value3' };
+    initialModel = { 0: 'value1', 3: 'value2', 5: 'value3' };
   });
 
   it('renders empty key-value with button disabled', () => {
@@ -24,6 +24,8 @@ describe('IndexedValue', () => {
     expect(wrapper.getByDisplayValue('value1')).toBeInTheDocument();
     expect(wrapper.getByText('1')).toBeInTheDocument();
     expect(wrapper.getByDisplayValue('value2')).toBeInTheDocument();
+    expect(wrapper.getByText('2')).toBeInTheDocument();
+    expect(wrapper.getByDisplayValue('value3')).toBeInTheDocument();
   });
 
   it('renders initial key-value pairs with button disabled', () => {
@@ -49,6 +51,19 @@ describe('IndexedValue', () => {
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ 0: 'value1', 1: 'value2', 2: 'value3', 3: '' }));
   });
 
+  it('adds a new duplicate key-value pair', () => {
+    const onChange = jest.fn();
+    const wrapper = render(<IndexedValue propName={propName} initialModel={initialModel} onChange={onChange} />);
+    expect(wrapper.getByText('0')).toBeInTheDocument();
+    expect(wrapper.getByDisplayValue('value1')).toBeInTheDocument();
+
+    // currently tere are 3 elemeents but index 3 is already used
+    fireEvent.click(wrapper.getByTestId(`${propName}__add`));
+
+    //expected behaviour is to have the new element added at the end with index 3 and reindex the rest
+    expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ 0: 'value1', 1: 'value2', 2: 'value3', 3: '' }));
+  });
+
   it('removes a key-value pair', () => {
     const onChange = jest.fn();
     const wrapper = render(<IndexedValue propName={propName} initialModel={initialModel} onChange={onChange} />);
@@ -64,6 +79,7 @@ describe('IndexedValue', () => {
 
     fireEvent.change(wrapper.getByDisplayValue('value1'), { target: { value: 'newValue1' } });
 
-    expect(onChange).toHaveBeenCalledWith({ 0: 'newValue1', 1: 'value2', 3: 'value3' });
+    // also reindexes the keys
+    expect(onChange).toHaveBeenCalledWith({ 0: 'newValue1', 1: 'value2', 2: 'value3' });
   });
 });

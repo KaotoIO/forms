@@ -15,6 +15,10 @@ interface KeyValueProps {
 
 type KeyValueEntry = [string, string];
 
+const reindexModel = (model: KeyValueEntry[]): KeyValueEntry[] => {
+  return model.map((value, index) => [index.toString(), value[1]] as KeyValueEntry);
+};
+
 /**
  * This component manages an ordered map with numeric string keys, after adding and removing values keys are re-indexed.
  * Internally it uses an array of tuples to represent the key-value pairs,
@@ -26,7 +30,13 @@ export const IndexedValue: FunctionComponent<KeyValueProps> = ({
   onChange,
   disabled = false,
 }) => {
-  const [internalModel, setInternalModel] = useState<KeyValueEntry[]>(Object.entries(initialModel ?? {}));
+  // Ensure the initial model is sorted by key and re-indexed. Even if the keys aren't indexes camel is sorting them and uses indexes.
+  const convertedInitialModel = initialModel
+    ? reindexModel(Object.entries(initialModel).sort(([a], [b]) => Number(a) - Number(b)))
+    : [];
+
+  const [internalModel, setInternalModel] = useState<KeyValueEntry[]>(convertedInitialModel);
+
   const currentFocusIndex = useRef<['key' | 'value', number]>(['key', -1]);
 
   const getFocusRefFn = (location: 'value', index: number) => (inputElement: HTMLInputElement | null) => {
@@ -81,8 +91,6 @@ export const IndexedValue: FunctionComponent<KeyValueProps> = ({
 
       <Content component="hr" />
 
-      {/* In this iteration, it's ok to use the `id` of the element because using the `key` will
-        cause for the input to lose focus when the list is updated. */}
       {internalModel.map(([key, value], index) => {
         return (
           <Split hasGutter key={index}>
