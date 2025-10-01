@@ -2572,10 +2572,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kaoto/camel-catalog@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "@kaoto/camel-catalog@npm:0.1.2"
-  checksum: 10/7ce7431ea093a1741592b9ae080cbe7bd975ff243eaa72d26928df4e5c1be4ff0b46eb41a3218da242e8afbeafdea666b70d0eba49217e567ce4faaef98652d4
+"@kaoto/camel-catalog@npm:^0.2.0":
+  version: 0.2.2
+  resolution: "@kaoto/camel-catalog@npm:0.2.2"
+  checksum: 10/cab892b10a0e7b794253652e9c1553900cd7477e19138da52258c32b8d95cd519ead8dd9dfdd4bbe9629ecb436921611db759a8198461cec450cf55b4eb12b7e
   languageName: node
   linkType: hard
 
@@ -2588,7 +2588,7 @@ __metadata:
     "@babel/preset-react": "npm:^7.18.6"
     "@babel/preset-typescript": "npm:^7.21.5"
     "@eslint/js": "npm:^9.10.0"
-    "@kaoto/camel-catalog": "npm:^0.1.2"
+    "@kaoto/camel-catalog": "npm:^0.2.0"
     "@lerna-lite/cli": "npm:^3.0.0"
     "@lerna-lite/publish": "npm:^3.0.0"
     "@lerna-lite/version": "npm:^3.0.0"
