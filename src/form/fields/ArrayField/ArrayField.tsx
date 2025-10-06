@@ -8,7 +8,7 @@ import { getHexaDecimalRandomId, getItemFromSchema, isDefined } from '../../util
 import { AutoField } from '../AutoField';
 import { ArrayFieldWrapper } from './ArrayFieldWrapper';
 
-export const ArrayField: FunctionComponent<FieldProps> = ({ propName }) => {
+export const ArrayField: FunctionComponent<FieldProps> = ({ propName, required }) => {
   const { schema, definitions } = useContext(SchemaContext);
   const { value, onChange, disabled } = useFieldValue<unknown[]>(propName);
   const [itemsHash, setItemsHash] = useState<string[]>([]);
@@ -40,6 +40,7 @@ export const ArrayField: FunctionComponent<FieldProps> = ({ propName }) => {
 
   return (
     <ArrayFieldWrapper
+      required={required}
       propName={propName}
       type="array"
       title={label}

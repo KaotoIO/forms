@@ -8,7 +8,7 @@ import { FieldProps } from '../../models/typings';
 import { ArrayFieldWrapper } from '../ArrayField/ArrayFieldWrapper';
 import { ObjectFieldGrouping } from './ObjectFieldGrouping';
 
-export const ObjectField: FunctionComponent<FieldProps> = ({ propName, onRemove: onRemoveProps }) => {
+export const ObjectField: FunctionComponent<FieldProps> = ({ propName, required, onRemove: onRemoveProps }) => {
   const { schema } = useContext(SchemaContext);
   const { value, onChange } = useFieldValue<object>(propName);
   const [isExpanded, setIsExpanded] = useState(isDefined(value));
@@ -38,6 +38,7 @@ export const ObjectField: FunctionComponent<FieldProps> = ({ propName, onRemove:
       propName={propName}
       type="object"
       title={label}
+      required={required}
       description={schema.description}
       defaultValue={schema.default}
       actions={

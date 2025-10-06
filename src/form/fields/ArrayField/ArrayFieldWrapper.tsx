@@ -16,6 +16,7 @@ interface FieldWrapperProps {
   description?: string;
   defaultValue?: unknown;
   actions?: ReactNode;
+  required?: boolean;
 }
 
 export const ArrayFieldWrapper: FunctionComponent<PropsWithChildren<FieldWrapperProps>> = ({
@@ -26,6 +27,7 @@ export const ArrayFieldWrapper: FunctionComponent<PropsWithChildren<FieldWrapper
   defaultValue,
   actions,
   children,
+  required,
 }) => {
   const id = `${title}-popover`;
 
@@ -36,6 +38,11 @@ export const ArrayFieldWrapper: FunctionComponent<PropsWithChildren<FieldWrapper
     <Card data-testid={`${propName}__field-wrapper`}>
       <CardHeader actions={cardActions}>
         <CardTitle>
+          {required && (
+            <span className="pf-v6-c-form__label-required" aria-hidden="true">
+              *{' '}
+            </span>
+          )}{' '}
           {title}{' '}
           <Popover
             id={id}
