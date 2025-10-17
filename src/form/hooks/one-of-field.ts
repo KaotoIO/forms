@@ -66,5 +66,6 @@ export const useOneOfField = (propName: string) => {
     oneOfSchemas,
     onSchemaChange,
     shouldRender,
+    modelType: schema.format,
   };
 };
