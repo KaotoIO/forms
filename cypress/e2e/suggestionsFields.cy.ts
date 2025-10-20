@@ -3,7 +3,19 @@ describe('Test for suggestions for form fields', () => {
     cy.openHomePage();
   });
 
-  it('Sample App - suggestions in String form field', () => {
+  it('Sample App - suggestions in String form field using Alt+Escape shortcut', () => {
+    cy.selectSchema('timer');
+    cy.get('input[name="#.timerName"]').clear().type('testTimerName');
+
+    // Simulate Alt+Escape key combo
+    cy.get('input[name="#.timerName"]').type('{alt}{esc}');
+
+    cy.get('span').contains('{{testTimerName:default}}').click();
+
+    cy.checkCodeSpanLine('"timerName": "{{testTimerName:default}}"', 1);
+  });
+
+  it.only('Sample App - suggestions in String form field', () => {
     cy.selectSchema('timer');
     cy.get('input[name="#.timerName"]').clear().type('testTimerName');
 

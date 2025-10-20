@@ -42,7 +42,7 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
     (event: Event) => {
       if (!(event instanceof KeyboardEvent)) return;
 
-      if (event.ctrlKey && event.code === 'Space') {
+if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code === 'Escape')) {
         event.preventDefault();
         setSearchValue('');
         setIsVisible(true);
