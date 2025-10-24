@@ -9,7 +9,7 @@ import { isDefined } from '../utils';
 export const AutoField: FunctionComponent<FieldProps> = ({ propName, required, onRemove }) => {
   const { selectedTab } = useContext(CanvasFormTabsContext);
   const { schema } = useContext(SchemaContext);
-  const { value } = useFieldValue<object>(propName);
+  const { value } = useFieldValue<unknown>(propName);
   const formComponentFactory = useContext(FormComponentFactoryContext);
 
   if (Object.keys(schema).length === 0) {
@@ -18,8 +18,28 @@ export const AutoField: FunctionComponent<FieldProps> = ({ propName, required, o
     throw new Error(`AutoField: formComponentFactory is not defined for ${propName}`);
   }
 
-  const isFieldDefined =
-    schema.type === 'object' ? isDefined(value) && Object.keys(value).length > 0 : isDefined(value);
+  let isFieldDefined = false;
+  if (isDefined(value)) {
+    // Check if the value is a valid value
+    switch (schema.type) {
+      case 'object':
+        isFieldDefined = typeof value === 'object' && Object.keys(value).length > 0;
+        break;
+      case 'array':
+        isFieldDefined = Array.isArray(value) && value.length > 0;
+        break;
+      case 'boolean':
+        isFieldDefined = typeof value === 'boolean';
+        break;
+      case 'string':
+      case 'number':
+        isFieldDefined = value !== '';
+        break;
+      default:
+        isFieldDefined = true;
+    }
+  }
+
   const isComplexFieldType =
     schema.type === 'object' || schema.type === 'array' || 'oneOf' in schema || 'anyOf' in schema;
   // If required is not defined, it is considered as required
