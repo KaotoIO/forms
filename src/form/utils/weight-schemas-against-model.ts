@@ -1,4 +1,4 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import { isDefined } from './is-defined';
 import { resolveSchemaWithRef } from './resolve-schema-with-ref';
 
@@ -15,8 +15,8 @@ const PRIMITIVE_TYPES = ['string', 'number', 'boolean'];
  */
 export const weightSchemaAgainstModel = (
   model: unknown,
-  schema: JSONSchema4,
-  definitions: Record<string, JSONSchema4>,
+  schema: JSONSchema7,
+  definitions: JSONSchema7Definition,
 ): number => {
   if (!isDefined(model) || !isDefined(schema)) return 0;
 
@@ -41,7 +41,10 @@ export const weightSchemaAgainstModel = (
         points += 1;
       }
 
-      const resolvedSchemaProperty = resolveSchemaWithRef(resolvedSchema.properties[modelKey], definitions);
+      const resolvedSchemaProperty = resolveSchemaWithRef(
+        resolvedSchema.properties[modelKey] as JSONSchema7,
+        definitions,
+      );
       if (isDefined(resolvedSchemaProperty) && typeof modelValue === resolvedSchemaProperty.type) {
         points += 10;
       }
@@ -52,12 +55,12 @@ export const weightSchemaAgainstModel = (
     }
 
     resolvedSchema.anyOf?.forEach((anyOfSchema) => {
-      const anyOfResolvedSchema = resolveSchemaWithRef(anyOfSchema, definitions);
+      const anyOfResolvedSchema = resolveSchemaWithRef(anyOfSchema as JSONSchema7, definitions);
       points += weightSchemaAgainstModel(model, anyOfResolvedSchema, definitions);
     });
 
     resolvedSchema.oneOf?.forEach((oneOfSchema) => {
-      const oneOfResolvedSchema = resolveSchemaWithRef(oneOfSchema, definitions);
+      const oneOfResolvedSchema = resolveSchemaWithRef(oneOfSchema as JSONSchema7, definitions);
       points += weightSchemaAgainstModel(model, oneOfResolvedSchema, definitions);
     });
 

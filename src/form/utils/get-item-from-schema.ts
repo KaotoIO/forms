@@ -1,7 +1,7 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import { resolveSchemaWithRef } from './resolve-schema-with-ref';
 
-export const getItemFromSchema = (schema: JSONSchema4, definitions: Record<string, JSONSchema4>) => {
+export const getItemFromSchema = (schema: JSONSchema7, definitions: JSONSchema7Definition) => {
   const resolvedSchema = resolveSchemaWithRef(schema, definitions);
   const defaultValue = resolvedSchema.default;
   const properties = resolvedSchema.properties ?? {};
@@ -18,7 +18,7 @@ export const getItemFromSchema = (schema: JSONSchema4, definitions: Record<strin
       return Object.entries(properties).reduce(
         (acc, [key, value]) => {
           if (required.includes(key)) {
-            acc[key] = getItemFromSchema(value, definitions);
+            acc[key] = getItemFromSchema(value as JSONSchema7, definitions);
           }
 
           return acc;

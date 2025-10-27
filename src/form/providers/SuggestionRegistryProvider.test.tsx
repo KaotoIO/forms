@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { useContext } from 'react';
 import { SuggestionContext, SuggestionRegistryProvider, useSuggestionRegistry } from './SuggestionRegistryProvider';
 
@@ -21,7 +21,7 @@ describe('SuggestionRegistryProvider', () => {
 
     const provider = {
       id: 'testProvider',
-      appliesTo: (propertyName: string, schema: JSONSchema4) => true,
+      appliesTo: (propertyName: string, schema: JSONSchema7) => true,
       getSuggestions: () => [],
     };
 
@@ -29,7 +29,7 @@ describe('SuggestionRegistryProvider', () => {
       result.current.registerProvider(provider);
     });
 
-    const schema: JSONSchema4 = { type: 'string' };
+    const schema: JSONSchema7 = { type: 'string' };
     const providers = result.current.getProviders('testProperty', schema);
     expect(providers).toHaveLength(1);
     expect(providers[0].id).toBe('testProvider');
@@ -47,13 +47,13 @@ describe('SuggestionRegistryProvider', () => {
 
     const stringProvider = {
       id: 'stringProvider',
-      appliesTo: (propertyName: string, schema: JSONSchema4) => schema.type === 'string',
+      appliesTo: (propertyName: string, schema: JSONSchema7) => schema.type === 'string',
       getSuggestions: () => [],
     };
 
     const numberProvider = {
       id: 'numberProvider',
-      appliesTo: (propertyName: string, schema: JSONSchema4) => schema.type === 'number',
+      appliesTo: (propertyName: string, schema: JSONSchema7) => schema.type === 'number',
       getSuggestions: () => [],
     };
 
@@ -63,13 +63,13 @@ describe('SuggestionRegistryProvider', () => {
     });
 
     // Test with string schema
-    const stringSchema: JSONSchema4 = { type: 'string' };
+    const stringSchema: JSONSchema7 = { type: 'string' };
     const stringProviders = result.current.getProviders('testProperty', stringSchema);
     expect(stringProviders).toHaveLength(1);
     expect(stringProviders[0].id).toBe('stringProvider');
 
     // Test with number schema
-    const numberSchema: JSONSchema4 = { type: 'number' };
+    const numberSchema: JSONSchema7 = { type: 'number' };
     const numberProviders = result.current.getProviders('testProperty', numberSchema);
     expect(numberProviders).toHaveLength(1);
     expect(numberProviders[0].id).toBe('numberProvider');
@@ -97,7 +97,7 @@ describe('SuggestionRegistryProvider', () => {
       result.current.registerProvider(provider2);
     });
 
-    const schema: JSONSchema4 = { type: 'string' };
+    const schema: JSONSchema7 = { type: 'string' };
     const providers = result.current.getProviders('testProperty', schema);
 
     expect(providers).toHaveLength(1);
@@ -120,7 +120,7 @@ describe('SuggestionRegistryProvider', () => {
       result.current.registerProvider(provider);
     });
 
-    const providers = result.current.getProviders('testProperty', null as unknown as JSONSchema4);
+    const providers = result.current.getProviders('testProperty', null as unknown as JSONSchema7);
     expect(providers).toHaveLength(1);
   });
 

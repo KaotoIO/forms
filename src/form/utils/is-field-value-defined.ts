@@ -1,8 +1,8 @@
-import { JSONSchema4TypeName } from 'json-schema';
+import { JSONSchema7TypeName } from 'json-schema';
 import { isDefined } from './is-defined';
 
 export const isFieldValueDefined = (
-  schemaType: JSONSchema4TypeName[] | JSONSchema4TypeName | undefined,
+  schemaType: JSONSchema7TypeName[] | JSONSchema7TypeName | undefined,
   value: unknown,
 ): boolean => {
   if (!isDefined(schemaType)) return false;

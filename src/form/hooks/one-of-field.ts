@@ -5,6 +5,7 @@ import { getAppliedSchemaIndex } from '../utils/get-applied-schema-index';
 import { OneOfSchemas, getOneOfSchemaList } from '../utils/get-oneof-schema-list';
 import { SchemaContext } from '../providers/SchemaProvider';
 import { useFieldValue } from './field-value';
+import { JSONSchema7 } from 'json-schema';
 
 export const useOneOfField = (propName: string) => {
   const { selectedTab } = useContext(CanvasFormTabsContext);
@@ -12,7 +13,7 @@ export const useOneOfField = (propName: string) => {
   const { value, onChange } = useFieldValue<Record<string, unknown>>(propName);
 
   const oneOfSchemas: OneOfSchemas[] = useMemo(
-    () => getOneOfSchemaList(schema.oneOf ?? [], definitions),
+    () => getOneOfSchemaList((schema.oneOf ?? []) as JSONSchema7[], definitions),
     [definitions, schema.oneOf],
   );
 

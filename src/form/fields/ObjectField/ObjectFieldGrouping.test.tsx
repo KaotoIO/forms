@@ -1,14 +1,14 @@
 import { act, fireEvent, render } from '@testing-library/react';
 import { FunctionComponent, PropsWithChildren } from 'react';
-import { KaotoSchemaDefinition } from '../../models';
 import { FilteredFieldContext } from '../../providers/filtered-field.provider';
 import { ROOT_PATH } from '../../utils';
 import { SchemaProvider } from '../../providers/SchemaProvider';
 import { FormWrapper } from '../../testing/FormWrapper';
 import { ObjectFieldGrouping } from './ObjectFieldGrouping';
+import { JSONSchema7 } from 'json-schema';
 
 describe('ObjectFieldGrouping', () => {
-  const schema: JSONSchema4 = {
+  const schema: JSONSchema7 = {
     type: 'object',
     properties: {
       id: {

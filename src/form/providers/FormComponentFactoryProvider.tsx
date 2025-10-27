@@ -1,4 +1,4 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { FunctionComponent, PropsWithChildren, useCallback } from 'react';
 import { ArrayField } from '../fields/ArrayField/ArrayField';
 import { BooleanField } from '../fields/BooleanField';
@@ -18,7 +18,7 @@ import {
 } from './context/form-component-factory-context';
 import { IndexedValuesField } from '../fields/IndexedValuesField/IndexedValuesField';
 
-export type CustomFieldsFactory = (schema: JSONSchema4) => FunctionComponent<FieldProps> | undefined;
+export type CustomFieldsFactory = (schema: JSONSchema7) => FunctionComponent<FieldProps> | undefined;
 
 interface IFormComponentFactoryProvider extends PropsWithChildren {
   /**

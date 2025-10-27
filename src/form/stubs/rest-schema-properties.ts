@@ -1,6 +1,6 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 
-export const restSchemaProperties: JSONSchema4['properties'] = {
+export const restSchemaProperties: JSONSchema7['properties'] = {
   id: {
     type: 'string',
     title: 'Id',

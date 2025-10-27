@@ -1,5 +1,5 @@
 import { render, renderHook } from '@testing-library/react';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { FunctionComponent, useContext } from 'react';
 import { ArrayField } from '../fields/ArrayField/ArrayField';
 import { BooleanField } from '../fields/BooleanField';
@@ -43,8 +43,8 @@ describe('FormComponentFactoryProvider', () => {
     [{ oneOf: [] }, OneOfField],
     [{ allOf: [] }, AllOfField],
     [{}, DisabledField],
-    [{ type: 'unknown' } as unknown as JSONSchema4, DisabledField],
-  ] as [JSONSchema4, FunctionComponent][])(
+    [{ type: 'unknown' } as unknown as JSONSchema7, DisabledField],
+  ] as [JSONSchema7, FunctionComponent][])(
     'should return the appropriate component for schema: %s',
     (schema, Field) => {
       const { result } = renderHook(() => useContext(FormComponentFactoryContext), {
@@ -64,7 +64,7 @@ describe('FormComponentFactoryProvider', () => {
       wrapper: ({ children }) => <FormComponentFactoryProvider>{children}</FormComponentFactoryProvider>,
     });
 
-    expect(() => result.current?.({ anyOf: [] } as unknown as JSONSchema4)).toThrow(
+    expect(() => result.current?.({ anyOf: [] } as unknown as JSONSchema7)).toThrow(
       'FormComponentFactoryProvider: AnyOf should be handled in the scope of the ObjectField',
     );
 

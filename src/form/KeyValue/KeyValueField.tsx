@@ -2,7 +2,7 @@ import { TextInputGroup, TextInputGroupMain } from '@patternfly/react-core';
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { IDataTestID } from '../models';
 import { useSuggestions } from '../hooks/suggestions';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 
 interface KeyValueFieldProps extends IDataTestID {
   id: string;
@@ -14,7 +14,7 @@ interface KeyValueFieldProps extends IDataTestID {
   onBlur?: () => void;
 }
 
-const STRING_SCHEMA: JSONSchema4 = { type: 'string' };
+const STRING_SCHEMA: JSONSchema7 = { type: 'string' };
 
 export const KeyValueField = forwardRef<HTMLInputElement, KeyValueFieldProps>(
   ({ id, name, placeholder, value, 'data-testid': dataTestId, onChange, onFocus, onBlur }, ref) => {

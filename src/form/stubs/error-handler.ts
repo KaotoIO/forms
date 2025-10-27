@@ -1,6 +1,6 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 
-export const errorHandlerSchema: JSONSchema4 = {
+export const errorHandlerSchema: JSONSchema7 = {
   type: 'object',
   additionalProperties: false,
   oneOf: [

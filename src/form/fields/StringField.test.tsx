@@ -1,5 +1,5 @@
 import { act, fireEvent, render, waitFor, within } from '@testing-library/react';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { SuggestionContext } from '../providers';
 import { ModelContext, ModelContextProvider } from '../providers/ModelProvider';
 import { SchemaProvider } from '../providers/SchemaProvider';
@@ -52,8 +52,8 @@ describe('StringField', () => {
   });
 
   describe('onChange', () => {
-    const stringSchema: JSONSchema4 = { type: 'string' };
-    const numberSchema: JSONSchema4 = { type: 'number' };
+    const stringSchema: JSONSchema7 = { type: 'string' };
+    const numberSchema: JSONSchema7 = { type: 'number' };
     const cases = [
       { initialValue: 'Value', newValue: 'New Value', expectedValue: 'New Value', schema: stringSchema },
       { initialValue: '', newValue: ' ', expectedValue: ' ', schema: stringSchema },

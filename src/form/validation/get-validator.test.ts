@@ -1,8 +1,8 @@
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema7 } from 'json-schema';
 import { getValidator } from './get-validator';
 
 describe('getValidator', () => {
-  const schema: JSONSchema4 = {
+  const schema: JSONSchema7 = {
     type: 'object',
     properties: {
       name: { type: 'string' },
@@ -35,7 +35,7 @@ describe('getValidator', () => {
       properties: {
         name: { type: 'invalidType' },
       },
-    } as unknown as JSONSchema4;
+    } as unknown as JSONSchema7;
 
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const validator = getValidator(invalidSchema);
@@ -49,7 +49,7 @@ describe('getValidator', () => {
       properties: {
         name: { type: 'invalidType' },
       },
-    } as unknown as JSONSchema4;
+    } as unknown as JSONSchema7;
 
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     getValidator(invalidSchema);

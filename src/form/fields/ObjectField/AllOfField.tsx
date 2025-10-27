@@ -2,6 +2,7 @@ import { FunctionComponent, useContext } from 'react';
 import { SchemaContext, SchemaProvider } from '../../providers/SchemaProvider';
 import { FieldProps } from '../../models/typings';
 import { AutoField } from '../AutoField';
+import { JSONSchema7 } from 'json-schema';
 
 export const AllOfField: FunctionComponent<FieldProps> = ({ propName, required, onRemove }) => {
   const { schema } = useContext(SchemaContext);
@@ -13,7 +14,7 @@ export const AllOfField: FunctionComponent<FieldProps> = ({ propName, required, 
     <>
       {schema.allOf.map((schema, index) => {
         return (
-          <SchemaProvider key={index} schema={schema}>
+          <SchemaProvider key={index} schema={schema as JSONSchema7}>
             <AutoField propName={propName} required={required} onRemove={onRemove} />
           </SchemaProvider>
         );
