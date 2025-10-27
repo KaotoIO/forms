@@ -1,8 +1,8 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { createContext, FunctionComponent, PropsWithChildren, useContext, useMemo, useState } from 'react';
 import componentSchemas from '../../assets/schemas/camel-components.json';
 
-type SchemaEntry = { name: string; value: JSONSchema4 };
+type SchemaEntry = { name: string; value: JSONSchema7 };
 interface ICurrentSchemaProviderProps {
   schema?: SchemaEntry;
   schemas: SchemaEntry[];
@@ -21,13 +21,13 @@ export const useCurrentSchema = (): ICurrentSchemaProviderProps => {
 
 export const CurrentSchemaProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const schemas: SchemaEntry[] = useMemo(
-    () => Object.entries(componentSchemas).map(([name, schema]) => ({ name, value: schema as JSONSchema4 })),
+    () => Object.entries(componentSchemas).map(([name, schema]) => ({ name, value: schema as JSONSchema7 })),
     [],
   );
 
   const [schema, setSchema] = useState<SchemaEntry | undefined>({
     name: 'log',
-    value: componentSchemas['log'] as JSONSchema4,
+    value: componentSchemas['log'] as JSONSchema7,
   });
 
   const value = useMemo(() => ({ schema, schemas, setSchema }), [schema, schemas]);

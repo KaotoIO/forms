@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react';
 import { FunctionComponent, PropsWithChildren, useContext } from 'react';
 import { SchemaContext, SchemaProvider } from './SchemaProvider';
-import { KaotoSchemaDefinition } from '../models';
 import { SchemaDefinitionsProvider } from './SchemaDefinitionsProvider';
+import { JSONSchema7 } from 'json-schema';
 
 describe('SchemaProvider', () => {
-  const schema: JSONSchema4 = {
+  const schema: JSONSchema7 = {
     type: 'object',
     properties: {
       foo: {
@@ -37,7 +37,7 @@ describe('SchemaProvider', () => {
   });
 
   it('should resolve first-level properties using the `SchemaDefinitionsContext` context', () => {
-    const localSchema: JSONSchema4 = {
+    const localSchema: JSONSchema7 = {
       $ref: '#/definitions/foo',
       definitions: {
         foo: {

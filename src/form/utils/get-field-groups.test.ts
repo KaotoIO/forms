@@ -1,9 +1,9 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { TimerComponentSchema } from '../stubs/timer.component.schema';
 import { getFieldGroups } from './get-field-groups';
 
 describe('getFieldGroups', () => {
-  let inputValue: JSONSchema4['properties'];
+  let inputValue: JSONSchema7['properties'];
 
   it('should get a object with common array and groups object containing advance groups array', () => {
     inputValue = {

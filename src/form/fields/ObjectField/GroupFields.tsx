@@ -1,5 +1,5 @@
 import { FormFieldGroupExpandable, FormFieldGroupHeader } from '@patternfly/react-core';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { FunctionComponent, useContext } from 'react';
 import { useFieldValue } from '../../hooks/field-value';
 import { FieldProps } from '../../models/typings';
@@ -10,7 +10,7 @@ import { capitalizeString } from '../../utils/capitalize-string';
 import { ObjectFieldInner } from './ObjectFieldInner';
 
 interface GroupFieldsProps extends FieldProps {
-  groups: [string, Record<string, JSONSchema4>][];
+  groups: [string, Record<string, JSONSchema7>][];
   requiredProperties: string[];
 }
 

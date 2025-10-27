@@ -1,4 +1,4 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 
 export type Suggestion = {
   /** The value of the suggestion that will be inserted into the input field. */
@@ -31,7 +31,7 @@ export interface SuggestionProvider {
    * @param schema The JSON Schema of the field.
    * @returns True if the provider is applicable, false otherwise.
    */
-  appliesTo: (propertyName: string, schema: JSONSchema4) => boolean;
+  appliesTo: (propertyName: string, schema: JSONSchema7) => boolean;
 
   /**
    * Fetches suggestions based on the current input value and schema.

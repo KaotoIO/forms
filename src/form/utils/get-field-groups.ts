@@ -1,32 +1,32 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { extractGroup } from './get-tagged-field-from-string';
 import { isDefined } from './is-defined';
 
 interface FieldGroups {
-  common: Record<string, JSONSchema4>;
-  groups: [string, Record<string, JSONSchema4>][];
+  common: Record<string, JSONSchema7>;
+  groups: [string, Record<string, JSONSchema7>][];
 }
 
-export const getFieldGroups = (properties?: JSONSchema4['properties']): FieldGroups => {
+export const getFieldGroups = (properties?: JSONSchema7['properties']): FieldGroups => {
   if (!isDefined(properties)) return { common: {}, groups: [] };
 
   const groupedProperties = Object.entries(properties).reduce(
     (acc, [name, definition]) => {
       // "$comment": "group:advanced" or "$comment": "group:consumer (advanced)"
-      const group = extractGroup('group', definition.$comment);
+      const group = extractGroup('group', (definition as JSONSchema7).$comment);
 
       if (group === '' || group === 'common' || group === 'producer' || group === 'consumer') {
-        acc.common[name] = definition;
+        acc.common[name] = definition as JSONSchema7;
       } else {
         acc.groups[group] ??= {};
-        acc.groups[group][name] = definition;
+        acc.groups[group][name] = definition as JSONSchema7;
       }
 
       return acc;
     },
     { common: {}, groups: {} } as {
-      common: Record<string, JSONSchema4>;
-      groups: Record<string, Record<string, JSONSchema4>>;
+      common: Record<string, JSONSchema7>;
+      groups: Record<string, Record<string, JSONSchema7>>;
     },
   );
 

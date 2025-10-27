@@ -6,10 +6,10 @@ import { FormComponentFactoryContext } from '../../providers/context/form-compon
 import { SchemaContext, SchemaProvider } from '../../providers/SchemaProvider';
 import { FormWrapper } from '../../testing/FormWrapper';
 import { AllOfField } from './AllOfField';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 
 describe('AllOfField', () => {
-  const allOf: JSONSchema4['anyOf'] = [
+  const allOf: JSONSchema7['anyOf'] = [
     { type: 'object', properties: { name: { type: 'string', title: 'Name' } } },
     { type: 'object', properties: { valid: { type: 'boolean', title: 'Valid' } } },
   ];

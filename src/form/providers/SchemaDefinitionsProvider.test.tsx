@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { FunctionComponent, PropsWithChildren, useContext } from 'react';
 import { SchemaDefinitionsContext, SchemaDefinitionsProvider } from './SchemaDefinitionsProvider';
-import { KaotoSchemaDefinition } from '../models';
+import { JSONSchema7 } from 'json-schema';
 
 describe('SchemaDefinitionsProvider', () => {
   it('should have a default value', () => {
@@ -12,7 +12,7 @@ describe('SchemaDefinitionsProvider', () => {
   });
 
   it('should return the provided value', () => {
-    const schema: JSONSchema4 = {
+    const schema: JSONSchema7 = {
       type: 'object',
       properties: {
         test: {

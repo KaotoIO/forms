@@ -7,6 +7,7 @@ import { SchemaContext, SchemaProvider } from '../../providers/SchemaProvider';
 import { getHexaDecimalRandomId, getItemFromSchema, isDefined } from '../../utils';
 import { AutoField } from '../AutoField';
 import { ArrayFieldWrapper } from './ArrayFieldWrapper';
+import { JSONSchema7 } from 'json-schema';
 
 export const ArrayField: FunctionComponent<FieldProps> = ({ propName, required }) => {
   const { schema, definitions } = useContext(SchemaContext);
@@ -21,7 +22,7 @@ export const ArrayField: FunctionComponent<FieldProps> = ({ propName, required }
 
   const onAdd = () => {
     const localValue = value ?? [];
-    const newItem = getItemFromSchema(itemsSchema, definitions);
+    const newItem = getItemFromSchema(itemsSchema as JSONSchema7, definitions);
     onChange([newItem, ...localValue]);
   };
 
@@ -62,7 +63,7 @@ export const ArrayField: FunctionComponent<FieldProps> = ({ propName, required }
         const onRemove = getRemoveFn(index);
 
         return (
-          <SchemaProvider key={hash} schema={itemsSchema}>
+          <SchemaProvider key={hash} schema={itemsSchema as JSONSchema7}>
             <AutoField propName={`${propName}.${index}`} onRemove={onRemove} />
           </SchemaProvider>
         );

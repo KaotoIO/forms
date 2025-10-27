@@ -1,5 +1,5 @@
 import { Menu, MenuContent, MenuItem, MenuList, Popper, SearchInput } from '@patternfly/react-core';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { ReactNode, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { GroupedSuggestions, Suggestion, SuggestionProvider } from '../models/suggestions';
 import { SuggestionContext } from '../providers';
@@ -8,7 +8,7 @@ import { getCursorWord } from '../utils/get-cursor-word';
 
 type UseSuggestionsProps = {
   propName: string;
-  schema: JSONSchema4;
+  schema: JSONSchema7;
   inputRef: RefObject<HTMLInputElement | HTMLTextAreaElement>;
   value: string | number;
   setValue?: (value: string) => void;
@@ -42,7 +42,7 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
     (event: Event) => {
       if (!(event instanceof KeyboardEvent)) return;
 
-if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code === 'Escape')) {
+      if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code === 'Escape')) {
         event.preventDefault();
         setSearchValue('');
         setIsVisible(true);

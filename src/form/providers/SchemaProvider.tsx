@@ -1,26 +1,30 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import { createContext, FunctionComponent, PropsWithChildren, useContext, useMemo } from 'react';
 import { resolveSchemaWithRef } from '../utils';
 import { SchemaDefinitionsContext } from './SchemaDefinitionsProvider';
 
 export interface SchemaContextValue {
-  schema: JSONSchema4;
-  definitions: Record<string, JSONSchema4>;
+  schema: JSONSchema7;
+  definitions: JSONSchema7Definition;
 }
 
 export const SchemaContext = createContext<SchemaContextValue>({ schema: {}, definitions: {} });
 
-export const SchemaProvider: FunctionComponent<PropsWithChildren<{ schema: JSONSchema4 }>> = ({ schema, children }) => {
+export const SchemaProvider: FunctionComponent<PropsWithChildren<{ schema: JSONSchema7 }>> = ({ schema, children }) => {
   const { definitions, omitFields } = useContext(SchemaDefinitionsContext);
 
   const value = useMemo(() => {
     const resolvedSchema = resolveSchemaWithRef(schema, definitions);
 
     if (Array.isArray(resolvedSchema.anyOf)) {
-      resolvedSchema.anyOf = resolvedSchema.anyOf.map((anyOfSchema) => resolveSchemaWithRef(anyOfSchema, definitions));
+      resolvedSchema.anyOf = resolvedSchema.anyOf.map((anyOfSchema) =>
+        resolveSchemaWithRef(anyOfSchema as JSONSchema7, definitions),
+      );
     }
     if (Array.isArray(resolvedSchema.oneOf)) {
-      resolvedSchema.oneOf = resolvedSchema.oneOf.map((oneOfSchema) => resolveSchemaWithRef(oneOfSchema, definitions));
+      resolvedSchema.oneOf = resolvedSchema.oneOf.map((oneOfSchema) =>
+        resolveSchemaWithRef(oneOfSchema as JSONSchema7, definitions),
+      );
     }
 
     omitFields.forEach((field) => {

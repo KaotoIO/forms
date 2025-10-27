@@ -1,5 +1,5 @@
 import { FormGroup } from '@patternfly/react-core';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { FunctionComponent, PropsWithChildren, useCallback, useMemo } from 'react';
 import { FieldProps } from '../../models/typings';
 import { SimpleSelector } from '../../Typeahead/SimpleSelector';
@@ -27,7 +27,7 @@ export const SchemaList: FunctionComponent<PropsWithChildren<SchemaList>> = ({
   'data-testid': dataTestId,
   children,
 }) => {
-  const items: TypeaheadItem<JSONSchema4>[] = useMemo(
+  const items: TypeaheadItem<JSONSchema7>[] = useMemo(
     () => schemas.map(({ name, description, schema }) => ({ name, description, value: schema })),
     [schemas],
   );

@@ -1,4 +1,4 @@
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { createContext, FunctionComponent, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react';
 import { SuggestionProvider } from '../models/suggestions';
 
@@ -7,7 +7,7 @@ interface SuggestionContextApi {
   unregisterProvider: (id: string) => void;
 }
 interface SuggestionContext {
-  getProviders: (propertyName: string, schema: JSONSchema4) => SuggestionProvider[];
+  getProviders: (propertyName: string, schema: JSONSchema7) => SuggestionProvider[];
 }
 
 export const SuggestionContextApi = createContext<SuggestionContextApi | undefined | null>(undefined);
@@ -33,7 +33,7 @@ export const SuggestionRegistryProvider: FunctionComponent<PropsWithChildren> = 
   }, []);
 
   const getProviders = useCallback(
-    (propertyName: string, schema: JSONSchema4) => {
+    (propertyName: string, schema: JSONSchema7) => {
       if (!schema) return providers;
       return providers.filter((provider) => provider.appliesTo(propertyName, schema));
     },

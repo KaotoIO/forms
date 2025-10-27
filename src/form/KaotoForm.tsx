@@ -1,5 +1,5 @@
 import { Form } from '@patternfly/react-core';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import {
   FormEventHandler,
   forwardRef,
@@ -27,7 +27,7 @@ export interface KaotoFormApi {
 }
 
 export interface KaotoFormProps extends IDataTestID {
-  schema?: JSONSchema4;
+  schema?: JSONSchema7;
   model: unknown;
   omitFields?: string[];
   disabled?: boolean;

@@ -3,6 +3,7 @@ import { isDefined } from '../../utils';
 import { SchemaContext, SchemaProvider } from '../../providers/SchemaProvider';
 import { FieldProps } from '../../models/typings';
 import { AutoField } from '../AutoField';
+import { JSONSchema7 } from 'json-schema';
 
 interface ObjectFieldInnerProps extends FieldProps {
   requiredProperties: string[];
@@ -23,7 +24,7 @@ export const ObjectFieldInner: FunctionComponent<ObjectFieldInnerProps> = ({ pro
           const required = requiredProperties.includes(propertyName);
 
           return (
-            <SchemaProvider key={name} schema={propertySchema}>
+            <SchemaProvider key={name} schema={propertySchema as JSONSchema7}>
               <AutoField propName={name} required={required} />
             </SchemaProvider>
           );
