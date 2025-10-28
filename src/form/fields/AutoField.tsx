@@ -5,11 +5,12 @@ import { CanvasFormTabsContext } from '../providers/canvas-form-tabs.provider';
 import { FormComponentFactoryContext } from '../providers/context/form-component-factory-context';
 import { SchemaContext } from '../providers/SchemaProvider';
 import { isDefined } from '../utils';
+import { isFieldValueDefined } from '../utils/is-field-value-defined';
 
 export const AutoField: FunctionComponent<FieldProps> = ({ propName, required, onRemove }) => {
   const { selectedTab } = useContext(CanvasFormTabsContext);
   const { schema } = useContext(SchemaContext);
-  const { value } = useFieldValue<object>(propName);
+  const { value } = useFieldValue<unknown>(propName);
   const formComponentFactory = useContext(FormComponentFactoryContext);
 
   if (Object.keys(schema).length === 0) {
@@ -18,8 +19,7 @@ export const AutoField: FunctionComponent<FieldProps> = ({ propName, required, o
     throw new Error(`AutoField: formComponentFactory is not defined for ${propName}`);
   }
 
-  const isFieldDefined =
-    schema.type === 'object' ? isDefined(value) && Object.keys(value).length > 0 : isDefined(value);
+  const isFieldDefined = isFieldValueDefined(schema.type, value);
   const isComplexFieldType =
     schema.type === 'object' || schema.type === 'array' || 'oneOf' in schema || 'anyOf' in schema;
   // If required is not defined, it is considered as required
