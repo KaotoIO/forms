@@ -5,8 +5,6 @@ export const isFieldValueDefined = (
   schemaType: JSONSchema4TypeName[] | JSONSchema4TypeName | undefined,
   value: unknown,
 ): boolean => {
-  if (!isDefined(schemaType)) return false;
-
   let isFieldDefined = false;
   // When field of any type in not defined with any input, the `value` returns `undefined` and therefore isFieldDefined return false
   if (isDefined(value)) {

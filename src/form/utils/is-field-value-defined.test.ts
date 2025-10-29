@@ -100,12 +100,12 @@ describe('isFieldValueDefined', () => {
 
   describe('when schema type is undefined or unknown', () => {
     it('should return true for any defined value', () => {
-      expect(isFieldValueDefined(undefined, 'hello')).toBe(false);
-      expect(isFieldValueDefined(undefined, 123)).toBe(false);
-      expect(isFieldValueDefined(undefined, true)).toBe(false);
-      expect(isFieldValueDefined(undefined, {})).toBe(false);
-      expect(isFieldValueDefined(undefined, [])).toBe(false);
-      expect(isFieldValueDefined(undefined, '')).toBe(false);
+      expect(isFieldValueDefined(undefined, 'hello')).toBe(true);
+      expect(isFieldValueDefined(undefined, 123)).toBe(true);
+      expect(isFieldValueDefined(undefined, true)).toBe(true);
+      expect(isFieldValueDefined(undefined, {})).toBe(true);
+      expect(isFieldValueDefined(undefined, [])).toBe(true);
+      expect(isFieldValueDefined(undefined, '')).toBe(true);
     });
   });
 });
