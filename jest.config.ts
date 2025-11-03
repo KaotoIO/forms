@@ -35,6 +35,8 @@ export default {
     '!src/**/stubs/*.ts',
     // Ignore icon resolver
     '!src/**/node-icon-resolver.ts',
+    // Ignore test app
+    '!src/testapp/**',
   ],
 
   // The directory where Jest should output its coverage files

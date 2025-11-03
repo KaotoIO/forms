@@ -46,11 +46,11 @@
     "usehooks-ts": "^3.0.0"
   },
   "peerDependencies": {
-    "@patternfly/patternfly": "^6.3.0",
+    "@patternfly/patternfly": "6.4.0",
     "@patternfly/react-core": "6.4.0",
-    "@patternfly/react-icons": "^6.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@patternfly/react-icons": "6.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
@@ -62,10 +62,10 @@
     "@lerna-lite/cli": "^3.0.0",
     "@lerna-lite/publish": "^3.0.0",
     "@lerna-lite/version": "^3.0.0",
-    "@patternfly/patternfly": "^6.3.0",
+    "@patternfly/patternfly": "6.4.0",
     "@patternfly/react-code-editor": "6.4.0",
     "@patternfly/react-core": "6.4.0",
-    "@patternfly/react-icons": "^6.3.0",
+    "@patternfly/react-icons": "6.4.0",
     "@swc/core": "^1.7.14",
     "@swc/jest": "^0.2.36",
     "@testing-library/dom": "^10.0.0",
@@ -93,10 +93,10 @@
     "monaco-editor": "^0.52.2",
     "postcss": "^8.4.45",
     "prettier": "^3.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-monaco-editor": "^0.56.0",
-    "react-test-renderer": "^18.2.0",
+    "react-test-renderer": "^18.3.1",
     "rimraf": "^6.0.0",
     "sass-embedded": "^1.79.5",
     "stylelint": "^16.1.0",

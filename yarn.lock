@@ -2511,10 +2511,10 @@ __metadata:
     "@lerna-lite/cli": "npm:^3.0.0"
     "@lerna-lite/publish": "npm:^3.0.0"
     "@lerna-lite/version": "npm:^3.0.0"
-    "@patternfly/patternfly": "npm:^6.3.0"
+    "@patternfly/patternfly": "npm:6.4.0"
     "@patternfly/react-code-editor": "npm:6.4.0"
     "@patternfly/react-core": "npm:6.4.0"
-    "@patternfly/react-icons": "npm:^6.3.0"
+    "@patternfly/react-icons": "npm:6.4.0"
     "@swc/core": "npm:^1.7.14"
     "@swc/jest": "npm:^0.2.36"
     "@testing-library/dom": "npm:^10.0.0"
@@ -2545,10 +2545,10 @@ __metadata:
     monaco-editor: "npm:^0.52.2"
     postcss: "npm:^8.4.45"
     prettier: "npm:^3.0.0"
-    react: "npm:^18.2.0"
-    react-dom: "npm:^18.2.0"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
     react-monaco-editor: "npm:^0.56.0"
-    react-test-renderer: "npm:^18.2.0"
+    react-test-renderer: "npm:^18.3.1"
     rimraf: "npm:^6.0.0"
     sass-embedded: "npm:^1.79.5"
     stylelint: "npm:^16.1.0"
@@ -2562,11 +2562,11 @@ __metadata:
     vite-plugin-dts: "npm:^4.5.4"
     vite-plugin-static-copy: "npm:^3.1.0"
   peerDependencies:
-    "@patternfly/patternfly": ^6.3.0
+    "@patternfly/patternfly": 6.4.0
     "@patternfly/react-core": 6.4.0
-    "@patternfly/react-icons": ^6.3.0
-    react: ^18.2.0
-    react-dom: ^18.2.0
+    "@patternfly/react-icons": 6.4.0
+    react: ^18.3.1
+    react-dom: ^18.3.1
   languageName: unknown
   linkType: soft
 
@@ -3237,7 +3237,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/patternfly@npm:^6.3.0":
+"@patternfly/patternfly@npm:6.4.0":
   version: 6.4.0
   resolution: "@patternfly/patternfly@npm:6.4.0"
   checksum: 10/67fdc5998485e129721f595d9e1df6d3b778f15d030751eb9b7b6a09af66928871983722cc228c5f70e41a73074c832e3ab5f723091a17b4f6edecc6915a5894
@@ -3278,7 +3278,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/react-icons@npm:^6.3.0, @patternfly/react-icons@npm:^6.4.0":
+"@patternfly/react-icons@npm:6.4.0, @patternfly/react-icons@npm:^6.4.0":
   version: 6.4.0
   resolution: "@patternfly/react-icons@npm:6.4.0"
   peerDependencies:
@@ -11564,7 +11564,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.2.0":
+"react-dom@npm:^18.3.1":
   version: 18.3.1
   resolution: "react-dom@npm:18.3.1"
   dependencies:
@@ -11649,7 +11649,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-test-renderer@npm:^18.2.0":
+"react-test-renderer@npm:^18.3.1":
   version: 18.3.1
   resolution: "react-test-renderer@npm:18.3.1"
   dependencies:
@@ -11662,7 +11662,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.2.0":
+"react@npm:^18.3.1":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
   dependencies:
