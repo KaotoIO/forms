@@ -1,5 +1,5 @@
-import { Button, Content, Split, SplitItem, TextInputGroup, TextInputGroupMain } from '@patternfly/react-core';
-import { PlusIcon, TrashIcon } from '@patternfly/react-icons';
+import { IconButton, Grid, Column, TextInput } from '@carbon/react';
+import { Add, TrashCan } from '@carbon/icons-react';
 import { FunctionComponent, useRef, useState } from 'react';
 import { getCamelRandomId } from '../utils/camel-random-id';
 import { KeyValueField } from './KeyValueField';
@@ -63,54 +63,58 @@ export const KeyValue: FunctionComponent<KeyValueProps> = ({ propName, initialMo
   };
 
   return (
-    <>
-      <Split hasGutter>
-        <SplitItem isFilled>Key</SplitItem>
-        <SplitItem isFilled>Value</SplitItem>
-        <SplitItem>
-          <Button
-            variant="plain"
+    <div>
+      <Grid>
+        <Column sm={2} md={3} lg={7}>
+          <strong>Key</strong>
+        </Column>
+        <Column sm={2} md={3} lg={7}>
+          <strong>Value</strong>
+        </Column>
+        <Column sm={0} md={2} lg={2}>
+          <IconButton
+            kind="ghost"
             data-testid={`${propName}__add`}
             onClick={onAddNewProperty}
-            aria-label="Add a new property"
-            title="Add a new property"
-            icon={<PlusIcon />}
-            isDisabled={disabled}
-          />
-        </SplitItem>
-      </Split>
+            label="Add a new property"
+            disabled={disabled}
+          >
+            <Add />
+          </IconButton>
+        </Column>
+      </Grid>
 
-      <Content component="hr" />
+      <hr />
 
       {/* In this iteration, it's ok to use the `id` of the element because using the `key` will
         cause for the input to lose focus when the list is updated. */}
       {internalModel.map(([key, value], index) => {
         return (
-          <Split hasGutter key={index}>
-            <SplitItem isFilled>
-              <TextInputGroup validated={duplicateKeyExists(key) ? 'error' : undefined}>
-                <TextInputGroupMain
-                  type="text"
-                  id={`${propName}__${key}__key`}
-                  name={`${propName}__${key}__key`}
-                  data-testid={`${propName}__key`}
-                  onChange={(_event, value) => {
-                    onPropertyKeyChange(index, key, value);
-                  }}
-                  ref={getFocusRefFn('key', index)}
-                  onFocus={() => {
-                    currentFocusIndex.current = ['key', index];
-                  }}
-                  onBlur={() => {
-                    currentFocusIndex.current = ['key', -1];
-                  }}
-                  placeholder="Write a key"
-                  value={key}
-                />
-              </TextInputGroup>
-            </SplitItem>
+          <Grid key={index}>
+            <Column sm={2} md={3} lg={7}>
+              <TextInput
+                labelText=""
+                type="text"
+                id={`${propName}__${key}__key`}
+                name={`${propName}__${key}__key`}
+                data-testid={`${propName}__key`}
+                onChange={(event) => {
+                  onPropertyKeyChange(index, key, event.target.value);
+                }}
+                ref={getFocusRefFn('key', index)}
+                onFocus={() => {
+                  currentFocusIndex.current = ['key', index];
+                }}
+                onBlur={() => {
+                  currentFocusIndex.current = ['key', -1];
+                }}
+                placeholder="Write a key"
+                value={key}
+                invalid={duplicateKeyExists(key)}
+              />
+            </Column>
 
-            <SplitItem isFilled>
+            <Column sm={2} md={3} lg={7}>
               <KeyValueField
                 id={`${propName}__${key}__value`}
                 name={`${propName}__${key}__value`}
@@ -128,23 +132,23 @@ export const KeyValue: FunctionComponent<KeyValueProps> = ({ propName, initialMo
                 placeholder="Write a value"
                 value={value}
               />
-            </SplitItem>
+            </Column>
 
-            <SplitItem>
-              <Button
-                variant="plain"
+            <Column sm={0} md={2} lg={2}>
+              <IconButton
+                kind="ghost"
                 data-testid={`${propName}__remove__${key}`}
                 onClick={() => {
                   onRemoveProperty(key);
                 }}
-                aria-label={`Remove the ${key} property`}
-                title={`Remove the ${key} property`}
-                icon={<TrashIcon />}
-              />
-            </SplitItem>
-          </Split>
+                label={`Remove the ${key} property`}
+              >
+                <TrashCan />
+              </IconButton>
+            </Column>
+          </Grid>
         );
       })}
-    </>
+    </div>
   );
 };

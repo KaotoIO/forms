@@ -1,4 +1,4 @@
-import { FormFieldGroupExpandable, FormFieldGroupHeader } from '@patternfly/react-core';
+import { Accordion, AccordionItem } from '@carbon/react';
 import { JSONSchema4 } from 'json-schema';
 import { FunctionComponent, useContext } from 'react';
 import { useFieldValue } from '../../hooks/field-value';
@@ -8,7 +8,7 @@ import { SchemaProvider } from '../../providers/SchemaProvider';
 import { isDefined } from '../../utils';
 import { capitalizeString } from '../../utils/capitalize-string';
 import { ObjectFieldInner } from './ObjectFieldInner';
-
+import './GroupFields.scss';
 interface GroupFieldsProps extends FieldProps {
   groups: [string, Record<string, JSONSchema4>][];
   requiredProperties: string[];
@@ -49,16 +49,13 @@ export const GroupFields: FunctionComponent<GroupFieldsProps> = ({ propName, gro
         const name = capitalizeString(groupName);
 
         return (
-          <FormFieldGroupExpandable
-            className="kaoto-form__expandable-group"
-            key={`${name}-section-toggle`}
-            toggleAriaLabel={`Toggle ${name} group`}
-            header={<FormFieldGroupHeader titleText={{ text: name, id: `${propName}-${name}` }} />}
-          >
-            <SchemaProvider schema={{ properties: groupProperties }}>
-              <ObjectFieldInner propName={propName} requiredProperties={requiredProperties} />
-            </SchemaProvider>
-          </FormFieldGroupExpandable>
+          <Accordion key={`${name}-section-toggle`} className="kaoto-form__expandable-group">
+            <AccordionItem title={name} data-testid={`${propName}-${name}`}>
+              <SchemaProvider schema={{ properties: groupProperties }}>
+                <ObjectFieldInner propName={propName} requiredProperties={requiredProperties} />
+              </SchemaProvider>
+            </AccordionItem>
+          </Accordion>
         );
       })}
     </>

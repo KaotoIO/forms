@@ -1,10 +1,10 @@
-import { Button } from '@patternfly/react-core';
-import { PencilAltIcon, TrashIcon } from '@patternfly/react-icons';
+import { Edit, TrashCan } from '@carbon/icons-react';
+import { IconButton } from '@carbon/react';
 import { FunctionComponent, useContext, useState } from 'react';
-import { isDefined, ROOT_PATH } from '../../utils';
 import { useFieldValue } from '../../hooks/field-value';
-import { SchemaContext } from '../../providers/SchemaProvider';
 import { FieldProps } from '../../models/typings';
+import { SchemaContext } from '../../providers/SchemaProvider';
+import { isDefined, ROOT_PATH } from '../../utils';
 import { ArrayFieldWrapper } from '../ArrayField/ArrayFieldWrapper';
 import { ObjectFieldGrouping } from './ObjectFieldGrouping';
 
@@ -44,25 +44,15 @@ export const ObjectField: FunctionComponent<FieldProps> = ({ propName, required,
       actions={
         <>
           {!isExpanded && (
-            <Button
-              variant="plain"
-              data-testid={`${propName}__set`}
-              aria-label="Set object"
-              title="Set object"
-              onClick={onSet}
-              icon={<PencilAltIcon />}
-            />
+            <IconButton kind="ghost" data-testid={`${propName}__set`} label="Set object" onClick={onSet}>
+              <Edit />
+            </IconButton>
           )}
 
           {isExpanded && (
-            <Button
-              variant="plain"
-              data-testid={`${propName}__remove`}
-              aria-label="Remove object"
-              title="Remove object"
-              onClick={onRemove}
-              icon={<TrashIcon />}
-            />
+            <IconButton kind="ghost" data-testid={`${propName}__remove`} label="Remove object" onClick={onRemove}>
+              <TrashCan />
+            </IconButton>
           )}
         </>
       }

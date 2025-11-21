@@ -11,8 +11,8 @@ describe('SimpleSelector', () => {
   ];
 
   it('renders without crashing', () => {
-    render(<SimpleSelector items={items} onChange={jest.fn()} data-testid="simple-selector" />);
-    expect(screen.getByTestId('simple-selector')).toBeInTheDocument();
+    render(<SimpleSelector items={items} onChange={jest.fn()} />);
+    expect(screen.getByRole('tablist')).toBeInTheDocument();
   });
 
   it('renders all items', () => {
@@ -33,12 +33,12 @@ describe('SimpleSelector', () => {
   it('updates selected state when an item is clicked', () => {
     render(<SimpleSelector items={items} onChange={jest.fn()} />);
 
-    const itemButton1 = screen.getByRole('button', {
+    const itemButton1 = screen.getByRole('tab', {
       name: /item 1/i,
     });
     fireEvent.click(itemButton1);
 
-    expect(itemButton1).toHaveAttribute('aria-pressed', 'true');
+    expect(itemButton1).toHaveAttribute('aria-selected', 'true');
   });
 
   it('does not call onChange if the same item is clicked again', () => {

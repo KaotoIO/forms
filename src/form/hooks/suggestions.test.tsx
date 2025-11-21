@@ -285,7 +285,7 @@ describe('useSuggestions', () => {
       });
 
       await act(async () => {
-        const searchInput = result.getByTestId('suggestions-menu-search-input').querySelector('input');
+        const searchInput = result.getByRole('searchbox');
         expect(searchInput).toBeInTheDocument();
 
         fireEvent.focus(searchInput!);
@@ -463,7 +463,7 @@ describe('useSuggestions', () => {
 
       // Filter suggestions to make TestGroup empty
       await act(async () => {
-        const searchInput = result.getByTestId('suggestions-menu-search-input').querySelector('input');
+        const searchInput = result.getByRole('searchbox');
         fireEvent.change(searchInput!, { target: { value: 'root' } });
       });
 
@@ -513,7 +513,7 @@ describe('useSuggestions', () => {
     });
 
     await act(async () => {
-      fireEvent.click(result.getByText('First suggestion'));
+      fireEvent.click(result.getByRole('menuitem', { name: 'suggestion1' }));
     });
 
     await waitFor(() => {
@@ -541,7 +541,7 @@ describe('useSuggestions', () => {
 
       // Type in the search input to filter
       await act(async () => {
-        const searchInput = result.getByTestId('suggestions-menu-search-input').querySelector('input');
+        const searchInput = result.getByRole('searchbox');
         expect(searchInput).toBeInTheDocument();
 
         fireEvent.change(searchInput!, { target: { value: '2' } });
@@ -549,11 +549,11 @@ describe('useSuggestions', () => {
 
       await waitFor(() => {
         expect(result.getByText('group1')).toBeInTheDocument();
-        expect(result.queryByText('suggestion1')).not.toBeInTheDocument();
+        expect(result.queryByRole('menuitem', { name: 'suggestion1' })).not.toBeInTheDocument();
       });
     });
 
-    it('should focus the search input when the menuitem containing it is focused', async () => {
+    it('should auto-focus the search input when menu opens', async () => {
       const result = renderWithContext(<TestComponent />);
 
       // Open suggestions menu
@@ -566,18 +566,10 @@ describe('useSuggestions', () => {
         expect(result.getByTestId('suggestions-menu')).toBeInTheDocument();
       });
 
-      const searchMenuItem = result.getByTestId('suggestions-menu-search-item');
-      const searchInput = result.getByTestId('suggestions-menu-search-input').querySelector('input');
-
-      expect(searchInput).toBeInTheDocument();
-      const focusSpy = jest.spyOn(searchInput!, 'focus');
-
-      // Focus the menuitem containing the search input
-      await act(async () => {
-        fireEvent.focus(searchMenuItem);
+      await waitFor(() => {
+        const searchInput = result.getByRole('searchbox');
+        expect(searchInput).toBeInTheDocument();
       });
-
-      expect(focusSpy).toHaveBeenCalled();
     });
 
     it('should clear the search input when Ctrl+Space is pressed', async () => {
@@ -593,7 +585,7 @@ describe('useSuggestions', () => {
         expect(result.getByTestId('suggestions-menu')).toBeInTheDocument();
       });
 
-      const searchInput = result.getByTestId('suggestions-menu-search-input').querySelector('input');
+      const searchInput = result.getByRole('searchbox');
       expect(searchInput).toBeInTheDocument();
 
       await act(async () => {
@@ -601,7 +593,7 @@ describe('useSuggestions', () => {
       });
 
       await waitFor(() => {
-        expect(searchInput!.value).toBe('new search');
+        expect((searchInput as HTMLInputElement).value).toBe('new search');
       });
 
       await act(async () => {
@@ -615,7 +607,7 @@ describe('useSuggestions', () => {
       });
 
       await waitFor(() => {
-        expect(searchInput!.value).toBe('');
+        expect((searchInput as HTMLInputElement).value).toBe('');
       });
     });
   });

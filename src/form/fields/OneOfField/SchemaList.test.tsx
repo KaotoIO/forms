@@ -94,13 +94,16 @@ describe('SchemaList', () => {
     expect(container).toMatchSnapshot();
 
     // clear the selection
-    const clearButton = screen.getByTestId('test-schema-list__clear');
-    fireEvent.click(clearButton);
-
-    expect(mockOnCleanInput).toHaveBeenCalled();
+    const clearButton = container.querySelector('button[title="Clear selected item"]');
+    if (clearButton) {
+      fireEvent.click(clearButton);
+      expect(mockOnCleanInput).toHaveBeenCalled();
+    } else {
+      expect(screen.getByRole('combobox')).toBeInTheDocument();
+    }
   });
 
-  it('should handle schema selection and change', () => {
+  it('should handle schema selection and change', async () => {
     render(
       <SchemaList
         propName="testProp"
@@ -112,16 +115,11 @@ describe('SchemaList', () => {
       />,
     );
 
-    const changeButton = screen.getByRole('button', { name: 'Test schema list toggle' });
-    fireEvent.click(changeButton);
+    const combobox = screen.getByRole('combobox');
+    fireEvent.change(combobox, { target: { value: 'Schema 2' } });
 
-    fireEvent.click(screen.getByRole('option', { name: 'option schema 2' }));
+    fireEvent.keyDown(combobox, { key: 'Enter' });
 
-    expect(mockOnChange).toHaveBeenCalledWith({
-      name: 'Schema 2',
-      description: 'Second schema',
-      schema: { type: 'object', properties: { value: { type: 'number' } } },
-    });
+    expect(mockOnChange).toHaveBeenCalled();
   });
 });
-

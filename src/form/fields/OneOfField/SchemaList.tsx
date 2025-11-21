@@ -1,4 +1,4 @@
-import { FormGroup } from '@patternfly/react-core';
+import { Stack } from '@carbon/react';
 import { JSONSchema4 } from 'json-schema';
 import { FunctionComponent, PropsWithChildren, useCallback, useMemo } from 'react';
 import { FieldProps } from '../../models/typings';
@@ -58,8 +58,8 @@ export const SchemaList: FunctionComponent<PropsWithChildren<SchemaList>> = ({
   );
 
   return (
-    <>
-      <FormGroup isStack hasNoPaddingTop fieldId={propName} role="group">
+    <Stack gap={3}>
+      <div role="group">
         {useTypeahead ? (
           <Typeahead
             aria-label={ariaLabel}
@@ -81,9 +81,9 @@ export const SchemaList: FunctionComponent<PropsWithChildren<SchemaList>> = ({
             onChange={onItemChange}
           />
         )}
-      </FormGroup>
+      </div>
 
       {children}
-    </>
+    </Stack>
   );
 };

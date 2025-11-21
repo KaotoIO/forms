@@ -1,39 +1,24 @@
-import { ToggleGroup, ToggleGroupItem } from '@patternfly/react-core';
+import { ContentSwitcher, Switch } from '@carbon/react';
 import { FunctionComponent, useContext } from 'react';
-import { CanvasFormTabsContext, FormTabsModes } from '../../form/providers/canvas-form-tabs.provider';
+import { CanvasFormTabsContext } from '../../form/providers/canvas-form-tabs.provider';
 
 export const TabSelector: FunctionComponent = () => {
   const { selectedTab, setSelectedTab } = useContext(CanvasFormTabsContext);
 
   return (
-    <ToggleGroup>
-      <ToggleGroupItem
-        title={FormTabsModes.All}
-        text="All"
-        buttonId="All"
-        isSelected={selectedTab === 'All'}
-        onChange={() => {
-          setSelectedTab('All');
-        }}
-      />
-      <ToggleGroupItem
-        title={FormTabsModes.Required}
-        text="Required"
-        buttonId="Required"
-        isSelected={selectedTab === 'Required'}
-        onChange={() => {
-          setSelectedTab('Required');
-        }}
-      />
-      <ToggleGroupItem
-        title={FormTabsModes.Modified}
-        text="Modified"
-        buttonId="Modified"
-        isSelected={selectedTab === 'Modified'}
-        onChange={() => {
-          setSelectedTab('Modified');
-        }}
-      />
-    </ToggleGroup>
+    <ContentSwitcher
+      size="md"
+      selectedIndex={selectedTab === 'All' ? 0 : selectedTab === 'Required' ? 1 : 2}
+      onChange={(e) => {
+        const index = e.index;
+        if (index === 0) setSelectedTab('All');
+        else if (index === 1) setSelectedTab('Required');
+        else setSelectedTab('Modified');
+      }}
+    >
+      <Switch name="All" text="All" />
+      <Switch name="Required" text="Required" />
+      <Switch name="Modified" text="Modified" />
+    </ContentSwitcher>
   );
 };

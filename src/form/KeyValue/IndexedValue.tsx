@@ -1,5 +1,5 @@
-import { Button, Content, Split, SplitItem, TextInputGroup, TextInputGroupMain } from '@patternfly/react-core';
-import { PlusIcon, TrashIcon } from '@patternfly/react-icons';
+import { IconButton, Grid, Column } from '@carbon/react';
+import { Add, TrashCan } from '@carbon/icons-react';
 import { FunctionComponent, useRef, useState } from 'react';
 import { KeyValueField } from './KeyValueField';
 
@@ -72,33 +72,37 @@ export const IndexedValue: FunctionComponent<KeyValueProps> = ({
   };
 
   return (
-    <>
-      <Split hasGutter>
-        <SplitItem isFilled>Index</SplitItem>
-        <SplitItem isFilled>Argument Value</SplitItem>
-        <SplitItem>
-          <Button
-            variant="plain"
+    <div>
+      <Grid>
+        <Column sm={1} md={2} lg={3}>
+          <strong>Index</strong>
+        </Column>
+        <Column sm={3} md={4} lg={11}>
+          <strong>Argument Value</strong>
+        </Column>
+        <Column sm={0} md={2} lg={2}>
+          <IconButton
+            kind="ghost"
             data-testid={`${propName}__add`}
             onClick={onAddNewProperty}
-            aria-label="Add a new property"
-            title="Add a new property"
-            icon={<PlusIcon />}
-            isDisabled={disabled}
-          />
-        </SplitItem>
-      </Split>
+            label="Add a new property"
+            disabled={disabled}
+          >
+            <Add />
+          </IconButton>
+        </Column>
+      </Grid>
 
-      <Content component="hr" />
+      <hr />
 
       {internalModel.map(([key, value], index) => {
         return (
-          <Split hasGutter key={index}>
-            <SplitItem isFilled>
+          <Grid key={index}>
+            <Column sm={1} md={2} lg={3}>
               <span data-testid={`${propName}__index`}>{key}</span>
-            </SplitItem>
+            </Column>
 
-            <SplitItem isFilled>
+            <Column sm={3} md={4} lg={11}>
               <KeyValueField
                 id={`${propName}__${key}__value`}
                 name={`${propName}__${key}__value`}
@@ -116,23 +120,23 @@ export const IndexedValue: FunctionComponent<KeyValueProps> = ({
                 placeholder="Write a value"
                 value={value}
               />
-            </SplitItem>
+            </Column>
 
-            <SplitItem>
-              <Button
-                variant="plain"
+            <Column sm={0} md={2} lg={2}>
+              <IconButton
+                kind="ghost"
                 data-testid={`${propName}__remove__${key}`}
                 onClick={() => {
                   onRemoveProperty(key);
                 }}
-                aria-label={`Remove the ${key} property`}
-                title={`Remove the ${key} property`}
-                icon={<TrashIcon />}
-              />
-            </SplitItem>
-          </Split>
+                label={`Remove the ${key} property`}
+              >
+                <TrashCan />
+              </IconButton>
+            </Column>
+          </Grid>
         );
       })}
-    </>
+    </div>
   );
 };

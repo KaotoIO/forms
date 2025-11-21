@@ -10,18 +10,18 @@ describe('Test for suggestions for form fields', () => {
     // Simulate Alt+Escape key combo
     cy.get('input[name="#.timerName"]').type('{alt}{esc}');
 
-    cy.get('span').contains('{{testTimerName:default}}').click();
+    cy.get('div').contains('{{testTimerName:default}}').click();
 
     cy.checkCodeSpanLine('"timerName": "{{testTimerName:default}}"', 1);
   });
 
-  it.only('Sample App - suggestions in String form field', () => {
+  it('Sample App - suggestions in String form field', () => {
     cy.selectSchema('timer');
     cy.get('input[name="#.timerName"]').clear().type('testTimerName');
 
     cy.get('input[name="#.timerName"]').type('{ctrl}{ }');
 
-    cy.get('span').contains('{{testTimerName:default}}').click();
+    cy.get('div').contains('{{testTimerName:default}}').click();
 
     cy.checkCodeSpanLine('"timerName": "{{testTimerName:default}}"', 1);
   });
@@ -32,8 +32,8 @@ describe('Test for suggestions for form fields', () => {
 
     cy.get('input[name="#.timerName"]').type('{ctrl}{ }');
 
-    cy.get('span').contains('Simple Language').trigger('mouseover');
-    cy.get('span').contains('${body}').click();
+    cy.get('div').contains('Simple Language').trigger('mouseover');
+    cy.get('div').contains('${body}').click({ force: true });
 
     cy.checkCodeSpanLine('"timerName": "${body}"', 1);
   });
@@ -44,8 +44,8 @@ describe('Test for suggestions for form fields', () => {
 
     cy.get('textarea[name="#.description"]').type('{ctrl}{ }');
 
-    cy.get('span').contains('Simple Language').trigger('mouseover');
-    cy.get('span').contains('${body}').click();
+    cy.get('div').contains('Simple Language').trigger('mouseover');
+    cy.get('div').contains('${body}').click({ force: true });
 
     cy.checkCodeSpanLine('"description": "${body}"', 1);
   });
@@ -59,7 +59,7 @@ describe('Test for suggestions for form fields', () => {
     cy.get('[data-testid="#.parameters__key"]').type('testKey');
     cy.get('[data-testid="#.parameters__value"]').type('testValue');
     cy.get('[data-testid="#.parameters__value"]').type('{ctrl}{ }');
-    cy.get('span').contains('{{testValue:default}}').click();
+    cy.get('div').contains('{{testValue:default}}').click();
 
     cy.checkCodeSpanLine('"parameters": {', 1);
     cy.checkCodeSpanLine('"testKey": "{{testValue:default}}"', 1);

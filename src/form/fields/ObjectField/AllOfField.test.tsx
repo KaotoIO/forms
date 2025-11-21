@@ -26,9 +26,9 @@ describe('AllOfField', () => {
     expect(inputFields).toHaveLength(1);
     expect(inputFields[0]).toHaveAttribute('name', '#.name');
 
-    const checkboxFields = wrapper.queryAllByRole('checkbox');
-    expect(checkboxFields).toHaveLength(1);
-    expect(checkboxFields[0]).toHaveAttribute('name', '#.valid');
+    const switchFields = wrapper.queryAllByRole('switch');
+    expect(switchFields).toHaveLength(1);
+    expect(switchFields[0]).toHaveAttribute('name', '#.valid');
   });
 
   it('should set the property name and propagate the required status', () => {

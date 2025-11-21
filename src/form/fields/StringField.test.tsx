@@ -105,7 +105,7 @@ describe('StringField', () => {
       fireEvent.click(fieldActions);
     });
 
-    const clearButton = await wrapper.findByRole('menuitem', { name: /clear/i });
+    const clearButton = await wrapper.findByTestId(`${ROOT_PATH}__clear`);
     act(() => {
       fireEvent.click(clearButton);
     });
@@ -129,7 +129,7 @@ describe('StringField', () => {
       fireEvent.click(fieldActions);
     });
 
-    const clearButton = await wrapper.findByRole('menuitem', { name: /remove/i });
+    const clearButton = await wrapper.findByTestId(`${ROOT_PATH}__clear`);
     act(() => {
       fireEvent.click(clearButton);
     });
@@ -170,9 +170,9 @@ describe('StringField', () => {
       fireEvent.click(fieldActions);
     });
 
-    const clearButton = await wrapper.findByRole('menuitem', { name: /raw/i });
+    const rawButton = await wrapper.findByTestId(`${ROOT_PATH}__toRaw`);
     act(() => {
-      fireEvent.click(clearButton);
+      fireEvent.click(rawButton);
     });
 
     expect(onPropertyChangeSpy).toHaveBeenCalledTimes(1);
@@ -193,7 +193,7 @@ describe('StringField', () => {
       fireEvent.click(fieldActions);
     });
 
-    const raw = await wrapper.findByRole('menuitem', { name: /raw/i });
+    const raw = await wrapper.findByTestId(`${ROOT_PATH}__toRaw`);
     act(() => {
       fireEvent.click(raw);
     });
@@ -227,7 +227,7 @@ describe('StringField', () => {
       fireEvent.click(fieldActions);
     });
 
-    const rawButton = await wrapper.findByRole('menuitem', { name: /raw/i });
+    const rawButton = await wrapper.findByTestId(`${ROOT_PATH}__toRaw`);
     act(() => {
       fireEvent.click(rawButton);
     });
@@ -324,7 +324,7 @@ describe('StringField', () => {
     );
 
     await act(async () => {
-      const input = wrapper.getByRole('textbox');
+      const input = wrapper.getByTestId(ROOT_PATH);
       input.focus();
       fireEvent.keyDown(input, { code: 'Space', ctrlKey: true });
     });
@@ -333,9 +333,9 @@ describe('StringField', () => {
       expect(wrapper.getByTestId('suggestions-menu')).toBeInTheDocument();
     });
 
-    // Check if suggestions are rendered
-    expect(wrapper.getByText('First test suggestion')).toBeInTheDocument();
-    expect(wrapper.getByText('Second test suggestion')).toBeInTheDocument();
+    // Check if suggestions are rendered - Carbon MenuItem uses aria-label
+    expect(wrapper.getByRole('menuitem', { name: 'test-suggestion-1' })).toBeInTheDocument();
+    expect(wrapper.getByRole('menuitem', { name: 'test-suggestion-2' })).toBeInTheDocument();
   });
 
   it('should apply suggestion when clicked', async () => {
@@ -348,7 +348,7 @@ describe('StringField', () => {
     );
 
     await act(async () => {
-      const input = wrapper.getByRole('textbox');
+      const input = wrapper.getByTestId(ROOT_PATH);
       input.focus();
       fireEvent.keyDown(input, { code: 'Space', ctrlKey: true });
     });
@@ -356,7 +356,7 @@ describe('StringField', () => {
     const suggestionMenu = await wrapper.findByRole('menu');
     expect(suggestionMenu).toBeInTheDocument();
 
-    const firstSuggestion = within(suggestionMenu).getByText('First test suggestion');
+    const firstSuggestion = wrapper.getByRole('menuitem', { name: 'test-suggestion-1' });
     act(() => {
       fireEvent.click(firstSuggestion);
     });

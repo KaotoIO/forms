@@ -1,14 +1,16 @@
-import { Switch } from '@patternfly/react-core';
+import { Toggle } from '@carbon/react';
 import { FunctionComponent, useContext } from 'react';
 import { useFieldValue } from '../hooks/field-value';
 import { SchemaContext } from '../providers/SchemaProvider';
 import { FieldProps } from '../models/typings';
 import { FieldWrapper } from './FieldWrapper';
+import './BooleanField.scss';
 
 export const BooleanField: FunctionComponent<FieldProps> = ({ propName, required }) => {
   const { schema } = useContext(SchemaContext);
   const { value, onChange, disabled } = useFieldValue<boolean>(propName);
-  const onFieldChange = (_event: unknown, checked: boolean) => {
+
+  const onToggleChange = (checked: boolean) => {
     onChange(checked);
   };
 
@@ -30,17 +32,18 @@ export const BooleanField: FunctionComponent<FieldProps> = ({ propName, required
       defaultValue={schema.default?.toString()}
       isRow
     >
-      <Switch
-        id={propName}
-        name={propName}
-        role="checkbox"
-        aria-label={schema.title}
-        aria-describedby={id}
-        isChecked={normalizedValue}
-        checked={normalizedValue}
-        onChange={onFieldChange}
-        isDisabled={disabled}
-      />
+      <div className="boolean-field-toggle-wrapper">
+        <Toggle
+          labelText=""
+          onToggle={onToggleChange}
+          disabled={disabled}
+          id={propName}
+          name={propName}
+          aria-label={schema.title}
+          aria-describedby={id}
+          toggled={normalizedValue}
+        />
+      </div>
     </FieldWrapper>
   );
 };

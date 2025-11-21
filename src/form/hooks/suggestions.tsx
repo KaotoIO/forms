@@ -1,6 +1,16 @@
-import { Menu, MenuContent, MenuItem, MenuList, Popper, SearchInput } from '@patternfly/react-core';
+import { Layer, Menu, MenuItem, MenuItemGroup, MenuItemSelectable, Search } from '@carbon/react';
 import { JSONSchema4 } from 'json-schema';
-import { ReactNode, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ReactNode,
+  RefObject,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  ChangeEvent,
+} from 'react';
 import { GroupedSuggestions, Suggestion, SuggestionProvider } from '../models/suggestions';
 import { SuggestionContext } from '../providers';
 import { applySuggestion } from '../utils/apply-suggestion';
@@ -17,8 +27,9 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
   const [isVisible, setIsVisible] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [groupedSuggestions, setGroupedSuggestions] = useState<GroupedSuggestions>({ root: [] });
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
-  const firstElementRef = useRef<HTMLDivElement>(null);
+  const firstElementRef = useRef<HTMLLIElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { getProviders } = useContext(SuggestionContext);
 
@@ -42,7 +53,7 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
     (event: Event) => {
       if (!(event instanceof KeyboardEvent)) return;
 
-if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code === 'Escape')) {
+      if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code === 'Escape')) {
         event.preventDefault();
         setSearchValue('');
         setIsVisible(true);
@@ -71,7 +82,7 @@ if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code ===
   );
 
   const getHandleMenuKeyDown = useCallback(
-    (inputValue: string | number, suggestion?: Suggestion) => (event: React.KeyboardEvent) => {
+    (inputValue: string | number, suggestion?: Suggestion, isFirst?: boolean) => (event: React.KeyboardEvent) => {
       if (event.key === 'Enter' && suggestion) {
         event.preventDefault();
         getHandleOnClick(inputValue, suggestion)();
@@ -160,89 +171,125 @@ if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code ===
     searchInputRef.current?.focus();
   }, []);
 
-  const handleOnSearchChange = useCallback((_event: unknown, value: string) => {
-    setSearchValue(value);
+  const handleOnSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+    setSearchValue(event.target.value);
   }, []);
 
-  return (
-    <Popper
-      preventOverflow
-      maxWidth="trigger"
-      isVisible={isVisible}
-      triggerRef={inputRef}
-      popperRef={menuRef}
-      popper={
-        <div ref={menuRef}>
-          <Menu containsFlyout isNavFlyout data-testid="suggestions-menu">
-            <MenuContent>
-              <MenuList>
-                <MenuItem data-testid="suggestions-menu-search-item" onFocus={focusOnSearchInput}>
-                  <SearchInput
-                    data-testid="suggestions-menu-search-input"
-                    ref={searchInputRef}
-                    placeholder="Filter suggestions..."
-                    value={searchValue}
-                    onChange={handleOnSearchChange}
-                    onKeyDown={getHandleMenuKeyDown('')}
-                  />
-                </MenuItem>
-
-                {Object.entries(groupedSuggestions).map(([group, suggestions], groupIndex) => {
-                  if (suggestions.length === 0) return null;
-
-                  if (group === 'root') {
-                    return suggestions.map((suggestion, suggestionIndex) => {
-                      const isFirst = groupIndex === 0 && suggestionIndex === 0;
-                      return (
-                        <MenuItem
-                          ref={isFirst ? firstElementRef : null}
-                          key={suggestion.value}
-                          onClick={getHandleOnClick(value, suggestion)}
-                          onKeyDown={getHandleMenuKeyDown(value, suggestion)}
-                          description={suggestion.description}
-                        >
-                          {suggestion.value}
-                        </MenuItem>
-                      );
-                    });
-                  }
-
-                  return (
-                    <MenuItem
-                      ref={groupIndex === 0 ? firstElementRef : null}
-                      key={group}
-                      flyoutMenu={
-                        <Menu containsFlyout isScrollable>
-                          <MenuContent>
-                            <MenuList>
-                              {suggestions.map((suggestion) => (
-                                <MenuItem
-                                  key={suggestion.value}
-                                  onClick={getHandleOnClick(value, suggestion)}
-                                  onKeyDown={getHandleMenuKeyDown(value, suggestion)}
-                                  description={suggestion.description}
-                                >
-                                  {suggestion.value}
-                                </MenuItem>
-                              ))}
-                            </MenuList>
-                          </MenuContent>
-                        </Menu>
-                      }
-                    >
-                      <strong>{group}</strong>
-                    </MenuItem>
-                  );
-                })}
-
-                {groupedSuggestions.root.length === 0 && Object.keys(groupedSuggestions).length === 1 && (
-                  <MenuItem isDisabled>No suggestions available</MenuItem>
-                )}
-              </MenuList>
-            </MenuContent>
-          </Menu>
-        </div>
+  const handleSearchKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        firstElementRef.current?.focus();
+        return;
       }
-    />
+
+      if (event.key !== 'Escape' && event.key !== 'Enter') {
+        event.stopPropagation();
+      }
+      if (event.key === 'Escape') {
+        onEscapeKey(event);
+      }
+    },
+    [onEscapeKey],
+  );
+
+  useEffect(() => {
+    if (!isVisible || !inputRef.current) return;
+
+    const inputElement = inputRef.current;
+    const rect = inputElement.getBoundingClientRect();
+
+    setMenuPosition({
+      top: rect.bottom + window.scrollY,
+      left: rect.left + window.scrollX,
+    });
+
+    requestAnimationFrame(() => {
+      searchInputRef.current?.focus();
+    });
+  }, [isVisible, inputRef]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    requestAnimationFrame(() => {
+      if (document.activeElement !== searchInputRef.current) {
+        searchInputRef.current?.focus();
+      }
+    });
+  }, [isVisible, groupedSuggestions]);
+
+  if (!isVisible) return null;
+
+  return (
+    <Layer level={1}>
+      <div ref={menuRef} data-testid="suggestions-menu">
+        <Menu
+          style={{
+            position: 'absolute',
+            top: `${menuPosition.top}px`,
+            left: `${menuPosition.left}px`,
+          }}
+          x={menuPosition.left}
+          y={menuPosition.top}
+          open
+          label="Suggestions"
+        >
+          <Search
+            data-testid="suggestions-menu-search-input"
+            ref={searchInputRef}
+            placeholder="Filter suggestions..."
+            value={searchValue}
+            onChange={handleOnSearchChange}
+            onKeyDown={handleSearchKeyDown}
+            labelText=""
+            size="sm"
+            onFocus={focusOnSearchInput}
+          />
+          {Object.entries(groupedSuggestions).map(([group, suggestions], groupIndex) => {
+            if (suggestions.length === 0) return null;
+
+            if (group === 'root') {
+              return suggestions.map((suggestion, suggestionIndex) => {
+                const isFirst = groupIndex === 0 && suggestionIndex === 0;
+                return (
+                  <MenuItem
+                    ref={isFirst ? firstElementRef : null}
+                    key={suggestion.value}
+                    label={String(suggestion.value)}
+                    aria-label={String(suggestion.value)}
+                    onClick={getHandleOnClick(value, suggestion)}
+                    onKeyDown={getHandleMenuKeyDown(value, suggestion, isFirst)}
+                  />
+                );
+              });
+            } else {
+              return (
+                <MenuItem label={group} key={group} title={group}>
+                  {suggestions.map((suggestion, suggestionIndex) => {
+                    const isFirst = groupIndex === 0 && suggestionIndex === 0;
+                    return (
+                      <MenuItem
+                        ref={isFirst ? firstElementRef : null}
+                        key={suggestion.value}
+                        label={String(suggestion.value)}
+                        aria-label={String(suggestion.value)}
+                        onClick={getHandleOnClick(value, suggestion)}
+                        onKeyDown={getHandleMenuKeyDown(value, suggestion, isFirst)}
+                      />
+                    );
+                  })}
+                </MenuItem>
+              );
+            }
+          })}
+
+          {groupedSuggestions.root.length === 0 && Object.keys(groupedSuggestions).length === 1 && (
+            <MenuItem label="No suggestions available" disabled />
+          )}
+        </Menu>
+      </div>
+    </Layer>
   );
 };

@@ -19,9 +19,9 @@ describe('BooleanField', () => {
 
   it('should render with default props', () => {
     const { getByRole } = renderWithProviders(<BooleanField propName={ROOT_PATH} />);
-    const checkbox = getByRole('checkbox');
-    expect(checkbox).toBeInTheDocument();
-    expect(checkbox).not.toBeChecked();
+    const toggle = getByRole('switch');
+    expect(toggle).toBeInTheDocument();
+    expect(toggle).toHaveAttribute('aria-checked', 'false');
   });
 
   it('should render checked if value is true', () => {
@@ -32,8 +32,8 @@ describe('BooleanField', () => {
         </SchemaProvider>
       </ModelContextProvider>,
     );
-    const checkbox = getByRole('checkbox');
-    expect(checkbox).toBeChecked();
+    const toggle = getByRole('switch');
+    expect(toggle).toHaveAttribute('aria-checked', 'true');
   });
 
   it('should use schema default if value is undefined', () => {
@@ -44,8 +44,8 @@ describe('BooleanField', () => {
         </SchemaProvider>
       </ModelContextProvider>,
     );
-    const checkbox = getByRole('checkbox');
-    expect(checkbox).toBeChecked();
+    const toggle = getByRole('switch');
+    expect(toggle).toHaveAttribute('aria-checked', 'true');
   });
 
   it('should call onChange when toggled', () => {
@@ -57,9 +57,9 @@ describe('BooleanField', () => {
         </SchemaProvider>
       </ModelContextProvider>,
     );
-    const checkbox = getByRole('checkbox');
+    const toggle = getByRole('switch');
     act(() => {
-      fireEvent.click(checkbox);
+      fireEvent.click(toggle);
     });
     expect(onPropertyChange).toHaveBeenCalledWith(ROOT_PATH, true);
   });
@@ -72,8 +72,8 @@ describe('BooleanField', () => {
         </SchemaProvider>
       </ModelContextProvider>,
     );
-    const checkbox = getByRole('checkbox');
-    expect(checkbox).toBeDisabled();
+    const toggle = getByRole('switch');
+    expect(toggle).toBeDisabled();
   });
 
   it('should pass required prop to FieldWrapper', () => {

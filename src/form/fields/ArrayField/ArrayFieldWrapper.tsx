@@ -1,13 +1,7 @@
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardHeaderActionsObject,
-  CardTitle,
-  FormGroupLabelHelp,
-  Popover,
-} from '@patternfly/react-core';
-import { FunctionComponent, PropsWithChildren, ReactNode, useMemo } from 'react';
+import { Tile, Toggletip, ToggletipButton, ToggletipContent } from '@carbon/react';
+import { Information } from '@carbon/icons-react';
+import { FunctionComponent, PropsWithChildren, ReactNode } from 'react';
+import './ArrayFieldWrapper.scss';
 
 interface FieldWrapperProps {
   propName: string;
@@ -29,43 +23,43 @@ export const ArrayFieldWrapper: FunctionComponent<PropsWithChildren<FieldWrapper
   children,
   required,
 }) => {
-  const id = `${title}-popover`;
-
-  const cardActions: CardHeaderActionsObject = useMemo(() => ({ actions, hasNoOffset: false }), [actions]);
   const shouldRenderChildren = Array.isArray(children) ? children.length > 0 : !!children;
 
   return (
-    <Card data-testid={`${propName}__field-wrapper`}>
-      <CardHeader actions={cardActions}>
-        <CardTitle>
-          {required && (
-            <span className="pf-v6-c-form__label-required" aria-hidden="true">
-              *{' '}
-            </span>
-          )}{' '}
-          {title}{' '}
-          <Popover
-            id={id}
-            headerContent={
-              <p className="kaoto-form__label">
-                {title} {`<${type}>`}
+    <Tile data-testid={`${propName}__field-wrapper`} className="array-field-wrapper-tile">
+      <div
+        className={`array-field-wrapper-header ${
+          shouldRenderChildren ? 'array-field-wrapper-header--with-children' : ''
+        }`}
+      >
+        <div className="array-field-wrapper-title-section">
+          <h4 className="cds--tile-heading array-field-wrapper-heading">
+            {required && <span className="array-field-wrapper-required">*</span>}
+            {title}
+          </h4>
+          <Toggletip align="top">
+            <ToggletipButton label={`More info for ${title} field`}>
+              <Information />
+            </ToggletipButton>
+            <ToggletipContent>
+              <p>
+                <strong>
+                  {title} {`<${type}>`}
+                </strong>
               </p>
-            }
-            bodyContent={<p>{description}</p>}
-            footerContent={<p>Default: {defaultValue?.toString() ?? 'no default value'}</p>}
-            triggerAction="hover"
-            withFocusTrap={false}
-          >
-            <FormGroupLabelHelp aria-label={`More info for ${title} field`} />
-          </Popover>
-        </CardTitle>
-      </CardHeader>
+              <p>{description}</p>
+              <p>Default: {defaultValue?.toString() ?? 'no default value'}</p>
+            </ToggletipContent>
+          </Toggletip>
+        </div>
+        {actions && <div>{actions}</div>}
+      </div>
 
       {shouldRenderChildren && (
-        <CardBody data-testid={`${propName}__children`} className="pf-v6-c-form kaoto-form__label">
+        <div data-testid={`${propName}__children`} className="kaoto-form kaoto-form__label">
           {children}
-        </CardBody>
+        </div>
       )}
-    </Card>
+    </Tile>
   );
 };

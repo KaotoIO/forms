@@ -1,20 +1,16 @@
-import {
-  TextInputGroup,
-  TextInputGroupMain,
-  TextInputGroupMainProps,
-  TextInputGroupUtilities,
-} from '@patternfly/react-core';
-import { FunctionComponent, ReactNode, useCallback, useContext, useRef, useState } from 'react';
+import { FunctionComponent, ReactNode, useCallback, useContext, useRef, useState, ChangeEvent } from 'react';
 import { useFieldValue } from '../hooks/field-value';
 import { useSuggestions } from '../hooks/suggestions';
 import { FieldProps } from '../models/typings';
 import { SchemaContext } from '../providers/SchemaProvider';
 import { isDefined, isRawString } from '../utils';
-import { FieldActions } from './FieldActions';
 import { FieldWrapper } from './FieldWrapper';
+import { TextInput } from '@carbon/react';
+import { FieldActions } from './FieldActions';
+import './StringField.scss';
 
 interface StringFieldProps extends FieldProps {
-  fieldType?: TextInputGroupMainProps['type'];
+  fieldType?: string;
   additionalUtility?: ReactNode;
 }
 
@@ -53,6 +49,13 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
       onChange(newValue);
     },
     [isNumberSchema, onChange],
+  );
+
+  const handleTextInputChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onFieldChange(event, event.currentTarget.value);
+    },
+    [onFieldChange],
   );
 
   const onRemove = () => {
@@ -103,35 +106,36 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
       errors={errors}
       isRaw={isRaw}
     >
-      <TextInputGroup validated={errors ? 'error' : undefined} isDisabled={disabled}>
-        <TextInputGroupMain
-          type={fieldType}
-          role="textbox"
-          className="pf-m-icon kaoto-form__string-field"
-          id={propName}
-          name={propName}
-          placeholder={schema.default?.toString()}
-          value={fieldValue}
-          onChange={onFieldChange}
-          aria-label={schema.title}
-          aria-describedby={id}
-          ref={inputRef}
-        />
-
-        {suggestions}
-
-        <TextInputGroupUtilities>
-          {additionalUtility}
-
-          <FieldActions
-            propName={propName}
-            clearAriaLabel={clearButtonAriaLabel}
-            toggleRawAriaLabel={toggleRawAriaLabel}
-            onRemove={onRemove}
-            toggleRawValueWrap={toggleRawValueWrap}
+      <div className="string-field-container">
+        <div className="string-field-input-wrapper">
+          <TextInput
+            hideLabel
+            labelText={schema.title}
+            role="textbox"
+            id={propName}
+            name={propName}
+            type={fieldType}
+            placeholder={schema.default?.toString()}
+            value={fieldValue}
+            data-testid={propName}
+            onChange={handleTextInputChange}
+            aria-label={schema.title}
+            aria-describedby={id}
+            ref={inputRef}
+            disabled={disabled}
           />
-        </TextInputGroupUtilities>
-      </TextInputGroup>
+        </div>
+        <FieldActions
+          propName={propName}
+          clearAriaLabel={clearButtonAriaLabel}
+          removeLabel={isDefined(onRemoveProps) ? 'Remove' : 'Clear'}
+          toggleRawAriaLabel={toggleRawAriaLabel}
+          onRemove={onRemove}
+          toggleRawValueWrap={toggleRawValueWrap}
+        />
+      </div>
+      {suggestions}
+      {additionalUtility}
     </FieldWrapper>
   );
 };

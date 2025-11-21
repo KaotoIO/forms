@@ -1,22 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`KeyValueField renders with correct props 1`] = `
-<div
-  class="pf-v6-c-text-input-group__main"
+<input
+  class="cds--text-input"
   data-testid="keyvalue-input"
   id="test-id"
->
-  <span
-    class="pf-v6-c-text-input-group__text"
-  >
-    <input
-      aria-label="Type to filter"
-      class="pf-v6-c-text-input-group__text-input"
-      name="test-name"
-      placeholder="Enter value"
-      type="text"
-      value="initial"
-    />
-  </span>
-</div>
+  name="test-name"
+  placeholder="Enter value"
+  title="Enter value"
+  type="text"
+  value="initial"
+/>
 `;

@@ -46,7 +46,7 @@ describe('PasswordField', () => {
       </ModelContextProvider>,
     );
 
-    const input = wrapper.getByRole('textbox');
+    const input = wrapper.getByTestId(ROOT_PATH);
     expect(input).toHaveAttribute('placeholder', 'Default Value');
   });
 
@@ -59,7 +59,7 @@ describe('PasswordField', () => {
       </ModelContextProvider>,
     );
 
-    const input = wrapper.getByRole('textbox');
+    const input = wrapper.getByTestId(ROOT_PATH);
     act(() => {
       fireEvent.change(input, { target: { value: 'New Value' } });
     });
@@ -82,7 +82,7 @@ describe('PasswordField', () => {
       fireEvent.click(fieldActions);
     });
 
-    const clearButton = await wrapper.findByRole('menuitem', { name: /clear/i });
+    const clearButton = await wrapper.findByTestId(`${ROOT_PATH}__clear`);
     act(() => {
       fireEvent.click(clearButton);
     });
@@ -106,7 +106,7 @@ describe('PasswordField', () => {
       fireEvent.click(fieldActions);
     });
 
-    const clearButton = await wrapper.findByRole('menuitem', { name: /remove/i });
+    const clearButton = await wrapper.findByTestId(`${ROOT_PATH}__clear`);
     act(() => {
       fireEvent.click(clearButton);
     });
@@ -140,7 +140,7 @@ describe('PasswordField', () => {
       </ModelContextProvider>,
     );
 
-    const input = wrapper.getByRole('textbox');
+    const input = wrapper.getByTestId(ROOT_PATH);
 
     expect(input.getAttribute('type')).toBe('password');
   });
@@ -152,12 +152,12 @@ describe('PasswordField', () => {
       </ModelContextProvider>,
     );
 
-    const toggleButton = wrapper.getByTestId(`${ROOT_PATH}__toggle-visibility`);
+    const toggleButton = wrapper.getByRole('button', { name: /show password/i });
     act(() => {
       fireEvent.click(toggleButton);
     });
 
-    const input = wrapper.getByRole('textbox');
+    const input = wrapper.getByTestId(ROOT_PATH);
 
     expect(input.getAttribute('type')).toBe('text');
   });
@@ -176,7 +176,7 @@ describe('PasswordField', () => {
       fireEvent.click(fieldActions);
     });
 
-    const rawItem = await wrapper.findByRole('menuitem', { name: /raw/i });
+    const rawItem = await wrapper.findByTestId(`${ROOT_PATH}__toRaw`);
     act(() => {
       fireEvent.click(rawItem);
     });
@@ -199,7 +199,7 @@ describe('PasswordField', () => {
       fireEvent.click(fieldActions);
     });
 
-    const rawItem = await wrapper.findByRole('menuitem', { name: /raw/i });
+    const rawItem = await wrapper.findByTestId(`${ROOT_PATH}__toRaw`);
     act(() => {
       fireEvent.click(rawItem);
     });
@@ -218,7 +218,7 @@ describe('PasswordField', () => {
     );
 
     await act(async () => {
-      const input = wrapper.getByRole('textbox');
+      const input = wrapper.getByTestId(ROOT_PATH);
       input.focus();
       fireEvent.keyDown(input, { code: 'Space', ctrlKey: true });
     });
@@ -227,9 +227,9 @@ describe('PasswordField', () => {
       expect(wrapper.getByTestId('suggestions-menu')).toBeInTheDocument();
     });
 
-    // Check if suggestions are rendered
-    expect(wrapper.getByText('First test suggestion')).toBeInTheDocument();
-    expect(wrapper.getByText('Second test suggestion')).toBeInTheDocument();
+    // Check if suggestions are rendered - Carbon MenuItem uses aria-label
+    expect(wrapper.getByRole('menuitem', { name: 'test-suggestion-1' })).toBeInTheDocument();
+    expect(wrapper.getByRole('menuitem', { name: 'test-suggestion-2' })).toBeInTheDocument();
   });
 
   it('should apply suggestion when clicked', async () => {
@@ -242,7 +242,7 @@ describe('PasswordField', () => {
     );
 
     await act(async () => {
-      const input = wrapper.getByRole('textbox');
+      const input = wrapper.getByTestId(ROOT_PATH);
       input.focus();
       fireEvent.keyDown(input, { code: 'Space', ctrlKey: true });
     });
@@ -250,8 +250,8 @@ describe('PasswordField', () => {
     const suggestionMenu = await wrapper.findByRole('menu');
     expect(suggestionMenu).toBeInTheDocument();
 
-    const firstSuggestion = within(suggestionMenu).getByText('First test suggestion');
-    await act(async () => {
+    const firstSuggestion = wrapper.getByRole('menuitem', { name: 'test-suggestion-1' });
+    act(() => {
       fireEvent.click(firstSuggestion);
     });
 

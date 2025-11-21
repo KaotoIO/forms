@@ -1,5 +1,5 @@
-import { TextInputGroup, TextInputGroupMain } from '@patternfly/react-core';
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { TextInput } from '@carbon/react';
+import { forwardRef, useImperativeHandle, useRef, ChangeEvent } from 'react';
 import { IDataTestID } from '../models';
 import { useSuggestions } from '../hooks/suggestions';
 import { JSONSchema4 } from 'json-schema';
@@ -30,25 +30,27 @@ export const KeyValueField = forwardRef<HTMLInputElement, KeyValueFieldProps>(
       setValue: onChange,
     });
 
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+      onChange?.(event.target.value);
+    };
+
     return (
-      <TextInputGroup>
-        <TextInputGroupMain
+      <div>
+        <TextInput
+          labelText=""
           type="text"
           id={id}
           name={name}
           data-testid={dataTestId}
-          onChange={(_event, value) => {
-            onChange?.(value);
-          }}
+          onChange={handleChange}
           ref={inputRef}
           onFocus={onFocus}
           onBlur={onBlur}
           placeholder={placeholder}
           value={value}
         />
-
         {suggestions}
-      </TextInputGroup>
+      </div>
     );
   },
 );

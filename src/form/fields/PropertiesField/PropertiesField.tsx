@@ -1,4 +1,4 @@
-import { Badge } from '@patternfly/react-core';
+import { Tag } from '@carbon/react';
 import { FunctionComponent, useContext } from 'react';
 import { useFieldValue } from '../../hooks/field-value';
 import { SchemaContext } from '../../providers/SchemaProvider';
@@ -18,9 +18,9 @@ export const PropertiesField: FunctionComponent<FieldProps> = ({ propName, requi
       propName={propName}
       required={required}
       title={
-        <>
-          {title} <Badge title={`${items.length} properties`}>{items.length}</Badge>
-        </>
+        <span>
+          {title} <Tag title={`${items.length} properties`}>{items.length}</Tag>
+        </span>
       }
       type="object"
       description={schema.description}

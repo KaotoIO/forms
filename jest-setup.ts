@@ -28,6 +28,15 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+Object.defineProperty(window, 'ResizeObserver', {
+  writable: true,
+  value: jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  })),
+});
+
 jest
   .spyOn(global, 'crypto', 'get')
   .mockImplementation(() => ({ getRandomValues: () => [12345678], subtle }) as unknown as Crypto);

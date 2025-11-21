@@ -12,7 +12,7 @@ describe('Test for form fields', () => {
 
   it('Sample App - insert value into Boolean form field', () => {
     cy.selectSchema('timer');
-    cy.get('input[name="#.fixedRate"]').click({ force: true });
+    cy.get('button[name="#.fixedRate"]').click({ force: true });
 
     cy.checkCodeSpanLine('"fixedRate": true', 1);
   });
@@ -22,9 +22,9 @@ describe('Test for form fields', () => {
     cy.expandWrappedSection('#-Security');
 
     cy.get('input[name="#.accessKey"]').clear().type('testAccessKey');
-    cy.get('[data-testid="#.accessKey__toggle-visibility"]').click();
+    cy.get('.cds--text-input--password__visibility__toggle').eq(0).click();
     cy.get('input[name="#.accessKey"]').should('have.value', 'testAccessKey');
-    cy.get('[data-testid="#.accessKey__toggle-visibility"]').click();
+    cy.get('.cds--text-input--password__visibility__toggle').eq(0).click();
     cy.get('input[name="#.accessKey"]').should('have.attr', 'type', 'password');
     cy.checkCodeSpanLine('"accessKey": "testAccessKey"', 1);
   });

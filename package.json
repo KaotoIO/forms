@@ -1,6 +1,6 @@
 {
   "name": "@kaoto/forms",
-  "version": "1.5.9",
+  "version": "2.0.0",
   "description": "Forms library for Kaoto",
   "license": "Apache-2.0",
   "author": {
@@ -46,9 +46,9 @@
     "usehooks-ts": "^3.0.0"
   },
   "peerDependencies": {
-    "@patternfly/patternfly": "6.4.0",
-    "@patternfly/react-core": "6.4.0",
-    "@patternfly/react-icons": "6.4.0",
+    "@carbon/icons-react": "^11.52.0",
+    "@carbon/react": "^1.73.0",
+    "@carbon/styles": "^1.72.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -57,15 +57,15 @@
     "@babel/preset-env": "^7.21.5",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.21.5",
+    "@carbon/icons-react": "^11.52.0",
+    "@carbon/react": "^1.73.0",
+    "@carbon/styles": "^1.72.0",
     "@eslint/js": "^9.10.0",
     "@kaoto/camel-catalog": "^0.2.0",
     "@lerna-lite/cli": "^3.0.0",
     "@lerna-lite/publish": "^3.0.0",
     "@lerna-lite/version": "^3.0.0",
-    "@patternfly/patternfly": "6.4.0",
     "@patternfly/react-code-editor": "6.4.0",
-    "@patternfly/react-core": "6.4.0",
-    "@patternfly/react-icons": "6.4.0",
     "@swc/core": "^1.7.14",
     "@swc/jest": "^0.2.36",
     "@testing-library/dom": "^10.0.0",

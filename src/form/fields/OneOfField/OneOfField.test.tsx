@@ -120,7 +120,8 @@ describe('OneOfField', () => {
     );
 
     // Test schema change
-    fireEvent.click(screen.getByRole('button', { name: 'Test Schema 2' }));
+    const schemaTab = screen.getByRole('tab', { name: 'Test Schema 2' });
+    fireEvent.click(schemaTab);
     expect(mockOnSchemaChange).toHaveBeenCalledWith(mockOneOfSchemas[1]);
   });
 });
