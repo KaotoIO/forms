@@ -1,23 +1,25 @@
-import { Button, InputGroup, InputGroupItem, TextArea } from '@patternfly/react-core';
-import { TimesIcon } from '@patternfly/react-icons';
-import { FunctionComponent, useContext, useRef } from 'react';
+import { TextArea } from '@carbon/react';
+import { ChangeEvent, FunctionComponent, useContext, useRef } from 'react';
 import { useFieldValue } from '../hooks/field-value';
 import { useSuggestions } from '../hooks/suggestions';
 import { FieldProps } from '../models/typings';
 import { SchemaContext } from '../providers/SchemaProvider';
-import { isDefined } from '../utils';
+import { isDefined, isRawString } from '../utils';
+import { FieldActions } from './FieldActions';
 import { FieldWrapper } from './FieldWrapper';
+import './TextAreaField.scss';
 
 export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, required, onRemove: onRemoveProps }) => {
   const { schema } = useContext(SchemaContext);
-  const { value = '', onChange, disabled } = useFieldValue<string>(propName);
+  const { value = '', errors, disabled, isRaw, onChange } = useFieldValue<string>(propName);
   const lastPropName = propName.split('.').pop();
-  const ariaLabel = isDefined(onRemoveProps) ? 'Remove' : `Clear ${lastPropName} field`;
+  const clearButtonAriaLabel = isDefined(onRemoveProps) ? 'Remove' : `Clear ${lastPropName} field`;
+  const toggleRawAriaLabel = `Toggle RAW wrap for ${lastPropName} field`;
   const rows = Math.max(value.split('\n').length, 2);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const onFieldChange = (_event: unknown, value: string) => {
-    onChange(value);
+  const onFieldChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    onChange(event.target.value);
   };
 
   const onRemove = () => {
@@ -28,6 +30,14 @@ export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, require
 
     /** Clear field by removing its value */
     onChange(undefined as unknown as string);
+    textAreaRef.current?.focus();
+  };
+
+  const toggleRawValueWrap = () => {
+    if (typeof value !== 'string') return;
+
+    const newValue = isRawString(value) ? value.substring(4, value.length - 1) : `RAW(${value})`;
+    onChange(newValue);
   };
 
   const suggestions = useSuggestions({
@@ -48,10 +58,13 @@ export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, require
       type="string"
       description={schema.description}
       defaultValue={schema.default?.toString()}
+      errors={errors}
+      isRaw={isRaw}
     >
-      <InputGroup>
-        <InputGroupItem isFill>
+      <div className="textarea-field-container">
+        <div className="textarea-field-input-wrapper">
           <TextArea
+            labelText={''}
             rows={rows}
             type="text"
             role="textbox"
@@ -61,24 +74,20 @@ export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, require
             value={value}
             onChange={onFieldChange}
             aria-describedby={id}
-            isDisabled={disabled}
             ref={textAreaRef}
+            disabled={disabled}
           />
-
-          {suggestions}
-        </InputGroupItem>
-
-        <InputGroupItem>
-          <Button
-            variant="plain"
-            data-testid={`${propName}__clear`}
-            onClick={onRemove}
-            aria-label={ariaLabel}
-            title={ariaLabel}
-            icon={<TimesIcon />}
-          />
-        </InputGroupItem>
-      </InputGroup>
+        </div>
+        <FieldActions
+          propName={propName}
+          clearAriaLabel={clearButtonAriaLabel}
+          removeLabel={isDefined(onRemoveProps) ? 'Remove' : 'Clear'}
+          toggleRawAriaLabel={toggleRawAriaLabel}
+          onRemove={onRemove}
+          toggleRawValueWrap={toggleRawValueWrap}
+        />
+      </div>
+      {suggestions}
     </FieldWrapper>
   );
 };

@@ -70,7 +70,7 @@ describe('ArrayField', () => {
     const fieldActions = wrapper!.getByTestId(`#.0__field-actions`);
     fireEvent.click(fieldActions);
 
-    const clearButton = await wrapper!.findByRole('menuitem', { name: /remove/i });
+    const clearButton = await wrapper!.findByTestId(`#.0__clear`);
     fireEvent.click(clearButton);
 
     expect(onChange).toHaveBeenCalledWith(ROOT_PATH, ['item2']);

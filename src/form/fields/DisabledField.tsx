@@ -1,4 +1,4 @@
-import { Card, CardBody, CardTitle } from '@patternfly/react-core';
+import { Tile } from '@carbon/react';
 import { FunctionComponent } from 'react';
 import { IDataTestID } from '../models';
 import { FieldProps } from '../models/typings';
@@ -6,9 +6,9 @@ import { CustomExpandableSection } from '../Form/customField/CustomExpandableSec
 
 export const DisabledField: FunctionComponent<IDataTestID & FieldProps> = (props) => {
   return (
-    <Card>
-      <CardTitle>{props.propName}</CardTitle>
-      <CardBody>
+    <Tile>
+      <h4 className="cds--tile-heading">{props.propName}</h4>
+      <div>
         <p>Configuring this field is not yet supported</p>
 
         <CustomExpandableSection groupName={props.propName}>
@@ -16,7 +16,7 @@ export const DisabledField: FunctionComponent<IDataTestID & FieldProps> = (props
             <pre>{JSON.stringify(props, null, 2)}</pre>
           </code>
         </CustomExpandableSection>
-      </CardBody>
-    </Card>
+      </div>
+    </Tile>
   );
 };

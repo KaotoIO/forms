@@ -12,26 +12,26 @@ describe('Test for form fields', () => {
 
   it('Sample App - insert value into Boolean form field', () => {
     cy.selectSchema('timer');
-    cy.get('input[name="#.fixedRate"]').click({ force: true });
+    cy.get('button[name="#.fixedRate"]').click({ force: true });
 
     cy.checkCodeSpanLine('"fixedRate": true', 1);
   });
 
   it('Sample App - insert value into Password form field', () => {
     cy.selectSchema('aws2-s3');
-    cy.expandWrappedSection('#-Security');
+    cy.expandWrappedSection('Security');
 
     cy.get('input[name="#.accessKey"]').clear().type('testAccessKey');
-    cy.get('[data-testid="#.accessKey__toggle-visibility"]').click();
+    cy.get('.cds--text-input--password__visibility__toggle').eq(0).click();
     cy.get('input[name="#.accessKey"]').should('have.value', 'testAccessKey');
-    cy.get('[data-testid="#.accessKey__toggle-visibility"]').click();
+    cy.get('.cds--text-input--password__visibility__toggle').eq(0).click();
     cy.get('input[name="#.accessKey"]').should('have.attr', 'type', 'password');
     cy.checkCodeSpanLine('"accessKey": "testAccessKey"', 1);
   });
 
   it('Sample App - insert value into enum form field', () => {
     cy.selectSchema('timer');
-    cy.expandWrappedSection('#-Scheduler');
+    cy.expandWrappedSection('Scheduler');
 
     cy.selectInTypeaheadField('runLoggingLevel', 'INFO');
 
@@ -40,7 +40,7 @@ describe('Test for form fields', () => {
 
   it('Sample App - insert value into properties form field', () => {
     cy.selectSchema('bean');
-    cy.expandWrappedSection('#-Advanced');
+    cy.expandWrappedSection('Advanced');
 
     cy.get('[data-testid="#.parameters__add"]').click();
     cy.get('[data-testid="#.parameters__key"]').click().focused().clear();

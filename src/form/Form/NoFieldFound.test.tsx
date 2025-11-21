@@ -19,7 +19,7 @@ describe('NoFieldFound Component', () => {
     expect(screen.getByText('No Required fields found')).toBeInTheDocument();
   });
 
-  it('should call onTabChange when the button is clicked', () => {
+  it('should call onTabChange when the link is clicked', () => {
     const mockContextValue: CanvasFormTabsContextResult = {
       selectedTab: 'Required',
       setSelectedTab: jest.fn(),
@@ -31,9 +31,9 @@ describe('NoFieldFound Component', () => {
       </CanvasFormTabsContext.Provider>,
     );
 
-    const button = screen.getByRole('button', { name: /All/i });
-    fireEvent.click(button);
+    const link = screen.getByText('Switch to All tab');
+    fireEvent.click(link);
 
-    expect(mockContextValue.setSelectedTab).toHaveBeenCalled();
+    expect(mockContextValue.setSelectedTab).toHaveBeenCalledWith('All');
   });
 });

@@ -89,7 +89,7 @@ describe('ObjectFieldGrouping', () => {
     it('should render property groups', () => {
       const wrapper = render(<ObjectFieldGrouping propName={ROOT_PATH} />, { wrapper: formWrapper });
 
-      const advancedGroup = wrapper.queryByLabelText('Toggle Advanced group');
+      const advancedGroup = wrapper.queryByText('Advanced');
       expect(advancedGroup).toBeInTheDocument();
     });
 
@@ -97,12 +97,12 @@ describe('ObjectFieldGrouping', () => {
       const wrapper = render(<ObjectFieldGrouping propName={ROOT_PATH} />, { wrapper: formWrapper });
 
       await act(async () => {
-        fireEvent.click(wrapper.getByLabelText('Toggle Advanced group'));
+        fireEvent.click(wrapper.getByText('Advanced'));
       });
 
-      const checkboxFields = wrapper.queryAllByRole('checkbox');
-      expect(checkboxFields).toHaveLength(1);
-      expect(checkboxFields[0]).toHaveAttribute('name', '#.disabled');
+      const switchFields = wrapper.queryAllByRole('switch');
+      expect(switchFields).toHaveLength(1);
+      expect(switchFields[0]).toHaveAttribute('name', '#.disabled');
     });
   });
 

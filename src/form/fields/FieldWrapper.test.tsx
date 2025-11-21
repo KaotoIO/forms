@@ -28,12 +28,12 @@ describe('FieldWrapper', () => {
     expect(wrapper.getByText('csimple')).toBeInTheDocument();
   });
 
-  it('should render the popover with correct content', async () => {
+  it('should render the toggletip with correct content', async () => {
     const wrapper = render(<FieldWrapper {...defaultProps}>Test Children</FieldWrapper>);
 
     await act(async () => {
-      const popoverTrigger = wrapper.getByLabelText(`More info for Test Field field`);
-      fireEvent.mouseEnter(popoverTrigger);
+      const toggletipButton = wrapper.getByLabelText(`More info for Test Field field`);
+      fireEvent.click(toggletipButton);
     });
 
     expect(wrapper.getByText('Test Field <string>')).toBeInTheDocument();

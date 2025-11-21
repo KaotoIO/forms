@@ -291,7 +291,7 @@ describe('AutoField', () => {
     const nameFields = wrapper.queryAllByRole('textbox');
     expect(nameFields).toHaveLength(1);
 
-    const disabledFields = wrapper.queryAllByRole('checkbox');
+    const disabledFields = wrapper.queryAllByRole('switch');
     expect(disabledFields).toHaveLength(1);
   });
 
