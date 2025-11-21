@@ -29,7 +29,7 @@ describe('FieldActions', () => {
       fireEvent.click(toggle);
     });
 
-    expect(wrapper.getByRole('menu')).toBeInTheDocument();
+    expect(wrapper.getByTestId('testProp__clear')).toBeInTheDocument();
 
     await act(async () => {
       fireEvent.click(toggle);
@@ -45,7 +45,7 @@ describe('FieldActions', () => {
       fireEvent.click(wrapper.getByTestId('testProp__field-actions'));
     });
 
-    const clearItem = wrapper.getByLabelText('Clear field');
+    const clearItem = wrapper.getByTestId('testProp__clear');
     await act(async () => {
       fireEvent.click(clearItem);
     });
@@ -60,7 +60,7 @@ describe('FieldActions', () => {
       fireEvent.click(wrapper.getByTestId('testProp__field-actions'));
     });
 
-    const rawItem = wrapper.getByLabelText('Toggle RAW wrap for field');
+    const rawItem = wrapper.getByTestId('testProp__toRaw');
     await act(async () => {
       fireEvent.click(rawItem);
     });
@@ -80,7 +80,7 @@ describe('FieldActions', () => {
     expect(rawItem).not.toBeInTheDocument();
   });
 
-  it('sets correct and titles', async () => {
+  it('renders correct menu items', async () => {
     const wrapper = render(<FieldActions {...defaultProps} />);
 
     await act(async () => {
@@ -88,9 +88,11 @@ describe('FieldActions', () => {
     });
 
     const clearItem = wrapper.getByTestId('testProp__clear');
-    expect(clearItem).toHaveAttribute('title', 'Clear field');
+    expect(clearItem).toBeInTheDocument();
+    expect(clearItem).toHaveTextContent('Clear');
 
     const rawItem = wrapper.getByTestId('testProp__toRaw');
-    expect(rawItem).toHaveAttribute('title', 'Toggle RAW wrap for field');
+    expect(rawItem).toBeInTheDocument();
+    expect(rawItem).toHaveTextContent('Raw');
   });
 });

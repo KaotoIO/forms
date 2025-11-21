@@ -1,7 +1,5 @@
-import { Dropdown, DropdownItem, DropdownList, MenuToggle, MenuToggleElement } from '@patternfly/react-core';
-import { EllipsisVIcon, PortIcon, TimesIcon } from '@patternfly/react-icons';
-import { FunctionComponent, useState } from 'react';
-import { DEFAULT_POPPER_PROPS } from '../models/popper-default';
+import { OverflowMenu, OverflowMenuItem } from '@carbon/react';
+import { FunctionComponent } from 'react';
 
 export interface FieldActionsProps {
   propName: string;
@@ -9,6 +7,7 @@ export interface FieldActionsProps {
   toggleRawAriaLabel?: string;
   toggleRawValueWrap?: () => void;
   onRemove: () => void;
+  removeLabel?: string;
 }
 
 export const FieldActions: FunctionComponent<FieldActionsProps> = ({
@@ -17,59 +16,30 @@ export const FieldActions: FunctionComponent<FieldActionsProps> = ({
   toggleRawAriaLabel,
   toggleRawValueWrap,
   onRemove,
+  removeLabel = 'Clear',
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const onToggleClick = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const onSelect = (_event: React.MouseEvent<Element, MouseEvent> | undefined, _value: string | number | undefined) => {
-    setIsOpen(false);
-  };
-
   return (
-    <Dropdown
-      isOpen={isOpen}
-      onSelect={onSelect}
-      onOpenChange={(isOpen: boolean) => setIsOpen(isOpen)}
-      toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
-        <MenuToggle
-          ref={toggleRef}
-          data-testid={`${propName}__field-actions`}
-          aria-label={`${propName}__field-actions`}
-          variant="plain"
-          onClick={onToggleClick}
-          isExpanded={isOpen}
-          icon={<EllipsisVIcon />}
+    <OverflowMenu
+      aria-label={`${propName}__field-actions`}
+      data-testid={`${propName}__field-actions`}
+      size="sm"
+      flipped
+    >
+      <OverflowMenuItem
+        itemText={removeLabel}
+        onClick={onRemove}
+        data-testid={`${propName}__clear`}
+        title={clearAriaLabel}
+      />
+
+      {toggleRawValueWrap && (
+        <OverflowMenuItem
+          itemText="Raw"
+          onClick={toggleRawValueWrap}
+          data-testid={`${propName}__toRaw`}
+          title={toggleRawAriaLabel}
         />
       )}
-      shouldFocusToggleOnSelect
-      popperProps={DEFAULT_POPPER_PROPS}
-    >
-      <DropdownList>
-        <DropdownItem
-          onClick={onRemove}
-          data-testid={`${propName}__clear`}
-          aria-label={clearAriaLabel}
-          title={clearAriaLabel}
-          icon={<TimesIcon />}
-        >
-          Clear
-        </DropdownItem>
-
-        {toggleRawValueWrap && (
-          <DropdownItem
-            onClick={toggleRawValueWrap}
-            data-testid={`${propName}__toRaw`}
-            aria-label={toggleRawAriaLabel}
-            title={toggleRawAriaLabel}
-            icon={<PortIcon />}
-          >
-            Raw
-          </DropdownItem>
-        )}
-      </DropdownList>
-    </Dropdown>
+    </OverflowMenu>
   );
 };

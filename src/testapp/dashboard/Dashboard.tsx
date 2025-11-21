@@ -1,5 +1,5 @@
-import { EmptyState, EmptyStateActions, EmptyStateBody, EmptyStateFooter } from '@patternfly/react-core';
-import { CubesIcon } from '@patternfly/react-icons';
+import { Tile } from '@carbon/react';
+import { Cube } from '@carbon/icons-react';
 import { FunctionComponent } from 'react';
 import { KaotoForm } from '../../form';
 import { Preview } from '../preview/Preview';
@@ -27,14 +27,14 @@ export const Dashboard: FunctionComponent = () => {
         <TabSelector />
 
         {!schema?.value ? (
-          <EmptyState titleText="No schema selected" headingLevel="h4" icon={CubesIcon}>
-            <EmptyStateBody>Select an schema to start</EmptyStateBody>
-            <EmptyStateFooter>
-              <EmptyStateActions>
-                <SchemaSelector />
-              </EmptyStateActions>
-            </EmptyStateFooter>
-          </EmptyState>
+          <Tile className="dashboard__empty-state">
+            <div className="dashboard__empty-state-content">
+              <Cube size={48} className="dashboard__empty-state-icon" />
+              <h4>No schema selected</h4>
+              <p>Select a schema to start</p>
+              <SchemaSelector />
+            </div>
+          </Tile>
         ) : (
           <KaotoForm schema={schema.value} model={model} onChange={setModel} />
         )}

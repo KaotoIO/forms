@@ -1,4 +1,4 @@
-import { ExpandableSection, capitalize } from '@patternfly/react-core';
+import { Accordion, AccordionItem } from '@carbon/react';
 import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
 
 interface CustomExpandableSectionProps extends PropsWithChildren {
@@ -6,7 +6,7 @@ interface CustomExpandableSectionProps extends PropsWithChildren {
   isGroupExpanded?: boolean;
 }
 
-const WHITESPACE_REGEX = /\s/g;
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
 export const CustomExpandableSection: FunctionComponent<CustomExpandableSectionProps> = ({
   groupName,
@@ -19,19 +19,15 @@ export const CustomExpandableSection: FunctionComponent<CustomExpandableSectionP
     setIsExpanded(isGroupExpanded);
   }, [isGroupExpanded]);
 
-  const onToggle = (_event: React.MouseEvent, isExpanded: boolean) => {
-    setIsExpanded(isExpanded);
-  };
-
   return (
-    <ExpandableSection
-      toggleText={capitalize(`${groupName} properties`)}
-      toggleId={`expandable-section-toggle-${groupName.replace(WHITESPACE_REGEX, '-')}`}
-      contentId="expandable-section-content"
-      onToggle={onToggle}
-      isExpanded={isExpanded}
-    >
-      {children}
-    </ExpandableSection>
+    <Accordion>
+      <AccordionItem
+        title={capitalize(`${groupName} properties`)}
+        open={isExpanded}
+        onHeadingClick={() => setIsExpanded(!isExpanded)}
+      >
+        {children}
+      </AccordionItem>
+    </Accordion>
   );
 };

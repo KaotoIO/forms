@@ -1,4 +1,4 @@
-import { Badge } from '@patternfly/react-core';
+import { Tag } from '@carbon/react';
 import { FunctionComponent, useContext } from 'react';
 import { useFieldValue } from '../../hooks/field-value';
 import { SchemaContext } from '../../providers/SchemaProvider';
@@ -6,6 +6,7 @@ import { FieldProps } from '../../models/typings';
 import { FieldWrapper } from '../FieldWrapper';
 import { KeyValue, KeyValueType } from '../../KeyValue/KeyValue';
 import { IndexedValue } from '../../KeyValue/IndexedValue';
+import './IndexedValuesField.scss';
 
 export const IndexedValuesField: FunctionComponent<FieldProps> = ({ propName, required }) => {
   const { schema } = useContext(SchemaContext);
@@ -19,9 +20,9 @@ export const IndexedValuesField: FunctionComponent<FieldProps> = ({ propName, re
       propName={propName}
       required={required}
       title={
-        <>
-          {title} <Badge title={`${items.length} properties`}>{items.length}</Badge>
-        </>
+        <span className="indexed-values-field-title">
+          {title} <Tag title={`${items.length} properties`}>{items.length}</Tag>
+        </span>
       }
       type="object"
       description={schema.description}

@@ -24,4 +24,21 @@
     display: flex;
     flex-direction: column;
   }
+
+  &__empty-state {
+    margin-top: 2rem;
+    padding: 2rem;
+  }
+
+  &__empty-state-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  &__empty-state-icon {
+    color: var(--cds-icon-secondary);
+  }
 }

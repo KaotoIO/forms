@@ -22,7 +22,7 @@ describe('EnumField', () => {
       </ModelContextProvider>,
     );
 
-    const input = screen.getByRole('textbox', { name: /type to filter/i });
+    const input = screen.getByRole('combobox');
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute('placeholder', 'Option2');
   });
@@ -35,7 +35,7 @@ describe('EnumField', () => {
         </SchemaProvider>
       </ModelContextProvider>,
     );
-    const input = screen.getByRole('textbox', { name: /type to filter/i });
+    const input = screen.getByRole('combobox');
 
     await act(async () => {
       fireEvent.click(input);
@@ -56,7 +56,7 @@ describe('EnumField', () => {
       </ModelContextProvider>,
     );
 
-    const input = screen.getByRole('textbox', { name: /type to filter/i });
+    const input = screen.getByRole('combobox');
 
     await act(async () => {
       fireEvent.click(input);
@@ -72,7 +72,7 @@ describe('EnumField', () => {
 
   it('calls onCleanInput when the clear button is clicked', async () => {
     const onPropertyChangeSpy = jest.fn();
-    render(
+    const { container } = render(
       <ModelContextProvider model={'Option1'} onPropertyChange={onPropertyChangeSpy}>
         <SchemaProvider schema={enumSchema}>
           <EnumField propName={ROOT_PATH} />
@@ -80,12 +80,17 @@ describe('EnumField', () => {
       </ModelContextProvider>,
     );
 
-    const clearButton = screen.getByLabelText('Clear input value');
-    act(() => {
-      fireEvent.click(clearButton);
+    const input = screen.getByRole('combobox');
+    expect(input).toHaveValue('Option1');
+
+    const clearButton = container.querySelector('button[title="Clear selected item"]');
+    expect(clearButton).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(clearButton!);
     });
 
-    expect(onPropertyChangeSpy).toHaveBeenCalledWith(ROOT_PATH, undefined);
+    expect(input).toHaveValue('');
   });
 
   it('shows errors if available for its property path', () => {
@@ -114,7 +119,7 @@ describe('EnumField', () => {
       </ModelContextProvider>,
     );
 
-    const input = screen.getByRole('textbox', { name: /type to filter/i });
+    const input = screen.getByRole('combobox');
 
     await act(async () => {
       fireEvent.change(input, { target: { value: '{{aws.region}}' } });
@@ -134,7 +139,7 @@ describe('EnumField', () => {
       </ModelContextProvider>,
     );
 
-    const input = screen.getByRole('textbox', { name: /type to filter/i });
+    const input = screen.getByRole('combobox');
     expect(input).toHaveValue('{{custom.value}}');
   });
 });

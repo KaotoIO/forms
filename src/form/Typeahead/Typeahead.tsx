@@ -1,28 +1,6 @@
-import {
-  Button,
-  MenuToggle,
-  MenuToggleElement,
-  Select,
-  SelectList,
-  SelectOption,
-  TextInputGroup,
-  TextInputGroupMain,
-  TextInputGroupUtilities,
-} from '@patternfly/react-core';
-import { TimesIcon } from '@patternfly/react-icons';
-import {
-  FormEvent,
-  FunctionComponent,
-  KeyboardEvent,
-  MouseEventHandler,
-  Ref,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { DEFAULT_POPPER_PROPS } from '../models/popper-default';
+import { ComboBox } from '@carbon/react';
+import type { OnChangeData as ComboOnChangeData } from '@carbon/react/lib/components/ComboBox/ComboBox';
+import { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { isDefined } from '../utils';
 import { TypeaheadProps } from './Typeahead.types';
 
@@ -42,11 +20,10 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
   disabled = false,
   allowCustomInput = false,
 }) => {
-  const [filter, setFilter] = useState<string>(selectedItem?.name ?? '');
   const [inputValue, setInputValue] = useState<string>(selectedItem?.name ?? '');
-  const [isOpen, setIsOpen] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const selectedOptionRef = useRef<HTMLSelectElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const customInputHandledRef = useRef<boolean>(false);
+  const inputValueRef = useRef<string>(inputValue);
 
   const items = useMemo(() => {
     const isValueInArray = isDefined(itemsProps.find((item) => item.name === selectedItem?.name));
@@ -57,197 +34,167 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
     if (selectedItem?.name && selectedItem?.value) {
       localArray.unshift({ name: selectedItem.name, value: selectedItem.value });
     }
+
     return localArray;
   }, [itemsProps, selectedItem?.name, selectedItem?.value]);
 
   useEffect(() => {
     if (selectedItem?.name) {
       setInputValue(selectedItem.name);
+      inputValueRef.current = selectedItem.name;
     }
   }, [selectedItem]);
 
-  const onItemChanged = useCallback(
-    (_event: unknown, name: string | number | undefined) => {
-      if (name === CREATE_NEW_ITEM) {
-        onCreate?.(name, inputValue);
-        setIsOpen(false);
+  useEffect(() => {
+    if (!allowCustomInput || !wrapperRef.current) return;
+
+    const input = wrapperRef.current.querySelector('input[role="combobox"]') as HTMLInputElement;
+    if (!input) return;
+
+    const handleKeyDown = (e: Event) => {
+      const keyboardEvent = e as KeyboardEvent;
+      const currentValue = inputValueRef.current;
+      if (keyboardEvent.key === 'Enter' && currentValue.trim()) {
+        const isExistingItem = items.some((item) => item.name === currentValue);
+        const isCreateNew = currentValue.includes('Create new');
+        if (!isExistingItem && !isCreateNew) {
+          keyboardEvent.preventDefault();
+          keyboardEvent.stopPropagation();
+          customInputHandledRef.current = true;
+          const customItem = { name: currentValue, value: currentValue, description: '' };
+          onChange?.(customItem);
+        }
+      }
+    };
+
+    const handleBlur = () => {
+      const currentValue = inputValueRef.current;
+      if (currentValue.trim()) {
+        const isExistingItem = items.some((item) => item.name === currentValue);
+        const isCreateNew = currentValue.includes('Create new');
+        if (!isExistingItem && !isCreateNew) {
+          customInputHandledRef.current = true;
+          const customItem = { name: currentValue, value: currentValue, description: '' };
+          onChange?.(customItem);
+        }
+      }
+    };
+
+    input.addEventListener('keydown', handleKeyDown, { capture: true });
+    input.addEventListener('blur', handleBlur);
+
+    return () => {
+      input.removeEventListener('keydown', handleKeyDown, { capture: true });
+      input.removeEventListener('blur', handleBlur);
+    };
+  }, [allowCustomInput, inputValue, items, selectedItem, onChange]);
+
+  const handleChange = useCallback(
+    (data: ComboOnChangeData<{ id: string; text: string }>) => {
+      const selected = data.selectedItem ?? null;
+
+      if (customInputHandledRef.current) {
         return;
-      } else if (!isDefined(name)) {
+      }
+
+      if (!selected) {
+        if (allowCustomInput) {
+          if (!inputValue || !inputValue.trim()) {
+            setInputValue('');
+            return;
+          }
+          onCleanInput?.();
+          return;
+        }
         onChange?.(undefined);
         setInputValue('');
-        setIsOpen(false);
+        onCleanInput?.();
         return;
       }
 
-      // Handle selection of custom input value
-      if (allowCustomInput && name === inputValue && !items.find((item) => item.value === name)) {
-        const customItem = { name: inputValue, value: inputValue, description: '' };
+      if (selected.id === CREATE_NEW_ITEM) {
+        onCreate?.(selected.id, inputValue);
+        return;
+      }
+
+      const selectedFromItems = items.find((item) => String(item.value) === selected.id && item.name === selected.text);
+
+      if (selectedFromItems) {
+        setInputValue(selectedFromItems.name);
+        onChange?.(selectedFromItems);
+        return;
+      }
+
+      const selectedById = items.find((item) => String(item.value) === selected.id);
+      if (selectedById) {
+        setInputValue(selectedById.name);
+        onChange?.(selectedById);
+        return;
+      }
+
+      if (allowCustomInput && selected.text && selected.text.trim()) {
+        const customItem = { name: selected.text, value: selected.text, description: '' };
         onChange?.(customItem);
-        setIsOpen(false);
-        return;
-      }
-
-      const localItem = items.find((item) => item.value === name);
-      setInputValue(localItem?.name ?? '');
-      setIsOpen(false);
-
-      if (name !== selectedItem?.name) {
-        onChange?.(localItem);
       }
     },
-    [onChange, items, selectedItem?.name, onCreate, inputValue, allowCustomInput],
+    [onChange, items, onCreate, inputValue, allowCustomInput, onCleanInput],
   );
 
-  const onToggleClick: MouseEventHandler<HTMLDivElement | HTMLButtonElement> = async (event) => {
-    event.stopPropagation();
-    if (isOpen) {
-      setIsOpen(false);
-      return;
+  const handleInputChange = useCallback((inputValue: string) => {
+    setInputValue(inputValue);
+    inputValueRef.current = inputValue;
+  }, []);
+
+  const comboBoxItems = useMemo(() => {
+    const mappedItems = items.map((item) => ({
+      id: String(item.value),
+      text: item.name,
+      description: item.description,
+    }));
+
+    if (onCreate && inputValue && inputValue.trim()) {
+      const createNewText = onCreatePrefix
+        ? `Create new ${onCreatePrefix} '${inputValue}'`
+        : `Create new ${onCreatePrefix ?? ''}`;
+
+      const createNewItem = {
+        id: CREATE_NEW_ITEM,
+        text: createNewText.trim(),
+        description: '',
+      };
+      mappedItems.push(createNewItem);
     }
 
-    setFilter('');
-    setIsOpen(true);
+    return mappedItems;
+  }, [items, onCreate, onCreatePrefix, inputValue]);
 
-    requestAnimationFrame(() => {
-      selectedOptionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      inputRef.current?.focus();
-    });
-  };
-
-  const onTextInputChange = (_event: FormEvent<HTMLInputElement>, value: string) => {
-    setFilter(value);
-    setInputValue(value);
-  };
-
-  const onTextInputClear = () => {
-    setFilter('');
-    setInputValue('');
-    onCleanInput?.();
-    inputRef.current?.focus();
-  };
-
-  const onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && allowCustomInput && inputValue.trim()) {
-      event.preventDefault();
-      const exactMatch = items.find((item) => item.name === inputValue);
-      if (!exactMatch && inputValue !== selectedItem?.name) {
-        const customItem = { name: inputValue, value: inputValue, description: '' };
-        onChange?.(customItem);
-      }
-      setIsOpen(false);
-    }
-  };
-
-  const onInputBlur = () => {
-    if (allowCustomInput && inputValue.trim() && !isOpen) {
-      const exactMatch = items.find((item) => item.name === inputValue);
-      if (!exactMatch && inputValue !== selectedItem?.name) {
-        const customItem = { name: inputValue, value: inputValue, description: '' };
-        onChange?.(customItem);
-      }
-    }
-  };
-
-  const filteredItems = useMemo(() => {
-    const lowerFilterValue = filter.toLowerCase();
-    return items.filter((item) => {
-      if (!lowerFilterValue) {
-        return true;
-      }
-
-      const hasNameMatch = item.name?.toLowerCase().includes(lowerFilterValue);
-      const hasDescriptionMatch = item.description?.toLowerCase().includes(lowerFilterValue);
-
-      return hasNameMatch || hasDescriptionMatch;
-    });
-  }, [filter, items]);
-
-  const toggle = (toggleRef: Ref<MenuToggleElement>) => (
-    <MenuToggle
-      isFullWidth
-      ref={toggleRef}
-      onClick={onToggleClick}
-      isExpanded={isOpen}
-      isDisabled={disabled}
-      variant="typeahead"
-      aria-label={`${ariaLabel} toggle`}
-      id={id}
-    >
-      <TextInputGroup isPlain>
-        <TextInputGroupMain
-          autoComplete="off"
-          id={`${id}-typeahead-select-input`}
-          aria-label={ariaLabel}
-          data-testid={`${dataTestId}-typeahead-select-input`}
-          ref={inputRef}
-          placeholder={placeholder}
-          onClick={onToggleClick}
-          value={inputValue}
-          onChange={onTextInputChange}
-          onKeyDown={onInputKeyDown}
-          onBlur={onInputBlur}
-        />
-
-        <TextInputGroupUtilities>
-          {!!inputValue && (
-            <Button
-              variant="plain"
-              onClick={onTextInputClear}
-              aria-label="Clear input value"
-              data-testid={`${dataTestId}__clear`}
-              icon={<TimesIcon aria-hidden />}
-            />
-          )}
-        </TextInputGroupUtilities>
-      </TextInputGroup>
-    </MenuToggle>
-  );
+  const selectedComboBoxItem = useMemo(() => {
+    return selectedItem ? { id: String(selectedItem.value), text: selectedItem.name } : null;
+  }, [selectedItem]);
 
   return (
-    <Select
-      id={`${id}-typeahead-select`}
-      data-testid={`${dataTestId}-typeahead-select`}
-      isScrollable
-      shouldFocusToggleOnSelect
-      isOpen={isOpen}
-      selected={selectedItem?.name}
-      onSelect={onItemChanged}
-      toggle={toggle}
-      onOpenChange={(isOpen) => setIsOpen(isOpen)}
-      popperProps={DEFAULT_POPPER_PROPS}
-    >
-      <SelectList>
-        {filteredItems.map((item) => (
-          <SelectOption
-            key={item.name}
-            value={item.value}
-            description={item.description}
-            aria-label={`option ${item.name.toLocaleLowerCase()}`}
-            isSelected={item.name === selectedItem?.name}
-            ref={item.name === selectedItem?.name ? selectedOptionRef : undefined}
-          >
-            {item.name}
-          </SelectOption>
-        ))}
-
-        {filteredItems.length === 0 && !allowCustomInput && <SelectOption isDisabled>No items found</SelectOption>}
-
-        {filteredItems.length === 0 && allowCustomInput && inputValue.trim() && (
-          <SelectOption value={inputValue} aria-label={`use custom value ${inputValue.toLowerCase()}`}>
-            Use &quot;{inputValue}&quot;
-          </SelectOption>
-        )}
-
-        {filteredItems.length === 0 && allowCustomInput && !inputValue.trim() && (
-          <SelectOption isDisabled>Type to enter custom value</SelectOption>
-        )}
-
-        {onCreate && (
-          <SelectOption value={CREATE_NEW_ITEM} aria-label={`option ${CREATE_NEW_ITEM.toLocaleLowerCase()}`}>
-            Create new {onCreatePrefix} {inputValue ? `'${inputValue}'` : ''}
-          </SelectOption>
-        )}
-      </SelectList>
-    </Select>
+    <div ref={wrapperRef}>
+      <ComboBox
+        id={id ?? `typeahead-${dataTestId}`}
+        titleText=""
+        placeholder={placeholder}
+        items={comboBoxItems}
+        itemToString={(item) => (item ? item.text : '')}
+        selectedItem={selectedComboBoxItem}
+        onChange={handleChange}
+        onInputChange={handleInputChange}
+        disabled={disabled}
+        aria-label={ariaLabel}
+        data-testid={dataTestId}
+        allowCustomValue={allowCustomInput}
+        shouldFilterItem={(menu) => {
+          if (menu?.item?.id === CREATE_NEW_ITEM) {
+            return true;
+          }
+          if (!inputValue) return true;
+          return menu?.item?.text?.toLowerCase().includes(inputValue.toLowerCase()) ?? false;
+        }}
+      />
+    </div>
   );
 };

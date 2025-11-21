@@ -78,7 +78,7 @@ describe('TextAreaField', () => {
     expect(onPropertyChangeSpy).toHaveBeenCalledWith(ROOT_PATH, 'New Value');
   });
 
-  it('should clear the input when using the clear button', () => {
+  it('should clear the input when using the clear button', async () => {
     const onPropertyChangeSpy = jest.fn();
 
     const wrapper = render(
@@ -87,7 +87,12 @@ describe('TextAreaField', () => {
       </ModelContextProvider>,
     );
 
-    const clearButton = wrapper.getByTestId(`${ROOT_PATH}__clear`);
+    const fieldActions = wrapper.getByTestId(`${ROOT_PATH}__field-actions`);
+    act(() => {
+      fireEvent.click(fieldActions);
+    });
+
+    const clearButton = await wrapper.findByTestId(`${ROOT_PATH}__clear`);
     act(() => {
       fireEvent.click(clearButton);
     });
@@ -96,7 +101,7 @@ describe('TextAreaField', () => {
     expect(onPropertyChangeSpy).toHaveBeenCalledWith(ROOT_PATH, undefined);
   });
 
-  it('should call the onRemove callback if provided when using the clear button', () => {
+  it('should call the onRemove callback if provided when using the clear button', async () => {
     const onRemoveSpy = jest.fn();
 
     const wrapper = render(
@@ -105,7 +110,12 @@ describe('TextAreaField', () => {
       </ModelContextProvider>,
     );
 
-    const clearButton = wrapper.getByTestId(`${ROOT_PATH}__clear`);
+    const fieldActions = wrapper.getByTestId(`${ROOT_PATH}__field-actions`);
+    act(() => {
+      fireEvent.click(fieldActions);
+    });
+
+    const clearButton = await wrapper.findByTestId(`${ROOT_PATH}__clear`);
     act(() => {
       fireEvent.click(clearButton);
     });

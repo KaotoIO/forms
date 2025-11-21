@@ -3,120 +3,126 @@
 exports[`OneOfField should render correctly with basic oneOf schema 1`] = `
 <div>
   <div
-    class="pf-v6-c-card"
-    data-ouia-component-id="OUIA-Generated-Card-1"
-    data-ouia-component-type="PF6/Card"
-    data-ouia-safe="true"
+    class="cds--tile array-field-wrapper-tile"
     data-testid="#__field-wrapper"
-    id=""
   >
     <div
-      class="pf-v6-c-card__header"
+      class="array-field-wrapper-header array-field-wrapper-header--with-children"
     >
       <div
-        class="pf-v6-c-card__actions"
+        class="array-field-wrapper-title-section"
       >
-        <div
-          aria-labelledby="#-legend"
-          class="pf-v6-c-form__group"
-          role="group"
+        <h4
+          class="cds--tile-heading array-field-wrapper-heading"
         >
-          <div
-            class="pf-v6-c-form__group-control pf-m-stack"
+          Test Schema 1
+        </h4>
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--toggletip"
+        >
+          <button
+            aria-controls="id-:r0:"
+            aria-expanded="false"
+            aria-label="More info for Test Schema 1 field"
+            class="cds--toggletip-button"
+            type="button"
           >
-            <div
-              aria-label="# oneof list"
-              class="pf-v6-c-toggle-group"
-              data-testid="#__oneof-list"
-              id="#"
-              role="group"
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"
+              />
+              <path
+                d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"
+              />
+            </svg>
+          </button>
+          <span
+            class="cds--popover"
+            id="id-:r0:"
+          >
+            <span
+              class="cds--popover-content"
             >
               <div
-                class="pf-v6-c-toggle-group__item"
+                class="cds--toggletip-content"
               >
-                <button
-                  aria-pressed="true"
-                  class="pf-v6-c-toggle-group__button pf-m-selected"
-                  id="Test Schema 1"
-                  type="button"
-                >
-                  <span
-                    class="pf-v6-c-toggle-group__text"
-                  >
+                <p>
+                  <strong>
                     Test Schema 1
-                  </span>
-                </button>
+                     
+                    &lt;expression&gt;
+                  </strong>
+                </p>
+                <p>
+                  First test schema
+                </p>
+                <p>
+                  Default: 
+                  no default value
+                </p>
               </div>
-              <div
-                class="pf-v6-c-toggle-group__item"
-              >
-                <button
-                  aria-pressed="false"
-                  class="pf-v6-c-toggle-group__button"
-                  id="Test Schema 2"
-                  type="button"
-                >
-                  <span
-                    class="pf-v6-c-toggle-group__text"
-                  >
-                    Test Schema 2
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+            </span>
+            <span
+              class="cds--popover-caret"
+            />
+          </span>
+        </span>
       </div>
-      <div
-        class="pf-v6-c-card__header-main"
-      >
+      <div>
         <div
-          class="pf-v6-c-card__title"
+          class="cds--stack-vertical cds--stack-scale-3"
         >
           <div
-            class="pf-v6-c-card__title-text"
+            role="group"
           >
-             
-            Test Schema 1
-             
             <div
-              style="display: contents;"
+              class="cds--content-switcher cds--content-switcher--md cds--layout--size-md cds--layout-constraint--size__default-md cds--layout-constraint--size__min-sm cds--layout-constraint--size__max-lg"
+              role="tablist"
             >
-              <span
-                aria-label="More info for Test Schema 1 field"
-                class="pf-v6-c-button pf-m-plain pf-m-no-padding"
-                data-ouia-component-id="OUIA-Generated-Button-plain-1"
-                data-ouia-component-type="PF6/Button"
-                data-ouia-safe="true"
-                role="button"
+              <button
+                aria-selected="true"
+                class="cds--content-switcher-btn cds--content-switcher--selected"
+                role="tab"
                 tabindex="0"
                 type="button"
               >
                 <span
-                  class="pf-v6-c-button__icon"
+                  class="cds--content-switcher__label"
+                  title="Test Schema 1"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="pf-v6-svg"
-                    fill="currentColor"
-                    height="1em"
-                    role="img"
-                    viewBox="0 0 1024 1024"
-                    width="1em"
-                  >
-                    <path
-                      d="M521.3,576 C627.5,576 713.7,502 713.7,413.7 C713.7,325.4 627.6,253.6 521.3,253.6 C366,253.6 334.5,337.7 329.2,407.2 C329.2,414.3 335.2,416 343.5,416 L445,416 C450.5,416 458,415.5 460.8,406.5 C460.8,362.6 582.9,357.1 582.9,413.6 C582.9,441.9 556.2,470.9 521.3,473 C486.4,475.1 447.3,479.8 447.3,521.7 L447.3,553.8 C447.3,570.8 456.1,576 472,576 C487.9,576 521.3,576 521.3,576 M575.3,751.3 L575.3,655.3 C575.313862,651.055109 573.620137,646.982962 570.6,644 C567.638831,640.947672 563.552355,639.247987 559.3,639.29884 L463.3,639.29884 C459.055109,639.286138 454.982962,640.979863 452,644 C448.947672,646.961169 447.247987,651.047645 447.29884,655.3 L447.29884,751.3 C447.286138,755.544891 448.979863,759.617038 452,762.6 C454.961169,765.652328 459.047645,767.352013 463.3,767.30116 L559.3,767.30116 C563.544891,767.313862 567.617038,765.620137 570.6,762.6 C573.659349,759.643612 575.360354,755.553963 575.3,751.3 M512,896 C300.2,896 128,723.9 128,512 C128,300.3 300.2,128 512,128 C723.8,128 896,300.2 896,512 C896,723.8 723.7,896 512,896 M512.1,0 C229.7,0 0,229.8 0,512 C0,794.2 229.8,1024 512.1,1024 C794.4,1024 1024,794.3 1024,512 C1024,229.7 794.4,0 512.1,0"
-                    />
-                  </svg>
+                  Test Schema 1
                 </span>
-              </span>
+              </button>
+              <button
+                aria-selected="false"
+                class="cds--content-switcher-btn"
+                role="tab"
+                tabindex="-1"
+                type="button"
+              >
+                <span
+                  class="cds--content-switcher__label"
+                  title="Test Schema 2"
+                >
+                  Test Schema 2
+                </span>
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div
-      class="pf-v6-c-card__body pf-v6-c-form kaoto-form__label"
+      class="kaoto-form kaoto-form__label"
       data-testid="#__children"
     />
   </div>

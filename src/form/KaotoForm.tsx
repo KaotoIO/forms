@@ -1,4 +1,4 @@
-import { Form } from '@patternfly/react-core';
+import { Form } from '@carbon/react';
 import { JSONSchema4 } from 'json-schema';
 import {
   FormEventHandler,

@@ -34,10 +34,10 @@ Cypress.Commands.add('openHomePage', () => {
 });
 
 Cypress.Commands.add('selectSchema', (schemaName: string) => {
-  cy.get('[aria-label="Schema selector toggle"]').click();
-  cy.get('input[type="text"][aria-label="Schema selector"]').eq(0).clear();
-  cy.get('input[type="text"][aria-label="Schema selector"]').eq(0).type(schemaName);
-  cy.get('.pf-v6-c-menu__item-text').contains(schemaName).click();
+  cy.get('[data-testid="schema-selector"]').click();
+  cy.get('[data-testid="schema-selector"]').clear();
+  cy.get('[data-testid="schema-selector"]').type(schemaName);
+  cy.get('.cds--list-box__menu-item').contains(schemaName).click({ force: true });
 });
 
 Cypress.Commands.add('checkCodeSpanLine', (spanText: string, linesCount?: number) => {
@@ -58,21 +58,19 @@ Cypress.Commands.add('closeWrappedSection', (sectionName: string) => {
 });
 
 Cypress.Commands.add('selectInTypeaheadField', (inputGroup: string, value: string) => {
-  cy.get(`[data-testid="#.${inputGroup}-typeahead-select-input"]`).within(() => {
-    cy.get('input.pf-v6-c-text-input-group__text-input').clear();
-  });
-  cy.get('.pf-v6-c-menu__item-text').contains(value).click();
+  cy.get(`[data-testid="#.${inputGroup}"]`).click();
+  cy.get('[role="option"]').contains(value).click();
 });
 
 Cypress.Commands.add('switchWrappedSection', (sectionName: string, wrapped: boolean) => {
-  cy.get(`div[aria-labelledby^="${sectionName}"]`)
+  cy.get(`[data-testid="${sectionName}"]`)
     .scrollIntoView()
     .within(() => {
-      cy.get('button').each(($button) => {
-        if ($button.attr('aria-expanded') === String(wrapped)) {
+      cy.get('button')
+        .first()
+        .then(($button) => {
           cy.wrap($button).click();
           cy.wrap($button).should('have.attr', 'aria-expanded', String(!wrapped));
-        }
-      });
+        });
     });
 });

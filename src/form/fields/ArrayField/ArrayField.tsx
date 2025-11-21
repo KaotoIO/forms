@@ -1,5 +1,5 @@
-import { Button } from '@patternfly/react-core';
-import { PlusIcon } from '@patternfly/react-icons';
+import { IconButton } from '@carbon/react';
+import { Add } from '@carbon/icons-react';
 import { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { useFieldValue } from '../../hooks/field-value';
 import { FieldProps } from '../../models/typings';
@@ -47,15 +47,15 @@ export const ArrayField: FunctionComponent<FieldProps> = ({ propName, required }
       description={schema.description}
       defaultValue={schema.default}
       actions={
-        <Button
-          variant="plain"
+        <IconButton
+          kind="ghost"
           data-testid={`${propName}__add`}
-          aria-label="Add new item"
-          title="Add new item"
+          label="Add new item"
           onClick={onAdd}
-          icon={<PlusIcon />}
-          isDisabled={disabled}
-        />
+          disabled={disabled}
+        >
+          <Add />
+        </IconButton>
       }
     >
       {itemsHash.map((hash, index) => {
