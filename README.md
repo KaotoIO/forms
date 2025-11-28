@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://kaoto.io/"><img src="./packages/ui/src/assets/logo-kaoto.png" alt="Kaoto"></a>
+  <a href="https://kaoto.io/"><img style="width: 400px;" src="./src/assets/logo-kaoto.png" alt="A picture showing the Kaoto graphical editor showing an integration with the configuration panel opened"/></a>
 </h1>
 
 <p align=center>
@@ -16,10 +16,6 @@
   <a style="font-weight: bold" href="https://kaoto.io/workshop/">Workshops</a> |
   <a style="font-weight: bold" href="https://kaoto.io/contribute/">Contribute</a> |
   <a style="font-weight: bold" href="https://camel.zulipchat.com/#narrow/stream/441302-kaoto">Chat</a>
-</p>
-
-<p align="center">
-  <img style="width: 400px;" src="./src/assets/logo-kaoto.png" alt="A picture showing the Kaoto graphical editor showing an integration with the configuration panel opened"/>
 </p>
 
 # Kaoto forms
