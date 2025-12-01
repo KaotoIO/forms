@@ -2940,10 +2940,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kaoto/camel-catalog@npm:^0.2.0":
-  version: 0.2.11
-  resolution: "@kaoto/camel-catalog@npm:0.2.11"
-  checksum: 10/1d5ecac6d9c763a80a614d6b58aa565c4a6b244c0e60ad95944aeb4f145c620729c21d8a2afcff059481d18e69b7cb7ef9a0a6cdfe2240af2b397051fda4e531
+"@kaoto/camel-catalog@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@kaoto/camel-catalog@npm:0.3.1"
+  checksum: 10/534d895bf935059c8bbd4434704a6e1849b039685702be5328448e16008d76641cf89ba40b8dec39e614401f36dbbc9cc331bd85729d686338fa2d991368127f
   languageName: node
   linkType: hard
 
@@ -2959,7 +2959,7 @@ __metadata:
     "@carbon/react": "npm:^1.73.0"
     "@carbon/styles": "npm:^1.72.0"
     "@eslint/js": "npm:^9.10.0"
-    "@kaoto/camel-catalog": "npm:^0.2.0"
+    "@kaoto/camel-catalog": "npm:^0.3.0"
     "@lerna-lite/cli": "npm:^3.0.0"
     "@lerna-lite/publish": "npm:^3.0.0"
     "@lerna-lite/version": "npm:^3.0.0"
