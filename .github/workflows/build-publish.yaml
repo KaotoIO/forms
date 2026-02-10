@@ -5,6 +5,11 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,12 +42,11 @@ jobs:
 
       - name: 💅 Run eslint
         run: yarn workspaces foreach --verbose --all --topological-dev run lint
-      
+
       - name: 📤 Upload artifacts for publish (only on main)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'KaotoIO/forms'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          NODE_AUTH_TOKEN: ${{ secrets.KAOTO_NPM_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
