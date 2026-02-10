@@ -33,6 +33,7 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
   items: itemsProps,
   id,
   placeholder = 'Select or write an option',
+  onInputValueChange,
   onChange,
   onCleanInput,
   'aria-label': ariaLabel,
@@ -61,9 +62,8 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
   }, [itemsProps, selectedItem?.name, selectedItem?.value]);
 
   useEffect(() => {
-    if (selectedItem?.name) {
-      setInputValue(selectedItem.name);
-    }
+    const nextValue = selectedItem?.name ?? '';
+    setInputValue(nextValue);
   }, [selectedItem]);
 
   const onItemChanged = useCallback(
@@ -75,6 +75,7 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
       } else if (!isDefined(name)) {
         onChange?.(undefined);
         setInputValue('');
+        onInputValueChange?.('');
         setIsOpen(false);
         return;
       }
@@ -88,14 +89,16 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
       }
 
       const localItem = items.find((item) => item.value === name);
-      setInputValue(localItem?.name ?? '');
+      const nextValue = localItem?.name ?? '';
+      setInputValue(nextValue);
+      onInputValueChange?.(nextValue);
       setIsOpen(false);
 
       if (name !== selectedItem?.name) {
         onChange?.(localItem);
       }
     },
-    [onChange, items, selectedItem?.name, onCreate, inputValue, allowCustomInput],
+    [onChange, items, selectedItem?.name, onCreate, inputValue, allowCustomInput, onInputValueChange],
   );
 
   const onToggleClick: MouseEventHandler<HTMLDivElement | HTMLButtonElement> = async (event) => {
@@ -117,11 +120,13 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
   const onTextInputChange = (_event: FormEvent<HTMLInputElement>, value: string) => {
     setFilter(value);
     setInputValue(value);
+    onInputValueChange?.(value);
   };
 
   const onTextInputClear = () => {
     setFilter('');
     setInputValue('');
+    onInputValueChange?.('');
     onCleanInput?.();
     inputRef.current?.focus();
   };

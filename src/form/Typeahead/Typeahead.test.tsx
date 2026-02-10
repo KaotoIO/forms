@@ -255,4 +255,73 @@ describe('Typeahead', () => {
       expect(screen.queryByText('Use "no-match"')).not.toBeInTheDocument();
     });
   });
+
+  describe('onInputValueChange', () => {
+    const onInputValueChange = jest.fn();
+    const propsWithInputValueListener = {
+      ...defaultProps,
+      onInputValueChange,
+    };
+
+    beforeEach(() => {
+      onInputValueChange.mockClear();
+    });
+
+    it('should call onInputValueChange when typing', async () => {
+      render(<Typeahead {...propsWithInputValueListener} />);
+      const input = screen.getByPlaceholderText('Select or write an option');
+
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'typed value' } });
+      });
+
+      expect(onInputValueChange).toHaveBeenCalledWith('typed value');
+    });
+
+    it('should call onInputValueChange when input is cleared', async () => {
+      render(<Typeahead {...propsWithInputValueListener} />);
+      const input = screen.getByPlaceholderText('Select or write an option');
+
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'to clear' } });
+      });
+
+      const clearButton = screen.getByLabelText('Clear input value');
+      await act(async () => {
+        fireEvent.click(clearButton);
+      });
+
+      expect(onInputValueChange).toHaveBeenCalledWith('');
+    });
+
+    it('should call onInputValueChange with selected option label', async () => {
+      render(<Typeahead {...propsWithInputValueListener} />);
+      const toggle = screen.getByLabelText('Typeahead toggle');
+
+      await act(async () => {
+        fireEvent.click(toggle);
+      });
+
+      const option = screen.getByText('Item 1');
+      await act(async () => {
+        fireEvent.click(option);
+      });
+
+      expect(onInputValueChange).toHaveBeenCalledWith('Item 1');
+    });
+
+    it('should not call onInputValueChange when selectedItem prop changes externally', async () => {
+      const { rerender } = render(<Typeahead {...propsWithInputValueListener} selectedItem={mockItems[0]} />);
+
+      onInputValueChange.mockClear();
+
+      rerender(<Typeahead {...propsWithInputValueListener} selectedItem={mockItems[1]} />);
+      expect(onInputValueChange).not.toHaveBeenCalled();
+
+      onInputValueChange.mockClear();
+
+      rerender(<Typeahead {...propsWithInputValueListener} selectedItem={undefined} />);
+      expect(onInputValueChange).not.toHaveBeenCalled();
+    });
+  });
 });
