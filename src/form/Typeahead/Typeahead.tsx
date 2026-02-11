@@ -11,6 +11,7 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
   items: itemsProps,
   id,
   placeholder = 'Select or write an option',
+  onInputValueChange,
   onChange,
   onCleanInput,
   'aria-label': ariaLabel,
@@ -39,10 +40,9 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
   }, [itemsProps, selectedItem?.name, selectedItem?.value]);
 
   useEffect(() => {
-    if (selectedItem?.name) {
-      setInputValue(selectedItem.name);
-      inputValueRef.current = selectedItem.name;
-    }
+    const nextValue = selectedItem?.name ?? '';
+    setInputValue(nextValue);
+    inputValueRef.current = nextValue;
   }, [selectedItem]);
 
   useEffect(() => {
@@ -152,10 +152,14 @@ export const Typeahead: FunctionComponent<TypeaheadProps> = ({
     [onChange, items, onCreate, inputValue, allowCustomInput, onCleanInput],
   );
 
-  const handleInputChange = useCallback((inputValue: string) => {
-    setInputValue(inputValue);
-    inputValueRef.current = inputValue;
-  }, []);
+  const handleInputChange = useCallback(
+    (inputValue: string) => {
+      setInputValue(inputValue);
+      inputValueRef.current = inputValue;
+      onInputValueChange?.(inputValue);
+    },
+    [onInputValueChange],
+  );
 
   const comboBoxItems = useMemo(() => {
     const mappedItems = items.map((item) => ({

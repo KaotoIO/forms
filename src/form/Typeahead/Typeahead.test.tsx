@@ -1,5 +1,5 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
-import { CREATE_NEW_ITEM, Typeahead } from './Typeahead';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { Typeahead } from './Typeahead';
 import { TypeaheadProps } from './Typeahead.types';
 
 const mockItems = [
@@ -249,6 +249,60 @@ describe('Typeahead', () => {
 
       const listbox = screen.getByRole('listbox');
       expect(listbox.children.length).toBe(0);
+    });
+  });
+
+  describe('onInputValueChange', () => {
+    const onInputValueChange = jest.fn();
+    const propsWithInputValueListener = {
+      ...defaultProps,
+      onInputValueChange,
+    };
+
+    beforeEach(() => {
+      onInputValueChange.mockClear();
+    });
+
+    it('should call onInputValueChange when typing', async () => {
+      render(<Typeahead {...propsWithInputValueListener} />);
+      const input = screen.getByPlaceholderText('Select or write an option');
+
+      await act(async () => {
+        fireEvent.change(input, { target: { value: 'typed value' } });
+      });
+
+      expect(onInputValueChange).toHaveBeenCalledWith('typed value');
+    });
+
+    it('should call onInputValueChange when input is cleared', async () => {
+      render(<Typeahead {...propsWithInputValueListener} selectedItem={mockItems[0]} />);
+
+      await act(async () => {
+        jest.runAllTimers();
+      });
+
+      const clearButton = screen.getByRole('button', { name: /clear selected item/i });
+      await act(async () => {
+        fireEvent.click(clearButton);
+      });
+
+      expect(onInputValueChange).toHaveBeenCalledWith('');
+    });
+
+    it('should call onInputValueChange with selected option label', async () => {
+      render(<Typeahead {...propsWithInputValueListener} />);
+      const toggle = screen.getByLabelText('Open');
+
+      await act(async () => {
+        fireEvent.click(toggle);
+      });
+
+      const option = screen.getByText('Item 1');
+      await act(async () => {
+        fireEvent.click(option);
+      });
+
+      expect(onInputValueChange).toHaveBeenCalledWith('Item 1');
     });
   });
 });
