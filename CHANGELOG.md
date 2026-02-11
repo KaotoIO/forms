@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/KaotoIO/forms/compare/@kaoto/forms@1.5.9...@kaoto/forms@1.6.0) (2026-02-11)
+
+### Bug Fixes
+
+* **Tests:** Run tests in pipeline build ([d2f4654](https://github.com/KaotoIO/forms/commit/d2f46544b990093f57c6ff71d7d66812a306403f))
+
+### Features
+
+* **Typeahead:** Extended the Typeahead to have an optional change listener ([83eddb5](https://github.com/KaotoIO/forms/commit/83eddb5dbd39f94b888113518b49488c403c15ac))
+
 ## 1.5.9 (2025-11-03)
 
 **Note:** Version bump only for package @kaoto/forms
