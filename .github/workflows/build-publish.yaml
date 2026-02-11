@@ -35,9 +35,12 @@ jobs:
       - name: 📦 Build the library
         run: yarn build
 
+      - name: 🧪 Run test
+        run: yarn test
+
       - name: 💅 Run eslint
         run: yarn workspaces foreach --verbose --all --topological-dev run lint
-      
+
       - name: 📤 Upload artifacts for publish (only on main)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'KaotoIO/forms'
         env:
