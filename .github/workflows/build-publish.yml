@@ -40,6 +40,9 @@ jobs:
       - name: 📦 Build the library
         run: yarn build
 
+      - name: 🧪 Run test
+        run: yarn test
+
       - name: 💅 Run eslint
         run: yarn workspaces foreach --verbose --all --topological-dev run lint
 

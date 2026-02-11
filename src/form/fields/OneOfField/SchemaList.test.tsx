@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { SchemaList } from './SchemaList';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { OneOfSchemas } from '../../utils/get-oneof-schema-list';
+import { SchemaList } from './SchemaList';
 
 describe('SchemaList', () => {
   const mockSchemas: OneOfSchemas[] = [
@@ -115,10 +115,15 @@ describe('SchemaList', () => {
       />,
     );
 
-    const combobox = screen.getByRole('combobox');
-    fireEvent.change(combobox, { target: { value: 'Schema 2' } });
+    act(() => {
+      const toggle = screen.getByLabelText('Open');
+      fireEvent.click(toggle);
+    });
 
-    fireEvent.keyDown(combobox, { key: 'Enter' });
+    act(() => {
+      const option = screen.getByText('Schema 2');
+      fireEvent.click(option);
+    });
 
     expect(mockOnChange).toHaveBeenCalled();
   });
