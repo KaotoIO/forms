@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.2.0 (2026-02-12)
+
+### Features
+
+* **Typeahead:** Add onInputValueChange callback ([aa8c249](https://github.com/KaotoIO/forms/commit/aa8c249dbb194ca8d2a81f2c0e31d46878660187))
+
 ## 2.1.11 (2026-02-11)
 
 ### Bug Fixes
