@@ -12,6 +12,7 @@ import { SchemaContext } from '../providers/SchemaProvider';
 import { isDefined, isRawString } from '../utils';
 import { FieldActions } from './FieldActions';
 import { FieldWrapper } from './FieldWrapper';
+import { SuggestionsButton } from './SuggestionsButton';
 
 interface StringFieldProps extends FieldProps {
   fieldType?: TextInputGroupMainProps['type'];
@@ -82,7 +83,7 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
     [onFieldChange],
   );
 
-  const { suggestionsMenu } = useSuggestions({
+  const { suggestionsMenu, openSuggestions } = useSuggestions({
     propName,
     schema,
     inputRef,
@@ -122,6 +123,8 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
 
         <TextInputGroupUtilities>
           {additionalUtility}
+
+          <SuggestionsButton propName={propName} onClick={openSuggestions} />
 
           <FieldActions
             propName={propName}

@@ -7,6 +7,7 @@ import { FieldProps } from '../models/typings';
 import { SchemaContext } from '../providers/SchemaProvider';
 import { isDefined } from '../utils';
 import { FieldWrapper } from './FieldWrapper';
+import { SuggestionsButton } from './SuggestionsButton';
 
 export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, required, onRemove: onRemoveProps }) => {
   const { schema } = useContext(SchemaContext);
@@ -30,7 +31,7 @@ export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, require
     onChange(undefined as unknown as string);
   };
 
-  const { suggestionsMenu } = useSuggestions({
+  const { suggestionsMenu, openSuggestions } = useSuggestions({
     propName,
     schema,
     inputRef: textAreaRef,
@@ -69,6 +70,8 @@ export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, require
         </InputGroupItem>
 
         <InputGroupItem>
+          <SuggestionsButton propName={propName} onClick={openSuggestions} />
+
           <Button
             variant="plain"
             data-testid={`${propName}__clear`}

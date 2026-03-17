@@ -152,6 +152,9 @@ export const useSuggestions = ({
   }, []);
 
   const openSuggestions = useCallback(() => {
+    const input = inputRef.current;
+    if (input?.disabled || input?.readOnly) return;
+
     setSearchValue('');
     setCurrentOpenMenu((prev) => {
       const newValue = prev === menuId ? null : menuId;
@@ -163,9 +166,9 @@ export const useSuggestions = ({
       }
       return newValue;
     });
-  }, [menuId, setCurrentOpenMenu]);
+  }, [menuId, setCurrentOpenMenu, inputRef]);
 
-  /** Register keyboard bindings */
+  /** Register keyboard bindings and double-click handler */
   useEffect(() => {
     const input = inputRef.current;
     if (!input) return;
@@ -179,6 +182,7 @@ export const useSuggestions = ({
 
     input.addEventListener('focus', handleFocus);
     input.addEventListener('blur', handleBlur);
+    input.addEventListener('dblclick', openSuggestions);
 
     // If already focused, register immediately
     if (document.activeElement === input) {
@@ -189,8 +193,9 @@ export const useSuggestions = ({
       input.removeEventListener('focus', handleFocus);
       input.removeEventListener('blur', handleBlur);
       input.removeEventListener('keydown', handleInputKeyDown);
+      input.removeEventListener('dblclick', openSuggestions);
     };
-  }, [handleInputKeyDown, inputRef]);
+  }, [handleInputKeyDown, inputRef, openSuggestions]);
 
   const suggestionsMenu = (
     <Popper

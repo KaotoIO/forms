@@ -42,6 +42,22 @@
     justify-content: space-between;
   }
 
+  &__suggestions-button {
+    display: none;
+  }
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  .pf-v6-c-text-input-group:hover &__suggestions-button,
+  /* stylelint-disable-next-line selector-class-pattern */
+  .pf-v6-c-text-input-group:focus-within &__suggestions-button,
+  /* stylelint-disable-next-line selector-class-pattern */
+  .pf-v6-c-input-group:hover &__suggestions-button,
+  /* stylelint-disable-next-line selector-class-pattern */
+  .pf-v6-c-input-group:focus-within &__suggestions-button,
+  &__suggestions-button:focus {
+    display: inline-flex;
+  }
+
   &__empty {
     display: none;
   }

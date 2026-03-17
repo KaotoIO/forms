@@ -8,6 +8,7 @@ import { SchemaContext } from '../providers/SchemaProvider';
 import { isDefined, isRawString } from '../utils';
 import { FieldActions } from './FieldActions';
 import { FieldWrapper } from './FieldWrapper';
+import { SuggestionsButton } from './SuggestionsButton';
 
 export const PasswordField: FunctionComponent<FieldProps> = ({ propName, required, onRemove: onRemoveProps }) => {
   const { schema } = useContext(SchemaContext);
@@ -51,7 +52,7 @@ export const PasswordField: FunctionComponent<FieldProps> = ({ propName, require
     [onFieldChange],
   );
 
-  const { suggestionsMenu } = useSuggestions({
+  const { suggestionsMenu, openSuggestions } = useSuggestions({
     propName,
     schema,
     inputRef,
@@ -89,6 +90,8 @@ export const PasswordField: FunctionComponent<FieldProps> = ({ propName, require
         {suggestionsMenu}
 
         <TextInputGroupUtilities>
+          <SuggestionsButton propName={propName} onClick={openSuggestions} />
+
           <Button
             variant="plain"
             data-testid={`${propName}__toggle-visibility`}

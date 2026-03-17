@@ -35,7 +35,7 @@ describe('FieldActions', () => {
       fireEvent.click(toggle);
     });
 
-    expect(wrapper.queryByTestId('testProp__clear')).not.toBeInTheDocument();
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
   });
 
   it('calls onRemove when Clear is clicked', async () => {
