@@ -82,7 +82,7 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
     [onFieldChange],
   );
 
-  const suggestions = useSuggestions({
+  const { suggestionsMenu } = useSuggestions({
     propName,
     schema,
     inputRef,
@@ -118,7 +118,7 @@ export const StringField: FunctionComponent<StringFieldProps> = ({
           ref={inputRef}
         />
 
-        {suggestions}
+        {suggestionsMenu}
 
         <TextInputGroupUtilities>
           {additionalUtility}

@@ -4,6 +4,21 @@ import { SuggestionProvider } from '../models/suggestions';
 import { SuggestionContext } from '../providers';
 import { useSuggestions } from './suggestions';
 
+const StatefulSuggestionProvider = ({
+  children,
+  getProviders,
+}: {
+  children: ReactNode;
+  getProviders: jest.Mock;
+}) => {
+  const [currentOpenMenu, setCurrentOpenMenu] = useState<string | null>(null);
+  return (
+    <SuggestionContext.Provider value={{ getProviders, currentOpenMenu, setCurrentOpenMenu }}>
+      {children}
+    </SuggestionContext.Provider>
+  );
+};
+
 describe('useSuggestions', () => {
   let setValueMock: jest.Mock;
   let mockProvider: SuggestionProvider;
@@ -13,7 +28,7 @@ describe('useSuggestions', () => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [value, setValue] = useState<string | number>('');
 
-    const suggestions = useSuggestions({
+    const { suggestionsMenu } = useSuggestions({
       propName: 'testProp',
       schema: { type: 'string' },
       value,
@@ -38,7 +53,7 @@ describe('useSuggestions', () => {
           aria-label="Test input"
         />
 
-        {suggestions}
+        {suggestionsMenu}
 
         <button type="button">Secondary focus</button>
       </>
@@ -47,7 +62,7 @@ describe('useSuggestions', () => {
 
   const renderWithContext = (children: ReactNode) => {
     return render(
-      <SuggestionContext.Provider value={{ getProviders: getProvidersMock }}>{children}</SuggestionContext.Provider>,
+      <StatefulSuggestionProvider getProviders={getProvidersMock}>{children}</StatefulSuggestionProvider>,
     );
   };
 
@@ -75,35 +90,29 @@ describe('useSuggestions', () => {
     const inputElement = document.createElement('input');
     const inputRef = { current: inputElement };
 
-    let result: ReactNode;
-
-    await act(async () => {
-      const hookResult = renderHook(
-        () =>
-          useSuggestions({
-            inputRef,
-            propName: 'testProp',
-            schema: { type: 'string' },
-            value: '',
-            setValue: setValueMock,
-          }),
-        {
-          wrapper: ({ children }) => (
-            <SuggestionContext.Provider value={{ getProviders: getProvidersMock }}>
-              {children}
-            </SuggestionContext.Provider>
-          ),
-        },
-      );
-
-      result = hookResult.result.current;
-    });
+    const { result } = renderHook(
+      () =>
+        useSuggestions({
+          inputRef,
+          propName: 'testProp',
+          schema: { type: 'string' },
+          value: '',
+          setValue: setValueMock,
+        }),
+      {
+        wrapper: ({ children }) => (
+          <SuggestionContext.Provider value={{ getProviders: getProvidersMock, currentOpenMenu: null, setCurrentOpenMenu: jest.fn() }}>
+            {children}
+          </SuggestionContext.Provider>
+        ),
+      },
+    );
 
     await waitFor(() => {
       expect(mockProvider.getSuggestions).not.toHaveBeenCalled();
     });
 
-    expect(result).toBeDefined();
+    expect(result.current.suggestionsMenu).toBeDefined();
   });
 
   it('should handle setValue being undefined', () => {
@@ -116,7 +125,7 @@ describe('useSuggestions', () => {
 
     const { result } = renderHook(() => useSuggestions(propsWithoutSetValue), {
       wrapper: ({ children }) => (
-        <SuggestionContext.Provider value={{ getProviders: getProvidersMock }}>{children}</SuggestionContext.Provider>
+        <SuggestionContext.Provider value={{ getProviders: getProvidersMock, currentOpenMenu: null, setCurrentOpenMenu: jest.fn() }}>{children}</SuggestionContext.Provider>
       ),
     });
 
@@ -139,7 +148,7 @@ describe('useSuggestions', () => {
           }),
         {
           wrapper: ({ children }) => (
-            <SuggestionContext.Provider value={{ getProviders: getProvidersMock }}>
+            <SuggestionContext.Provider value={{ getProviders: getProvidersMock, currentOpenMenu: null, setCurrentOpenMenu: jest.fn() }}>
               {children}
             </SuggestionContext.Provider>
           ),
@@ -175,7 +184,7 @@ describe('useSuggestions', () => {
           }),
         {
           wrapper: ({ children }) => (
-            <SuggestionContext.Provider value={{ getProviders: getProvidersMock }}>
+            <SuggestionContext.Provider value={{ getProviders: getProvidersMock, currentOpenMenu: null, setCurrentOpenMenu: jest.fn() }}>
               {children}
             </SuggestionContext.Provider>
           ),
@@ -205,7 +214,7 @@ describe('useSuggestions', () => {
 
     const { rerender } = renderHook(() => useSuggestions(props), {
       wrapper: ({ children }) => (
-        <SuggestionContext.Provider value={{ getProviders: getProvidersMock }}>{children}</SuggestionContext.Provider>
+        <SuggestionContext.Provider value={{ getProviders: getProvidersMock, currentOpenMenu: null, setCurrentOpenMenu: jest.fn() }}>{children}</SuggestionContext.Provider>
       ),
     });
 

@@ -22,7 +22,7 @@ export const KeyValueField = forwardRef<HTMLInputElement, KeyValueFieldProps>(
 
     useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
-    const suggestions = useSuggestions({
+    const { suggestionsMenu } = useSuggestions({
       propName: name,
       schema: STRING_SCHEMA,
       inputRef,
@@ -47,7 +47,7 @@ export const KeyValueField = forwardRef<HTMLInputElement, KeyValueFieldProps>(
           value={value}
         />
 
-        {suggestions}
+        {suggestionsMenu}
       </TextInputGroup>
     );
   },

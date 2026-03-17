@@ -1,6 +1,6 @@
 import { Menu, MenuContent, MenuItem, MenuList, Popper, SearchInput } from '@patternfly/react-core';
 import { JSONSchema4 } from 'json-schema';
-import { ReactNode, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { ReactNode, RefObject, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { GroupedSuggestions, Suggestion, SuggestionProvider } from '../models/suggestions';
 import { SuggestionContext } from '../providers';
 import { applySuggestion } from '../utils/apply-suggestion';
@@ -13,14 +13,28 @@ type UseSuggestionsProps = {
   value: string | number;
   setValue?: (value: string) => void;
 };
-export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: UseSuggestionsProps): ReactNode => {
-  const [isVisible, setIsVisible] = useState(false);
+
+type UseSuggestionsReturn = {
+  suggestionsMenu: ReactNode;
+  openSuggestions: () => void;
+};
+
+export const useSuggestions = ({
+  propName,
+  schema,
+  inputRef,
+  value,
+  setValue,
+}: UseSuggestionsProps): UseSuggestionsReturn => {
+  const menuId = `${propName}-${useId()}`;
   const [searchValue, setSearchValue] = useState('');
   const [groupedSuggestions, setGroupedSuggestions] = useState<GroupedSuggestions>({ root: [] });
   const menuRef = useRef<HTMLDivElement>(null);
   const firstElementRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const { getProviders } = useContext(SuggestionContext);
+  const { getProviders, currentOpenMenu, setCurrentOpenMenu } = useContext(SuggestionContext);
+
+  const isVisible = currentOpenMenu === menuId;
 
   const suggestionProviders: SuggestionProvider[] = useMemo(
     () => getProviders(propName, schema),
@@ -30,22 +44,22 @@ export const useSuggestions = ({ propName, schema, inputRef, value, setValue }: 
   const onEscapeKey = useCallback(
     (event: React.KeyboardEvent | KeyboardEvent) => {
       event.preventDefault();
-      setIsVisible(false);
+      setCurrentOpenMenu(null);
       requestAnimationFrame(() => {
         inputRef.current?.focus();
       });
     },
-    [inputRef],
+    [inputRef, setCurrentOpenMenu],
   );
 
   const handleInputKeyDown = useCallback(
     (event: Event) => {
       if (!(event instanceof KeyboardEvent)) return;
 
-if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code === 'Escape')) {
+      if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code === 'Escape')) {
         event.preventDefault();
         setSearchValue('');
-        setIsVisible(true);
+        setCurrentOpenMenu(menuId);
         requestAnimationFrame(() => {
           firstElementRef.current?.focus();
           firstElementRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
@@ -54,20 +68,20 @@ if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code ===
         onEscapeKey(event);
       }
     },
-    [onEscapeKey],
+    [onEscapeKey, setCurrentOpenMenu, menuId],
   );
 
   const getHandleOnClick = useCallback(
     (inputValue: string | number, suggestion: Suggestion) => () => {
       const { newValue, cursorPosition } = applySuggestion(suggestion, inputValue, inputRef.current?.selectionStart);
 
-      setIsVisible(false);
+      setCurrentOpenMenu(null);
       setValue?.(newValue);
 
       inputRef.current?.focus();
       inputRef.current?.setSelectionRange(cursorPosition, cursorPosition);
     },
-    [inputRef, setValue],
+    [inputRef, setValue, setCurrentOpenMenu],
   );
 
   const getHandleMenuKeyDown = useCallback(
@@ -129,6 +143,28 @@ if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code ===
     };
   }, [suggestionProviders, value, propName, inputRef, isVisible, searchValue]);
 
+  const focusOnSearchInput = useCallback(() => {
+    searchInputRef.current?.focus();
+  }, []);
+
+  const handleOnSearchChange = useCallback((_event: unknown, value: string) => {
+    setSearchValue(value);
+  }, []);
+
+  const openSuggestions = useCallback(() => {
+    setSearchValue('');
+    setCurrentOpenMenu((prev) => {
+      const newValue = prev === menuId ? null : menuId;
+      if (newValue) {
+        requestAnimationFrame(() => {
+          firstElementRef.current?.focus();
+          firstElementRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+        });
+      }
+      return newValue;
+    });
+  }, [menuId, setCurrentOpenMenu]);
+
   /** Register keyboard bindings */
   useEffect(() => {
     const input = inputRef.current;
@@ -156,15 +192,7 @@ if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code ===
     };
   }, [handleInputKeyDown, inputRef]);
 
-  const focusOnSearchInput = useCallback(() => {
-    searchInputRef.current?.focus();
-  }, []);
-
-  const handleOnSearchChange = useCallback((_event: unknown, value: string) => {
-    setSearchValue(value);
-  }, []);
-
-  return (
+  const suggestionsMenu = (
     <Popper
       preventOverflow
       maxWidth="trigger"
@@ -245,4 +273,9 @@ if ((event.ctrlKey && event.code === 'Space') || (event.altKey && event.code ===
       }
     />
   );
+
+  return {
+    suggestionsMenu,
+    openSuggestions,
+  };
 };

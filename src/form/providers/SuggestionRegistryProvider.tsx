@@ -6,17 +6,24 @@ interface SuggestionContextApi {
   registerProvider: (provider: SuggestionProvider) => void;
   unregisterProvider: (id: string) => void;
 }
+type MenuStateSetter = (menuId: string | null | ((prev: string | null) => string | null)) => void;
+
 interface SuggestionContext {
   getProviders: (propertyName: string, schema: JSONSchema4) => SuggestionProvider[];
+  currentOpenMenu: string | null;
+  setCurrentOpenMenu: MenuStateSetter;
 }
 
 export const SuggestionContextApi = createContext<SuggestionContextApi | undefined | null>(undefined);
 export const SuggestionContext = createContext<SuggestionContext>({
   getProviders: () => [],
+  currentOpenMenu: null,
+  setCurrentOpenMenu: () => {},
 });
 
 export const SuggestionRegistryProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [providers, setProviders] = useState<SuggestionProvider[]>([]);
+  const [currentOpenMenu, setCurrentOpenMenu] = useState<string | null>(null);
 
   const registerProvider = useCallback((provider: SuggestionProvider) => {
     setProviders((prevProviders) => {
@@ -48,9 +55,18 @@ export const SuggestionRegistryProvider: FunctionComponent<PropsWithChildren> = 
     [registerProvider, unregisterProvider],
   );
 
+  const contextValue = useMemo(
+    () => ({
+      getProviders,
+      currentOpenMenu,
+      setCurrentOpenMenu,
+    }),
+    [getProviders, currentOpenMenu],
+  );
+
   return (
     <SuggestionContextApi.Provider value={contextApi}>
-      <SuggestionContext.Provider value={{ getProviders }}>{children}</SuggestionContext.Provider>
+      <SuggestionContext.Provider value={contextValue}>{children}</SuggestionContext.Provider>
     </SuggestionContextApi.Provider>
   );
 };

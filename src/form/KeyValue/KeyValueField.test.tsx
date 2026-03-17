@@ -3,7 +3,10 @@ import { KeyValueField } from './KeyValueField';
 
 // Mock useSuggestions to control its output
 jest.mock('../hooks/suggestions', () => ({
-  useSuggestions: jest.fn(() => null),
+  useSuggestions: jest.fn(() => ({
+    suggestionsMenu: null,
+    openSuggestions: jest.fn(),
+  })),
 }));
 
 describe('KeyValueField', () => {
@@ -75,7 +78,10 @@ describe('KeyValueField', () => {
     const SuggestionsMenu = () => <div data-testid="suggestions-menu">Suggestions</div>;
     const { useSuggestions } = jest.requireMock('../hooks/suggestions');
 
-    useSuggestions.mockImplementation(() => <SuggestionsMenu />);
+    useSuggestions.mockImplementation(() => ({
+      suggestionsMenu: <SuggestionsMenu />,
+      openSuggestions: jest.fn(),
+    }));
 
     const { getByTestId } = render(<KeyValueField {...defaultProps} />);
     const input = getByTestId('keyvalue-input');

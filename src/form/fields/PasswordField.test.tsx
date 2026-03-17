@@ -1,9 +1,25 @@
 import { act, fireEvent, render, waitFor, within } from '@testing-library/react';
+import { ReactNode, useState } from 'react';
 import { ModelContextProvider } from '../providers/ModelProvider';
 import { SchemaProvider } from '../providers/SchemaProvider';
 import { SuggestionContext } from '../providers/SuggestionRegistryProvider';
 import { ROOT_PATH } from '../utils';
 import { PasswordField } from './PasswordField';
+
+const StatefulSuggestionProvider = ({
+  children,
+  getProviders,
+}: {
+  children: ReactNode;
+  getProviders: jest.Mock;
+}) => {
+  const [currentOpenMenu, setCurrentOpenMenu] = useState<string | null>(null);
+  return (
+    <SuggestionContext.Provider value={{ getProviders, currentOpenMenu, setCurrentOpenMenu }}>
+      {children}
+    </SuggestionContext.Provider>
+  );
+};
 
 describe('PasswordField', () => {
   const mockSuggestionProvider = {
@@ -19,7 +35,7 @@ describe('PasswordField', () => {
 
   const renderWithSuggestions = (children: React.ReactNode) => {
     return render(
-      <SuggestionContext.Provider value={{ getProviders: getProvidersMock }}>{children}</SuggestionContext.Provider>,
+      <StatefulSuggestionProvider getProviders={getProvidersMock}>{children}</StatefulSuggestionProvider>,
     );
   };
 

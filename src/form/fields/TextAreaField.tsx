@@ -30,7 +30,7 @@ export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, require
     onChange(undefined as unknown as string);
   };
 
-  const suggestions = useSuggestions({
+  const { suggestionsMenu } = useSuggestions({
     propName,
     schema,
     inputRef: textAreaRef,
@@ -65,7 +65,7 @@ export const TextAreaField: FunctionComponent<FieldProps> = ({ propName, require
             ref={textAreaRef}
           />
 
-          {suggestions}
+          {suggestionsMenu}
         </InputGroupItem>
 
         <InputGroupItem>

@@ -6,7 +6,10 @@ import { TextAreaField } from './TextAreaField';
 
 // Mock useSuggestions to control its output
 jest.mock('../hooks/suggestions', () => ({
-  useSuggestions: jest.fn(() => null),
+  useSuggestions: jest.fn(() => ({
+    suggestionsMenu: null,
+    openSuggestions: jest.fn(),
+  })),
 }));
 
 describe('TextAreaField', () => {
@@ -117,7 +120,10 @@ describe('TextAreaField', () => {
     const SuggestionsMenu = () => <div data-testid="suggestions-menu">Suggestions</div>;
     const { useSuggestions } = jest.requireMock('../hooks/suggestions');
 
-    useSuggestions.mockImplementation(() => <SuggestionsMenu />);
+    useSuggestions.mockImplementation(() => ({
+      suggestionsMenu: <SuggestionsMenu />,
+      openSuggestions: jest.fn(),
+    }));
 
     const { getByRole, getByTestId } = render(
       <ModelContextProvider model="Value" onPropertyChange={jest.fn()}>
