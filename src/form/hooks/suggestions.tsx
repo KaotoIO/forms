@@ -9,7 +9,7 @@ import { getCursorWord } from '../utils/get-cursor-word';
 type UseSuggestionsProps = {
   propName: string;
   schema: JSONSchema4;
-  inputRef: RefObject<HTMLInputElement | HTMLTextAreaElement>;
+  inputRef: RefObject<HTMLInputElement | HTMLTextAreaElement | null>;
   value: string | number;
   setValue?: (value: string) => void;
 };
