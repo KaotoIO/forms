@@ -113,7 +113,7 @@ exports[`SchemaList should use Typeahead when items > 5, none selected 1`] = `
               <input
                 aria-activedescendant=""
                 aria-autocomplete="list"
-                aria-controls="downshift-:r2:-menu"
+                aria-controls="downshift-_r_2_-menu"
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="Choose an item"
@@ -128,11 +128,11 @@ exports[`SchemaList should use Typeahead when items > 5, none selected 1`] = `
                 value=""
               />
               <button
-                aria-controls="downshift-:r2:-menu"
+                aria-controls="downshift-_r_2_-menu"
                 aria-expanded="false"
                 aria-label="Open"
                 class="cds--list-box__menu-icon"
-                id="downshift-:r2:-toggle-button"
+                id="downshift-_r_2_-toggle-button"
                 tabindex="-1"
                 title="Open"
                 type="button"
@@ -154,9 +154,9 @@ exports[`SchemaList should use Typeahead when items > 5, none selected 1`] = `
               </button>
             </div>
             <ul
-              aria-labelledby="downshift-:r2:-label"
+              aria-labelledby="downshift-_r_2_-label"
               class="cds--list-box__menu"
-              id="downshift-:r2:-menu"
+              id="downshift-_r_2_-menu"
               role="listbox"
             />
           </div>
@@ -188,7 +188,7 @@ exports[`SchemaList should use Typeahead when items > 5, one selected 1`] = `
               <input
                 aria-activedescendant=""
                 aria-autocomplete="list"
-                aria-controls="downshift-:r5:-menu"
+                aria-controls="downshift-_r_5_-menu"
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="Choose an item"
@@ -225,11 +225,11 @@ exports[`SchemaList should use Typeahead when items > 5, one selected 1`] = `
                 </svg>
               </button>
               <button
-                aria-controls="downshift-:r5:-menu"
+                aria-controls="downshift-_r_5_-menu"
                 aria-expanded="false"
                 aria-label="Open"
                 class="cds--list-box__menu-icon"
-                id="downshift-:r5:-toggle-button"
+                id="downshift-_r_5_-toggle-button"
                 tabindex="-1"
                 title="Open"
                 type="button"
@@ -251,9 +251,9 @@ exports[`SchemaList should use Typeahead when items > 5, one selected 1`] = `
               </button>
             </div>
             <ul
-              aria-labelledby="downshift-:r5:-label"
+              aria-labelledby="downshift-_r_5_-label"
               class="cds--list-box__menu"
-              id="downshift-:r5:-menu"
+              id="downshift-_r_5_-menu"
               role="listbox"
             />
           </div>

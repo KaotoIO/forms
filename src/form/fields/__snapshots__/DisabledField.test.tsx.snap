@@ -21,7 +21,7 @@ exports[`DisabledField should render 1`] = `
           class="cds--accordion__item"
         >
           <button
-            aria-controls="accordion-item-:r0:"
+            aria-controls="accordion-item-_r_0_"
             aria-expanded="false"
             class="cds--accordion__heading"
             type="button"
@@ -53,7 +53,7 @@ exports[`DisabledField should render 1`] = `
           >
             <div
               class="cds--accordion__content"
-              id="accordion-item-:r0:"
+              id="accordion-item-_r_0_"
             >
               <code>
                 <pre>

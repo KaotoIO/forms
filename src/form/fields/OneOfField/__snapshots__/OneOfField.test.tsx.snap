@@ -21,7 +21,7 @@ exports[`OneOfField should render correctly with basic oneOf schema 1`] = `
           class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--toggletip"
         >
           <button
-            aria-controls="id-:r0:"
+            aria-controls="id-_r_0_"
             aria-expanded="false"
             aria-label="More info for Test Schema 1 field"
             class="cds--toggletip-button"
@@ -50,7 +50,7 @@ exports[`OneOfField should render correctly with basic oneOf schema 1`] = `
           </button>
           <span
             class="cds--popover"
-            id="id-:r0:"
+            id="id-_r_0_"
           >
             <span
               class="cds--popover-content"
