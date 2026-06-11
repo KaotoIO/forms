@@ -29,7 +29,7 @@ exports[`StringField should render 1`] = `
           <span
             aria-label="More info for # field"
             class="pf-v6-c-button pf-m-plain pf-m-no-padding"
-            data-ouia-component-id="OUIA-Generated-Button-plain-1"
+            data-ouia-component-id="OUIA-Generated-Button-plain-_r_3_"
             data-ouia-component-type="PF6/Button"
             data-ouia-safe="true"
             role="button"
@@ -87,7 +87,7 @@ exports[`StringField should render 1`] = `
           <button
             aria-label="Open suggestions"
             class="pf-v6-c-button pf-m-plain kaoto-form__suggestions-button"
-            data-ouia-component-id="OUIA-Generated-Button-plain-2"
+            data-ouia-component-id="OUIA-Generated-Button-plain-_r_4_"
             data-ouia-component-type="PF6/Button"
             data-ouia-safe="true"
             data-testid="#__open-suggestions-button"
@@ -116,7 +116,7 @@ exports[`StringField should render 1`] = `
             aria-expanded="false"
             aria-label="#__field-actions"
             class="pf-v6-c-menu-toggle pf-m-plain"
-            data-ouia-component-id="OUIA-Generated-MenuToggle-plain-1"
+            data-ouia-component-id="OUIA-Generated-MenuToggle-plain-_r_8_"
             data-ouia-component-type="PF6/MenuToggle"
             data-ouia-safe="true"
             data-testid="#__field-actions"
@@ -131,12 +131,24 @@ exports[`StringField should render 1`] = `
                 fill="currentColor"
                 height="1em"
                 role="img"
-                viewBox="0 0 192 512"
                 width="1em"
               >
-                <path
-                  d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                />
+                <svg
+                  class="pf-v6-icon-default"
+                  viewBox="0 0 192 512"
+                >
+                  <path
+                    d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                  />
+                </svg>
+                <svg
+                  class="pf-v6-icon-rh-ui"
+                  viewBox="0 0 32 32"
+                >
+                  <path
+                    d="M16 9c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4Zm0-6c1.103 0 2 .897 2 2s-.897 2-2 2-2-.897-2-2 .897-2 2-2Zm0 9c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4Zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2Zm0 5c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4Zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2Z"
+                  />
+                </svg>
               </svg>
             </span>
           </button>

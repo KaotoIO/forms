@@ -46,9 +46,9 @@
     "usehooks-ts": "^3.0.0"
   },
   "peerDependencies": {
-    "@patternfly/patternfly": "6.4.0",
-    "@patternfly/react-core": "6.4.0",
-    "@patternfly/react-icons": "6.4.0",
+    "@patternfly/patternfly": "^6.5.2",
+    "@patternfly/react-core": "^6.5.1",
+    "@patternfly/react-icons": "^6.5.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
@@ -62,10 +62,10 @@
     "@lerna-lite/cli": "^3.0.0",
     "@lerna-lite/publish": "^3.0.0",
     "@lerna-lite/version": "^3.0.0",
-    "@patternfly/patternfly": "6.4.0",
-    "@patternfly/react-code-editor": "6.4.0",
-    "@patternfly/react-core": "6.4.0",
-    "@patternfly/react-icons": "6.4.0",
+    "@patternfly/patternfly": "^6.5.2",
+    "@patternfly/react-code-editor": "^6.5.1",
+    "@patternfly/react-core": "^6.5.1",
+    "@patternfly/react-icons": "^6.5.1",
     "@swc/core": "^1.7.14",
     "@swc/jest": "^0.2.36",
     "@testing-library/dom": "^10.0.0",
