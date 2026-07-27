@@ -1,4 +1,4 @@
-import { FunctionComponent, PropsWithChildren, createContext, useCallback } from 'react';
+import { FunctionComponent, PropsWithChildren, createContext, useCallback, useMemo } from 'react';
 import { useDebounceValue } from 'usehooks-ts';
 
 export interface FilteredFieldContextResult {
@@ -24,15 +24,14 @@ export const FilteredFieldProvider: FunctionComponent<PropsWithChildren> = (prop
     [setSearchTerm],
   );
 
-  return (
-    <FilteredFieldContext.Provider
-      value={{
-        filteredFieldText: searchTerm,
-        onFilterChange,
-        isGroupExpanded: searchTerm.length > 0,
-      }}
-    >
-      {props.children}
-    </FilteredFieldContext.Provider>
+  const contextValue = useMemo(
+    () => ({
+      filteredFieldText: searchTerm,
+      onFilterChange,
+      isGroupExpanded: searchTerm.length > 0,
+    }),
+    [searchTerm, onFilterChange],
   );
+
+  return <FilteredFieldContext.Provider value={contextValue}>{props.children}</FilteredFieldContext.Provider>;
 };
