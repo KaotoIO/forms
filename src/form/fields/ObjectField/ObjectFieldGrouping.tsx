@@ -1,9 +1,10 @@
 import { FunctionComponent, useContext, useMemo } from 'react';
+import { FieldProps } from '../../models/typings';
 import { FilteredFieldContext } from '../../providers/filtered-field.provider';
 import { ModelContext } from '../../providers/ModelProvider';
-import { getFieldGroups, getFilteredProperties, safeGetValue } from '../../utils';
 import { SchemaContext, SchemaProvider } from '../../providers/SchemaProvider';
-import { FieldProps } from '../../models/typings';
+import { getFieldGroups, safeGetValue } from '../../utils';
+import { SchemaPropertyFilter } from '../../utils/SchemaPropertyFilter';
 import { AnyOfField } from './AnyOfField';
 import { GroupFields } from './GroupFields';
 import { ObjectFieldInner } from './ObjectFieldInner';
@@ -18,7 +19,7 @@ export const ObjectFieldGrouping: FunctionComponent<FieldProps> = ({ propName })
   const filteredProperties = useMemo(() => {
     const cleanQueryTerm = filteredFieldText.replace(SPACE_REGEX, '').toLowerCase();
     const modelSlice = safeGetValue(model, propName.replace('#.', '')) as Record<string, unknown> | undefined;
-    return getFilteredProperties(schema.properties, cleanQueryTerm, undefined, modelSlice);
+    return SchemaPropertyFilter.filter(schema.properties, cleanQueryTerm, undefined, modelSlice);
   }, [filteredFieldText, schema.properties, model, propName]);
 
   const groupedProperties = useMemo(() => getFieldGroups(filteredProperties), [filteredProperties]);
