@@ -113,7 +113,7 @@ describe('SchemaPropertyFilter', () => {
 
       const result = SchemaPropertyFilter.filter(properties, 'e', ['email']);
 
-      expect(Object.keys(result!)).toEqual(['username', 'password']);
+      expect(Object.keys(result!)).toEqual(['username']);
     });
   });
 

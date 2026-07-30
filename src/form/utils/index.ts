@@ -3,7 +3,6 @@ export * from './camel-random-id';
 export * from './capitalize-string';
 export * from './get-applied-schema-index';
 export * from './get-field-groups';
-export * from './get-filtered-properties';
 export * from './get-item-from-schema';
 export * from './get-oneof-schema-list';
 export * from './get-tagged-field-from-string';
