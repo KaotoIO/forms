@@ -1,11 +1,11 @@
 import { act, fireEvent, render } from '@testing-library/react';
 import { FunctionComponent, PropsWithChildren } from 'react';
-import { KaotoSchemaDefinition } from '../../models';
 import { FilteredFieldContext } from '../../providers/filtered-field.provider';
 import { ROOT_PATH } from '../../utils';
 import { SchemaProvider } from '../../providers/SchemaProvider';
 import { FormWrapper } from '../../testing/FormWrapper';
 import { ObjectFieldGrouping } from './ObjectFieldGrouping';
+import { JSONSchema4 } from 'json-schema';
 
 describe('ObjectFieldGrouping', () => {
   const schema: JSONSchema4 = {
@@ -111,4 +111,41 @@ describe('ObjectFieldGrouping', () => {
       <FormWrapper>{children}</FormWrapper>
     </SchemaProvider>
   );
+
+  it('should strip spaces from the filter before matching', () => {
+    const wrapper = render(
+      <FilteredFieldContext.Provider
+        value={{ filteredFieldText: 'cor rel', onFilterChange: jest.fn(), isGroupExpanded: false }}
+      >
+        <ObjectFieldGrouping propName={ROOT_PATH} />
+      </FilteredFieldContext.Provider>,
+      { wrapper: formWrapper },
+    );
+
+    const inputFields = wrapper.queryAllByRole('textbox');
+    expect(inputFields).toHaveLength(1);
+    expect(inputFields[0]).toHaveAttribute('name', '#.correlationExpression');
+  });
+
+  it('should mark required properties with the required indicator', () => {
+    const requiredSchema: JSONSchema4 = {
+      type: 'object',
+      required: ['id'],
+      properties: {
+        id: { type: 'string', title: 'Id' },
+        description: { type: 'string', title: 'Description' },
+      },
+    };
+
+    const { getByTestId } = render(
+      <SchemaProvider schema={requiredSchema}>
+        <FormWrapper>
+          <ObjectFieldGrouping propName={ROOT_PATH} />
+        </FormWrapper>
+      </SchemaProvider>,
+    );
+
+    expect(getByTestId('#.id__field-wrapper').querySelector('.kaoto-field-wrapper__required')).toBeInTheDocument();
+    expect(getByTestId('#.description__field-wrapper').querySelector('.kaoto-field-wrapper__required')).toBeNull();
+  });
 });
