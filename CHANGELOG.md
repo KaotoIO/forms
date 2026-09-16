@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/KaotoIO/forms/compare/@kaoto/forms@1.8.0...@kaoto/forms@1.9.0) (2026-09-16)
+
+### Bug Fixes
+
+* clean export, snap, fixed expectation in test ([98f8f77](https://github.com/KaotoIO/forms/commit/98f8f771c84c6f23e1c2edd88d554317e26e2a56))
+* **sonarqube:** typescript S6481 fix ([773f8bb](https://github.com/KaotoIO/forms/commit/773f8bb87e97d7e07ee16b12967284e144c24111))
+
+### Features
+
+* AI guidelines added ([21aaad5](https://github.com/KaotoIO/forms/commit/21aaad5af9a8ac3ff299bb7283d70db1d0e3ce75))
+* **contributing:** update criteria ([14aa6b7](https://github.com/KaotoIO/forms/commit/14aa6b7a06a53f52670a962356bb8969b50bf902))
+* improve filter to match title and values ([4a61bd9](https://github.com/KaotoIO/forms/commit/4a61bd987ce661f88a85de7cc25503b4684c4b08))
+
 # [1.8.0](https://github.com/KaotoIO/forms/compare/@kaoto/forms@1.7.2...@kaoto/forms@1.8.0) (2026-06-11)
 
 ### Features
