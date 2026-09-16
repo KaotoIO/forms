@@ -1,4 +1,5 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { useState } from 'react';
 import { KeyValue, KeyValueType } from './KeyValue';
 
 describe('KeyValue', () => {
@@ -56,6 +57,27 @@ describe('KeyValue', () => {
     fireEvent.click(wrapper.getByTestId(`${propName}__remove__key1`));
 
     expect(onChange).toHaveBeenCalledWith({ key2: 'value2' });
+  });
+
+  it('keeps duplicate-key drafts when the parent reconstructs the emitted map', () => {
+    const ControlledMap = () => {
+      const [model, setModel] = useState<Record<string, string>>({ first: 'one', second: 'two' });
+      return (
+        <KeyValue
+          propName="parameters"
+          initialModel={model}
+          onChange={(next) => {
+            setModel({ ...next });
+          }}
+        />
+      );
+    };
+    render(<ControlledMap />);
+    fireEvent.change(screen.getByDisplayValue('second'), { target: { value: 'first' } });
+    expect(screen.getAllByDisplayValue('first')).toHaveLength(2);
+    fireEvent.change(screen.getAllByDisplayValue('first')[1], { target: { value: 'renamed' } });
+    expect(screen.getByDisplayValue('one')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('two')).toBeInTheDocument();
   });
 
   it('updates a key', () => {

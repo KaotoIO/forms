@@ -22,6 +22,22 @@ type KeyValueEntry = [string, string];
  */
 export const KeyValue: FunctionComponent<KeyValueProps> = ({ propName, initialModel, onChange, disabled = false }) => {
   const [internalModel, setInternalModel] = useState<KeyValueEntry[]>(Object.entries(initialModel ?? {}));
+  const [previousModel, setPreviousModel] = useState(initialModel);
+  const [lastEmittedModel, setLastEmittedModel] = useState<KeyValueType | null>(null);
+  if (previousModel !== initialModel) {
+    setPreviousModel(initialModel);
+    // A local edit can temporarily contain duplicate keys. A parent may clone
+    // the emitted object, so compare its entries before replacing those drafts.
+    const entries = Object.entries(initialModel ?? {});
+    const isLocalEcho =
+      lastEmittedModel !== null &&
+      entries.length === Object.keys(lastEmittedModel).length &&
+      entries.every(([key, value]) => Object.hasOwn(lastEmittedModel, key) && lastEmittedModel[key] === value);
+    if (!isLocalEcho) {
+      setInternalModel(entries);
+      setLastEmittedModel(null);
+    }
+  }
   const currentFocusIndex = useRef<['key' | 'value', number]>(['key', -1]);
 
   const getFocusRefFn = (location: 'key' | 'value', index: number) => (inputElement: HTMLInputElement | null) => {
@@ -32,7 +48,9 @@ export const KeyValue: FunctionComponent<KeyValueProps> = ({ propName, initialMo
 
   const updateModel = (newModel: KeyValueEntry[]) => {
     setInternalModel(newModel);
-    onChange(Object.fromEntries(newModel));
+    const emittedModel = Object.fromEntries(newModel);
+    setLastEmittedModel(emittedModel);
+    onChange(emittedModel);
   };
 
   const onAddNewProperty = () => {
