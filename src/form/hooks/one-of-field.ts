@@ -16,9 +16,18 @@ export const useOneOfField = (propName: string) => {
     [definitions, schema.oneOf],
   );
 
-  const appliedSchemaIndex = getAppliedSchemaIndex(value, oneOfSchemas, definitions);
-  const presetSchema = appliedSchemaIndex === -1 ? undefined : oneOfSchemas[appliedSchemaIndex];
-  const [selectedOneOfSchema, setSelectedOneOfSchema] = useState<OneOfSchemas | undefined>(presetSchema);
+  const getPreset = (model: unknown) => ({
+    index: getAppliedSchemaIndex(model, oneOfSchemas, definitions),
+    hasValue: isDefined(model) && (typeof model !== 'object' || Object.keys(model).length > 0),
+  });
+  const preset = getPreset(value);
+  const [selectedSchemaIndex, setSelectedSchemaIndex] = useState(preset.index);
+  const [previousPreset, setPreviousPreset] = useState(preset);
+  if (previousPreset.index !== preset.index || previousPreset.hasValue !== preset.hasValue) {
+    setPreviousPreset(preset);
+    setSelectedSchemaIndex(preset.index);
+  }
+  const selectedOneOfSchema = selectedSchemaIndex === -1 ? undefined : oneOfSchemas[selectedSchemaIndex];
 
   const onSchemaChange = (schema?: OneOfSchemas) => {
     if (schema?.name === selectedOneOfSchema?.name) {
@@ -29,10 +38,13 @@ export const useOneOfField = (propName: string) => {
       if (isDefined(value) && typeof value === 'object') {
         selectedOneOfSchema?.schema.properties &&
           Object.keys(selectedOneOfSchema.schema.properties).forEach((prop) => delete value[prop]);
+        // Clearing an object may infer a fallback schema. Keep the explicit local
+        // selection instead of treating that inferred change as an external update.
+        setPreviousPreset(getPreset(value));
         onChange(value);
       }
 
-      setSelectedOneOfSchema(schema);
+      setSelectedSchemaIndex(-1);
       return;
     }
 
@@ -50,7 +62,7 @@ export const useOneOfField = (propName: string) => {
       onChange(newValue as Record<string, unknown>);
     }
 
-    setSelectedOneOfSchema(schema);
+    setSelectedSchemaIndex(oneOfSchemas.findIndex((entry) => entry.schema === schema.schema));
   };
 
   let shouldRender = true;

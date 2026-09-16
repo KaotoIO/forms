@@ -54,10 +54,18 @@ export const KaotoForm = forwardRef<KaotoFormApi, KaotoFormProps>(
       throw new Error('[KaotoForm]: Schema is required');
     }
 
-    const [formModel, setFormModel] = useState<unknown>(model);
+    const [formState, setFormState] = useState<{
+      sourceModel: unknown;
+      model: unknown;
+      change?: { model: unknown };
+    }>({ sourceModel: model, model });
+    // Accept external updates without remounting fields or emitting another change.
+    if (!Object.is(formState.sourceModel, model)) {
+      setFormState({ ...formState, sourceModel: model, model });
+    }
+    const formModel = formState.model;
     const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({});
     const onChangeRef = useRef(onChange);
-    const isFirstRender = useRef(true);
 
     /**
      * This useEffect updates the onChangeRef.current value every time the onChange prop changes
@@ -69,18 +77,14 @@ export const KaotoForm = forwardRef<KaotoFormApi, KaotoFormProps>(
     }, [onChange]);
 
     /**
-     * This useEffect notifies the consumer about the entire form being updated
-     * It depends on the formModel state, so it will be triggered every time the formModel changes
-     * but not when the onChange function changes since it's not in the dependency array
+     * Notify the consumer only about local edits. External model updates preserve
+     * the pending change so a synchronous onChangeProp update cannot swallow it.
      */
     useEffect(() => {
-      if (isFirstRender.current) {
-        isFirstRender.current = false;
-        return;
+      if (formState.change) {
+        onChangeRef.current?.(formState.change.model);
       }
-
-      onChangeRef.current?.(formModel);
-    }, [formModel]);
+    }, [formState.change]);
 
     /**
      * Update the formModel state when a property changes
@@ -88,14 +92,14 @@ export const KaotoForm = forwardRef<KaotoFormApi, KaotoFormProps>(
     const onPropertyChange = useCallback(
       (propName: string, value: unknown) => {
         onChangeProp?.(propName, value);
-        setFormModel((prevModel: unknown) => {
-          if (typeof prevModel !== 'object') {
-            return value;
+        setFormState((previous) => {
+          if (typeof previous.model !== 'object') {
+            return { ...previous, model: value, change: { model: value } };
           }
 
-          const newModel = { ...prevModel };
+          const newModel = { ...previous.model };
           setValue(newModel, propName, value);
-          return newModel;
+          return { ...previous, model: newModel, change: { model: newModel } };
         });
       },
       [onChangeProp],
